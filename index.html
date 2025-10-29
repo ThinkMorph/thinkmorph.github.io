@@ -125,7 +125,7 @@
       <div class="columns is-centered">
         <div class="column has-text-centered">
           <img src="./static/images/thinkmorph_logo_new.png" alt="ThinkMorph Logo" style="max-width: 350px; margin-bottom: 1.5rem;">
-          <h1 class="title is-4">Emergent Properties in Multimodal Interleaved Chain-of-Thought Reasoning</h1>
+          <h1 class="title is-3">Emergent Properties in Multimodal Interleaved Chain-of-Thought Reasoning</h1>
           
           <div class="is-size-5 publication-authors" style="margin-top: 2rem;">
             <span class="author-block">
@@ -207,16 +207,17 @@
         <div class="content has-text-justified">
           <p>
             Multimodal reasoning requires <strong>iterative coordination between language and vision</strong>, 
-            yet defining meaningful interleaved chain-of-thought remains unresolved. We posit that text and 
-            image thoughts should function as <strong>complementary—rather than isomorphic—modalities</strong> 
+            yet it remains unclear what constitutes a meaningful interleaved chain of thought. We posit that text and 
+            image thoughts should function as <strong>complementary, rather than isomorphic, modalities</strong> 
             that mutually advance reasoning. Guided by this principle, we build <strong>ThinkMorph</strong>, a unified model fine-tuned on 
             <strong>~24K high-quality interleaved reasoning traces</strong> spanning tasks with varying visual 
             engagement. ThinkMorph learns to generate progressive text–image reasoning steps that concretely 
             manipulate visual content while maintaining coherent verbal logic. It delivers <strong class="gradient-text">large gains on vision-centric benchmarks</strong> 
-            (average <strong>+34.7%</strong> over the base model) and generalizes across out-of-domain tasks, 
-            matching or surpassing larger and proprietary VLMs. Beyond performance, ThinkMorph exhibits <strong>emergent multimodal intelligence</strong>—unseen 
+            (averaging <strong>34.7%</strong> over the base model) and generalizes to out-of-domain tasks, 
+            matching or surpassing larger and proprietary VLMs. Beyond performance, ThinkMorph exhibits <strong>emergent multimodal intelligence</strong>, including unseen 
             visual manipulation skills, adaptive switching between reasoning modes, and better test-time 
             scaling through diversified multimodal thoughts.
+            These findings suggest promising directions for characterizing the emergent capabilities of unified models for multimodal reasoning.
           </p>
         </div>
       </div>
@@ -233,6 +234,34 @@
   </div>
 </section>
 
+<!-- Method Overview -->
+<section class="section" style="background-color: #f9f9f9;">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Method</h2>
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <p>
+            ThinkMorph is a unified multimodal model that generates <strong>interleaved text–image reasoning steps</strong> to solve complex multimodal problems. Unlike conventional Chain-of-Thought approaches that only produce textual tokens, ThinkMorph can generate both image tokens and text tokens, resulting in complementary multimodal thoughts that jointly advance reasoning.
+          </p>
+          <p style="margin-top: 1rem;">
+            We fine-tune ThinkMorph on <strong>~24K high-quality interleaved reasoning traces</strong> spanning four representative tasks with varying levels of visual engagement:
+          </p>
+          <ul style="margin-top: 1rem; margin-left: 2rem;">
+            <li><strong>Jigsaw Assembly:</strong> Determining correct arrangement of scrambled image patches</li>
+            <li><strong>Spatial Navigation:</strong> Finding safe routes through grid maps with obstacles</li>
+            <li><strong>Visual Search:</strong> Locating and identifying target objects in images</li>
+            <li><strong>Chart Refocus:</strong> Answering questions about data visualizations</li>
+          </ul>
+          <p style="margin-top: 1rem;">
+            Each interleaved sequence is carefully designed so that text and images function as <strong>complementary modalities</strong> that progressively guide reasoning toward solutions, rather than isomorphic representations.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Visualization -->
 <section class="section" style="background-color: #f5f5f5;">
   <div class="container is-max-desktop">
@@ -243,6 +272,73 @@
         ThinkMorph's interleaved reasoning (green) consistently outperforms text-only (orange) and 
         vision-only (blue) modes across multiple benchmarks during test-time scaling.
       </p>
+    </div>
+  </div>
+</section>
+
+<!-- Emergent Properties -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Emergent Properties</h2>
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content">
+          <div class="box" style="margin-bottom: 2rem; border-left: 4px solid #667eea;">
+            <h3 class="title is-4" style="color: #667eea;">Property ①: Unseen Visual Manipulations</h3>
+            <p>
+              ThinkMorph develops accurate and meaningful visual manipulations <strong>unseen in training data</strong> when generalizing to out-of-domain tasks. These include zoom-in operations, inpainting, multi-box generation, motion forecasting, perspective transformation, and region cropping. These emergent behaviors are precise and task-effective, contributing directly to problem solving. For example, when asked "Is the bell pepper red or yellow?", the model automatically generates a zoomed-in view to distinguish subtle color differences, mirroring human visual inspection without explicit prompting.
+            </p>
+          </div>
+          
+          <div class="box" style="margin-bottom: 2rem; border-left: 4px solid #764ba2;">
+            <h3 class="title is-4" style="color: #764ba2;">Property ②: Autonomous Mode Switching</h3>
+            <p>
+              Despite being trained exclusively on interleaved data, ThinkMorph <strong>autonomously switches</strong> to text-only reasoning in 5.3% of inference cases. This switching is task-adaptive, not arbitrary: the model recognizes when fine-grained visual details are essential versus when textual reasoning alone suffices. On questions where the model switches to text-only mode, accuracy improves by 7.29% over interleaved reasoning, demonstrating effective dynamic allocation of reasoning effort based on task demands.
+            </p>
+          </div>
+          
+          <div class="box" style="margin-bottom: 2rem; border-left: 4px solid #f093fb;">
+            <h3 class="title is-4" style="color: #f093fb;">Property ③: Better Test-Time Scaling via Diversified Thoughts</h3>
+            <p>
+              Interleaved reasoning enables superior test-time scaling by generating <strong>diversified thoughts</strong> that explore broader multimodal solution spaces. Under Best-of-N sampling, interleaved reasoning consistently outperforms unimodal approaches across all benchmarks, with substantial gains (e.g., +8.0% on BLINK-J). The scaling advantage arises from richer trajectory diversity: while unimodal reasoning chains are confined to single representational spaces, interleaved reasoning explores both modalities simultaneously, greatly improving the likelihood of discovering correct solutions.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Results -->
+<section class="section" style="background-color: #f9f9f9;">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Results</h2>
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <p>
+            ThinkMorph delivers <strong>substantial gains</strong> across diverse vision-centric benchmarks:
+          </p>
+          <ul style="margin-top: 1rem; margin-left: 2rem;">
+            <li><strong>Average improvement of 34.74%</strong> over the base model Bagel-7B across all benchmarks</li>
+            <li><strong>85.84% improvement</strong> on Spatial Navigation (VSP)</li>
+            <li><strong>38.75% improvement</strong> on Jigsaw Assembly (VisPuzzle)</li>
+            <li><strong>Average gain of 20.74%</strong> over the base model on out-of-domain benchmarks</li>
+          </ul>
+          <p style="margin-top: 1rem;">
+            Despite being fine-tuned on only 24K samples, ThinkMorph achieves performance comparable to, and in several cases exceeding, models an order of magnitude larger:
+          </p>
+          <ul style="margin-top: 1rem; margin-left: 2rem;">
+            <li>Outperforms <strong>Qwen2.5-VL-72B</strong> by 34% on VSP and 10.67% on BLINK-J</li>
+            <li>Surpasses <strong>InternVL3.5-38B</strong> on SAT (52.67% vs. 49.33%)</li>
+            <li>Outperforms <strong>GPT-4o</strong> by 24.67% on SAT (52.67% vs. 28.00%)</li>
+            <li>Matches <strong>Gemini 2.5 Flash</strong> on general perception in MMVP (80.33%)</li>
+          </ul>
+          <p style="margin-top: 1rem;">
+            Compared across reasoning modes, ThinkMorph's interleaved reasoning consistently outperforms text-only and vision-only approaches by <strong>5.33%</strong>, demonstrating the effectiveness of complementary multimodal reasoning.
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
