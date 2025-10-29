@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="ThinkMorph: Emergent Properties in Multimodal Interleaved Chain-of-Thought Reasoning">
+  <meta name="keywords" content="ThinkMorph, Multimodal Reasoning, Chain-of-Thought, VLM">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ThinkMorph: Emergent Properties in Multimodal Interleaved Chain-of-Thought Reasoning</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <style>
+    .hero-body {
+      padding: 3rem 1.5rem;
+    }
+    .publication-title {
+      margin-bottom: 1rem;
+    }
+    .case-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    .case-carousel-container {
+      position: relative;
+      margin: 0;
+    }
+    @media (max-width: 1024px) {
+      .case-gallery-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .case-carousel {
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .case-carousel-track {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+    .case-item {
+      min-width: 100%;
+      cursor: pointer;
+      position: relative;
+    }
+    .case-item img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+    .carousel-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.9);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      z-index: 10;
+    }
+    .carousel-nav:hover {
+      background: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .carousel-nav.prev {
+      left: -45px;
+    }
+    .carousel-nav.next {
+      right: -45px;
+    }
+    @media (max-width: 1400px) {
+      .carousel-nav.prev {
+        left: 5px;
+      }
+      .carousel-nav.next {
+        right: 5px;
+      }
+    }
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 0.75rem;
+    }
+    .carousel-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #d1d5db;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .carousel-dot.active {
+      background: #667eea;
+      transform: scale(1.2);
+    }
+    .case-counter {
+      text-align: center;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+    .modal-content-custom {
+      max-width: 90%;
+      max-height: 90vh;
+      margin: auto;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  </style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <img src="./static/images/thinkmorph_logo_new.png" alt="ThinkMorph Logo" style="max-width: 350px; margin-bottom: 1.5rem;">
+          <h1 class="title is-4">Emergent Properties in Multimodal Interleaved Chain-of-Thought Reasoning</h1>
+          
+          <div class="is-size-5 publication-authors" style="margin-top: 2rem;">
+            <span class="author-block">
+              <a href="mailto:kuvvius@gmail.com">Jiawei Gu</a><sup>1,*</sup>,</span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=0SPl0hcAAAAJ&hl=zh-CN">Yunzhuo Hao</a><sup>2,*</sup>,</span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=P8MF9AQAAAAJ&hl=en">Huichen Will Wang</a><sup>3,*</sup>,</span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=WR875gYAAAAJ&hl=en">Linjie Li</a><sup>3,*</sup>,</span>
+            <span class="author-block">
+              <a href="#">Michael Qizhe Shieh</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://www.yejinchoi.com/">Yejin Choi</a><sup>4</sup>,</span>
+            <span class="author-block">
+              <a href="https://www.ranjaykrishna.com/">Ranjay Krishna</a><sup>3</sup>,</span>
+            <span class="author-block">
+              <a href="https://ych133.github.io/">Yu Cheng</a><sup>5</sup></span>
+          </div>
+
+          <div class="is-size-6 publication-authors" style="margin-top: 1rem;">
+            <span class="author-block"><sup>1</sup>National University of Singapore,</span>
+            <span class="author-block"><sup>2</sup>Zhejiang University,</span>
+            <span class="author-block"><sup>3</sup>University of Washington,</span>
+            <span class="author-block"><sup>4</sup>Stanford University,</span>
+            <span class="author-block"><sup>5</sup>The Chinese University of Hong Kong</span>
+          </div>
+
+          <div class="is-size-6 has-text-centered" style="margin-top: 0.5rem;">
+            <p>*Equal contribution</p>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper (Coming Soon)</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv (Coming Soon)</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/ThinkMorph/ThinkMorph" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://huggingface.co/ThinkMorph" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon" style="font-size:18px">🤗</span>
+                  <span>Models & Data</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Abstract -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Multimodal reasoning requires <strong>iterative coordination between language and vision</strong>, 
+            yet defining meaningful interleaved chain-of-thought remains unresolved. We posit that text and 
+            image thoughts should function as <strong>complementary—rather than isomorphic—modalities</strong> 
+            that mutually advance reasoning. Guided by this principle, we build <strong>ThinkMorph</strong>, a unified model fine-tuned on 
+            <strong>~24K high-quality interleaved reasoning traces</strong> spanning tasks with varying visual 
+            engagement. ThinkMorph learns to generate progressive text–image reasoning steps that concretely 
+            manipulate visual content while maintaining coherent verbal logic. It delivers <strong class="gradient-text">large gains on vision-centric benchmarks</strong> 
+            (average <strong>+34.7%</strong> over the base model) and generalizes across out-of-domain tasks, 
+            matching or surpassing larger and proprietary VLMs. Beyond performance, ThinkMorph exhibits <strong>emergent multimodal intelligence</strong>—unseen 
+            visual manipulation skills, adaptive switching between reasoning modes, and better test-time 
+            scaling through diversified multimodal thoughts.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Teaser Figure -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body has-text-centered">
+      <img src="./static/images/thinkmorph_main_web.png" alt="ThinkMorph Multimodal Reasoning" style="width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    </div>
+  </div>
+</section>
+
+<!-- Visualization -->
+<section class="section" style="background-color: #f5f5f5;">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Test-Time Scaling Comparison</h2>
+    <div class="hero-body has-text-centered">
+      <img src="./static/images/tts_mode_comparison_horizontal_v3.png" alt="Test-Time Scaling" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+      <p class="subtitle has-text-centered" style="margin-top: 1rem;">
+        ThinkMorph's interleaved reasoning (green) consistently outperforms text-only (orange) and 
+        vision-only (blue) modes across multiple benchmarks during test-time scaling.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Interactive Cases -->
+<section class="section">
+  <div class="container is-widescreen">
+    <h2 class="title is-3 has-text-centered">Interactive Case Gallery</h2>
+    <p class="subtitle has-text-centered">
+      Click on any case to view detailed reasoning traces
+    </p>
+
+    <div class="case-gallery-grid">
+      <!-- Main Reasoning Cases -->
+      <div>
+        <h3 class="title is-5 has-text-centered" style="margin-bottom: 1rem;">Main Reasoning Cases</h3>
+        <div class="case-carousel-container" id="main-cases-container">
+          <button class="carousel-nav prev" onclick="changeSlide('main-cases', -1)">‹</button>
+          <div class="case-carousel">
+            <div class="case-carousel-track" id="main-cases">
+              <!-- Cases will be loaded dynamically -->
+            </div>
+          </div>
+          <button class="carousel-nav next" onclick="changeSlide('main-cases', 1)">›</button>
+          <div class="carousel-dots" id="main-cases-dots"></div>
+          <div class="case-counter" id="main-cases-counter"></div>
+        </div>
+      </div>
+
+      <!-- Unseen Visual Manipulations -->
+      <div>
+        <h3 class="title is-5 has-text-centered" style="margin-bottom: 1rem;">Unseen Visual Manipulations</h3>
+        <div class="case-carousel-container" id="unseen-cases-container">
+          <button class="carousel-nav prev" onclick="changeSlide('unseen-cases', -1)">‹</button>
+          <div class="case-carousel">
+            <div class="case-carousel-track" id="unseen-cases">
+              <!-- Cases will be loaded dynamically -->
+            </div>
+          </div>
+          <button class="carousel-nav next" onclick="changeSlide('unseen-cases', 1)">›</button>
+          <div class="carousel-dots" id="unseen-cases-dots"></div>
+          <div class="case-counter" id="unseen-cases-counter"></div>
+        </div>
+      </div>
+
+      <!-- Mode Switching Examples -->
+      <div>
+        <h3 class="title is-5 has-text-centered" style="margin-bottom: 1rem;">Mode Switching Examples</h3>
+        <div class="case-carousel-container" id="mode-switch-cases-container">
+          <button class="carousel-nav prev" onclick="changeSlide('mode-switch-cases', -1)">‹</button>
+          <div class="case-carousel">
+            <div class="case-carousel-track" id="mode-switch-cases">
+              <!-- Cases will be loaded dynamically -->
+            </div>
+          </div>
+          <button class="carousel-nav next" onclick="changeSlide('mode-switch-cases', 1)">›</button>
+          <div class="carousel-dots" id="mode-switch-cases-dots"></div>
+          <div class="case-counter" id="mode-switch-cases-counter"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal for case viewing -->
+<div class="modal" id="case-modal">
+  <div class="modal-background"></div>
+  <div class="modal-content modal-content-custom" id="modal-content-container">
+    <!-- Content will be dynamically inserted here -->
+  </div>
+  <button class="modal-close is-large" aria-label="close"></button>
+</div>
+
+<!-- Citation -->
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{thinkmorph2025,
+  title={ThinkMorph: Emergent Properties in Multimodal Interleaved Chain-of-Thought Reasoning},
+  author={Gu, Jiawei and Hao, Yunzhuo and Wang, Huichen Will and Li, Linjie and Shieh, Michael Qizhe and Choi, Yejin and Krishna, Ranjay and Cheng, Yu},
+  journal={arXiv preprint},
+  year={2025}
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <p>
+        Website template adapted from <a href="https://emma-benchmark.github.io/">EMMA</a> and 
+        <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Case gallery data
+  const caseData = {
+    'main-cases': [
+      'case1.pdf', 'case2.pdf', 'case3.pdf', 'case4.pdf', 'case5.pdf'
+    ],
+    'unseen-cases': [
+      'unseen-case-1.pdf', 'unseen-case-2.pdf'
+    ],
+    'mode-switch-cases': [
+      'mode-switch-case-1.pdf', 'mode-switch-case-2.pdf', 'mode-switch-case-3.pdf', 
+      'mode-switch-case-4.pdf', 'mode-switch-case-5.pdf'
+    ]
+  };
+
+  // Track current slide for each carousel
+  const carouselState = {
+    'main-cases': 0,
+    'unseen-cases': 0,
+    'mode-switch-cases': 0
+  };
+
+  // Initialize carousel
+  function initCarousel(carouselId) {
+    const container = document.getElementById(carouselId);
+    const cases = caseData[carouselId];
+    
+    // Create case items
+    cases.forEach((filename, index) => {
+      const caseItem = document.createElement('div');
+      caseItem.className = 'case-item';
+      
+      const img = document.createElement('img');
+      img.src = `./static/images/${filename}`;
+      img.alt = filename;
+      
+      caseItem.appendChild(img);
+      caseItem.onclick = () => openModal(`./static/images/${filename}`);
+      container.appendChild(caseItem);
+    });
+
+    // Create dots
+    const dotsContainer = document.getElementById(`${carouselId}-dots`);
+    cases.forEach((_, index) => {
+      const dot = document.createElement('div');
+      dot.className = 'carousel-dot' + (index === 0 ? ' active' : '');
+      dot.onclick = () => goToSlide(carouselId, index);
+      dotsContainer.appendChild(dot);
+    });
+
+    // Update counter
+    updateCounter(carouselId);
+  }
+
+  // Change slide
+  function changeSlide(carouselId, direction) {
+    const cases = caseData[carouselId];
+    const currentIndex = carouselState[carouselId];
+    let newIndex = currentIndex + direction;
+    
+    // Loop around
+    if (newIndex < 0) {
+      newIndex = cases.length - 1;
+    } else if (newIndex >= cases.length) {
+      newIndex = 0;
+    }
+    
+    goToSlide(carouselId, newIndex);
+  }
+
+  // Go to specific slide
+  function goToSlide(carouselId, index) {
+    const cases = caseData[carouselId];
+    carouselState[carouselId] = index;
+    
+    // Update track position
+    const track = document.getElementById(carouselId);
+    track.style.transform = `translateX(-${index * 100}%)`;
+    
+    // Update dots
+    const dots = document.querySelectorAll(`#${carouselId}-dots .carousel-dot`);
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === index);
+    });
+
+    // Update counter
+    updateCounter(carouselId);
+  }
+
+  // Update counter
+  function updateCounter(carouselId) {
+    const cases = caseData[carouselId];
+    const currentIndex = carouselState[carouselId];
+    const counter = document.getElementById(`${carouselId}-counter`);
+    counter.textContent = `${currentIndex + 1} / ${cases.length}`;
+  }
+
+  // Initialize all carousels when page loads
+  document.addEventListener('DOMContentLoaded', function() {
+    initCarousel('main-cases');
+    initCarousel('unseen-cases');
+    initCarousel('mode-switch-cases');
+  });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      const direction = e.key === 'ArrowLeft' ? -1 : 1;
+      // You can add logic here to determine which carousel is in view
+      // For now, we'll control the first visible carousel
+    }
+  });
+
+  // Modal functionality
+  function openModal(fileSrc) {
+    const modal = document.getElementById('case-modal');
+    const modalContainer = document.getElementById('modal-content-container');
+    
+    // Clear previous content
+    modalContainer.innerHTML = '';
+    
+    // Check if file is PDF or image
+    if (fileSrc.endsWith('.pdf')) {
+      // Display PDF using object tag
+      const pdfObject = document.createElement('object');
+      pdfObject.data = fileSrc;
+      pdfObject.type = 'application/pdf';
+      pdfObject.style.width = '100%';
+      pdfObject.style.height = '80vh';
+      pdfObject.innerHTML = `<p>Your browser doesn't support PDF viewing. <a href="${fileSrc}" target="_blank">Open PDF in new tab</a></p>`;
+      modalContainer.appendChild(pdfObject);
+    } else {
+      // Display image
+      const imgElement = document.createElement('img');
+      imgElement.src = fileSrc;
+      imgElement.alt = 'Case Detail';
+      imgElement.style.width = '100%';
+      imgElement.style.height = 'auto';
+      modalContainer.appendChild(imgElement);
+    }
+    
+    modal.classList.add('is-active');
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('case-modal');
+    modal.classList.remove('is-active');
+  }
+
+  // Close modal on background click or close button
+  document.querySelector('.modal-background').addEventListener('click', closeModal);
+  document.querySelector('.modal-close').addEventListener('click', closeModal);
+
+  // Close modal on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+  });
+</script>
+
+</body>
+</html>
+
