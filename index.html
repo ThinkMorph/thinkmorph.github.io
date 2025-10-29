@@ -30,20 +30,10 @@
     .publication-title {
       margin-bottom: 1rem;
     }
-    .case-gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-      margin: 2rem 0;
-    }
     .case-carousel-container {
       position: relative;
-      margin: 0;
-    }
-    @media (max-width: 1024px) {
-      .case-gallery-grid {
-        grid-template-columns: 1fr;
-      }
+      margin: 2rem auto;
+      max-width: 800px;
     }
     .case-carousel {
       overflow: hidden;
@@ -72,9 +62,9 @@
       background: rgba(255,255,255,0.9);
       border: none;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      font-size: 20px;
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
       cursor: pointer;
       transition: all 0.3s ease;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
@@ -85,28 +75,20 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
     .carousel-nav.prev {
-      left: -45px;
+      left: -60px;
     }
     .carousel-nav.next {
-      right: -45px;
-    }
-    @media (max-width: 1400px) {
-      .carousel-nav.prev {
-        left: 5px;
-      }
-      .carousel-nav.next {
-        right: 5px;
-      }
+      right: -60px;
     }
     .carousel-dots {
       display: flex;
       justify-content: center;
-      gap: 8px;
-      margin-top: 0.75rem;
+      gap: 10px;
+      margin-top: 1rem;
     }
     .carousel-dot {
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
       background: #d1d5db;
       cursor: pointer;
@@ -118,8 +100,8 @@
     }
     .case-counter {
       text-align: center;
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
+      margin-top: 1rem;
+      font-size: 1rem;
       color: #6b7280;
     }
     .modal-content-custom {
@@ -267,60 +249,49 @@
 
 <!-- Interactive Cases -->
 <section class="section">
-  <div class="container is-widescreen">
+  <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Interactive Case Gallery</h2>
     <p class="subtitle has-text-centered">
       Click on any case to view detailed reasoning traces
     </p>
 
-    <div class="case-gallery-grid">
-      <!-- Main Reasoning Cases -->
-      <div>
-        <h3 class="title is-5 has-text-centered" style="margin-bottom: 1rem;">Main Reasoning Cases</h3>
-        <div class="case-carousel-container" id="main-cases-container">
-          <button class="carousel-nav prev" onclick="changeSlide('main-cases', -1)">‹</button>
-          <div class="case-carousel">
-            <div class="case-carousel-track" id="main-cases">
-              <!-- Cases will be loaded dynamically -->
-            </div>
-          </div>
-          <button class="carousel-nav next" onclick="changeSlide('main-cases', 1)">›</button>
-          <div class="carousel-dots" id="main-cases-dots"></div>
-          <div class="case-counter" id="main-cases-counter"></div>
+    <h3 class="title is-4 has-text-centered" style="margin-top: 2rem;">Main Reasoning Cases</h3>
+    <div class="case-carousel-container" id="main-cases-container">
+      <button class="carousel-nav prev" onclick="changeSlide('main-cases', -1)">‹</button>
+      <div class="case-carousel">
+        <div class="case-carousel-track" id="main-cases">
+          <!-- Cases will be loaded dynamically -->
         </div>
       </div>
+      <button class="carousel-nav next" onclick="changeSlide('main-cases', 1)">›</button>
+      <div class="carousel-dots" id="main-cases-dots"></div>
+      <div class="case-counter" id="main-cases-counter"></div>
+    </div>
 
-      <!-- Unseen Visual Manipulations -->
-      <div>
-        <h3 class="title is-5 has-text-centered" style="margin-bottom: 1rem;">Unseen Visual Manipulations</h3>
-        <div class="case-carousel-container" id="unseen-cases-container">
-          <button class="carousel-nav prev" onclick="changeSlide('unseen-cases', -1)">‹</button>
-          <div class="case-carousel">
-            <div class="case-carousel-track" id="unseen-cases">
-              <!-- Cases will be loaded dynamically -->
-            </div>
-          </div>
-          <button class="carousel-nav next" onclick="changeSlide('unseen-cases', 1)">›</button>
-          <div class="carousel-dots" id="unseen-cases-dots"></div>
-          <div class="case-counter" id="unseen-cases-counter"></div>
+    <h3 class="title is-4 has-text-centered" style="margin-top: 2rem;">Unseen Visual Manipulations</h3>
+    <div class="case-carousel-container" id="unseen-cases-container">
+      <button class="carousel-nav prev" onclick="changeSlide('unseen-cases', -1)">‹</button>
+      <div class="case-carousel">
+        <div class="case-carousel-track" id="unseen-cases">
+          <!-- Cases will be loaded dynamically -->
         </div>
       </div>
+      <button class="carousel-nav next" onclick="changeSlide('unseen-cases', 1)">›</button>
+      <div class="carousel-dots" id="unseen-cases-dots"></div>
+      <div class="case-counter" id="unseen-cases-counter"></div>
+    </div>
 
-      <!-- Mode Switching Examples -->
-      <div>
-        <h3 class="title is-5 has-text-centered" style="margin-bottom: 1rem;">Mode Switching Examples</h3>
-        <div class="case-carousel-container" id="mode-switch-cases-container">
-          <button class="carousel-nav prev" onclick="changeSlide('mode-switch-cases', -1)">‹</button>
-          <div class="case-carousel">
-            <div class="case-carousel-track" id="mode-switch-cases">
-              <!-- Cases will be loaded dynamically -->
-            </div>
-          </div>
-          <button class="carousel-nav next" onclick="changeSlide('mode-switch-cases', 1)">›</button>
-          <div class="carousel-dots" id="mode-switch-cases-dots"></div>
-          <div class="case-counter" id="mode-switch-cases-counter"></div>
+    <h3 class="title is-4 has-text-centered" style="margin-top: 2rem;">Mode Switching Examples</h3>
+    <div class="case-carousel-container" id="mode-switch-cases-container">
+      <button class="carousel-nav prev" onclick="changeSlide('mode-switch-cases', -1)">‹</button>
+      <div class="case-carousel">
+        <div class="case-carousel-track" id="mode-switch-cases">
+          <!-- Cases will be loaded dynamically -->
         </div>
       </div>
+      <button class="carousel-nav next" onclick="changeSlide('mode-switch-cases', 1)">›</button>
+      <div class="carousel-dots" id="mode-switch-cases-dots"></div>
+      <div class="case-counter" id="mode-switch-cases-counter"></div>
     </div>
   </div>
 </section>
