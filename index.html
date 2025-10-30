@@ -48,12 +48,19 @@
       min-width: 100%;
       cursor: pointer;
       position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
     }
     .case-item img {
       display: block;
-      width: 100%;
+      max-width: 100%;
+      max-height: 80vh;
       height: auto;
+      width: auto;
       border-radius: 10px;
+      object-fit: contain;
     }
     .carousel-nav {
       position: absolute;
@@ -124,9 +131,8 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <img src="./static/images/thinkmorph_logo_new.png" alt="ThinkMorph Logo" style="max-width: 350px; margin-bottom: 1.5rem;">
+          <img src="./static/images/thinkmorph_logo_new.png" alt="ThinkMorph Logo" style="max-width: 400px; margin-bottom: 0.1rem;">
           <h1 class="title is-3">Emergent Properties in Multimodal Interleaved Chain-of-Thought Reasoning</h1>
-          
           <div class="is-size-5 publication-authors" style="margin-top: 2rem;">
             <span class="author-block">
               <a href="https://scholar.google.com/citations?user=7p8yEHAAAAAJ&hl=En">Jiawei Gu</a><sup>1,*</sup>,</span>
@@ -198,6 +204,17 @@
   </div>
 </section>
 
+
+<!-- Main Figure -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body has-text-centered">
+      <img src="./static/images/thinkmorph_main.jpg" alt="ThinkMorph Main" style="width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    </div>
+  </div>
+</section>
+
+
 <!-- Abstract -->
 <section class="section">
   <div class="container is-max-desktop">
@@ -209,15 +226,27 @@
             Multimodal reasoning requires <strong>iterative coordination between language and vision</strong>, 
             yet it remains unclear what constitutes a meaningful interleaved chain of thought. We posit that text and 
             image thoughts should function as <strong>complementary, rather than isomorphic, modalities</strong> 
-            that mutually advance reasoning. Guided by this principle, we build <strong>ThinkMorph</strong>, a unified model fine-tuned on 
+            that mutually advance reasoning. 
+          </p>
+          <div class="hero-body has-text-centered" style="padding: 1.5rem 0;">
+            <img src="./static/images/interleaved_design.jpg" alt="Interleaved Design" style="width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          </div>
+          <p>
+            Guided by this principle, we build <strong>ThinkMorph</strong>, a unified model fine-tuned on 
             <strong>~24K high-quality interleaved reasoning traces</strong> spanning tasks with varying visual 
             engagement. ThinkMorph learns to generate progressive text–image reasoning steps that concretely 
             manipulate visual content while maintaining coherent verbal logic. It delivers <strong class="gradient-text">large gains on vision-centric benchmarks</strong> 
             (averaging <strong>34.7%</strong> over the base model) and generalizes to out-of-domain tasks, 
-            matching or surpassing larger and proprietary VLMs. Beyond performance, ThinkMorph exhibits <strong>emergent multimodal intelligence</strong>, including unseen 
+            matching or surpassing larger and proprietary VLMs. 
+            Beyond performance, ThinkMorph exhibits <strong>emergent multimodal intelligence</strong>, including unseen 
             visual manipulation skills, adaptive switching between reasoning modes, and better test-time 
             scaling through diversified multimodal thoughts.
             These findings suggest promising directions for characterizing the emergent capabilities of unified models for multimodal reasoning.
+          </p>
+          <div class="hero-body has-text-centered" style="padding: 1.5rem 0;">
+            <img src="./static/images/emrging_prop.jpg" alt="Emergent Properties" style="width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          </div>
+          <p>
           </p>
         </div>
       </div>
@@ -225,17 +254,61 @@
   </div>
 </section>
 
+
+
+<!-- About ThinkMorph -->
+<!-- <section class="section" style="background-color: #f9f9f9;">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Introduction</h2>
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <p>
+            Multimodal reasoning requires <strong>iterative coordination between language and vision</strong>, 
+            yet it remains unclear what constitutes a meaningful interleaved chain of thought. We posit that text and 
+            image thoughts should function as <strong>complementary, rather than isomorphic, modalities</strong> 
+            that mutually advance reasoning. Guided by this principle, we build <strong>ThinkMorph</strong>, a unified model fine-tuned on 
+            <strong>~24K high-quality interleaved reasoning traces</strong> spanning tasks with varying visual 
+            engagement. 
+          </p>
+          <div class="hero-body has-text-centered" style="padding: 1.5rem 0;">
+            <img src="./static/images/interleaved_design.jpg" alt="Interleaved Design" style="width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          </div>
+          <p>
+            ThinkMorph learns to generate progressive text–image reasoning steps that concretely 
+            manipulate visual content while maintaining coherent verbal logic. It delivers <strong class="gradient-text">large gains on vision-centric benchmarks</strong> 
+            (averaging <strong>34.7%</strong> over the base model) and generalizes to out-of-domain tasks, 
+            matching or surpassing larger and proprietary VLMs.
+          </p>
+          <p>
+            By fine-tuning with <strong>merely ~24K</strong> samples, ThinkMorph achieves out-of-domain performance that rivals or even surpasses leading large-scale, proprietary VLMs.
+          </p>
+          <p>
+            Intriguingly, ThinkMorph unlocks emergent properties that represent a <em>hallmark of multimodal intelligence</em>: the elicitation of unseen visual manipulation skills, the self-adaptive switching between reasoning modes according to task complexity, and better test-time scaling via diversified thoughts.
+          </p>
+          <div class="hero-body has-text-centered" style="padding: 1.5rem 0;">
+            <img src="./static/images/emrging_prop.jpg" alt="Emergent Properties" style="width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          </div>
+          <p>
+            These findings suggest promising directions for future work to characterize the emergent capabilities of unified models for multimodal reasoning.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
 <!-- Teaser Figure -->
-<section class="hero teaser">
+<!-- <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body has-text-centered">
       <img src="./static/images/thinkmorph_main_web.png" alt="ThinkMorph Multimodal Reasoning" style="width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
     </div>
   </div>
-</section>
+</section> -->
 
 <!-- Method Overview -->
-<section class="section" style="background-color: #f9f9f9;">
+<!-- <section class="section" style="background-color: #f9f9f9;">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Method</h2>
     <div class="columns is-centered">
@@ -254,10 +327,10 @@
       </div>
     </div>
   </div>
-</section>
+</section> -->
 
 <!-- Visualization -->
-<section class="section" style="background-color: #f5f5f5;">
+<!-- <section class="section" style="background-color: #f5f5f5;">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Test-Time Scaling Comparison</h2>
     <div class="hero-body has-text-centered">
@@ -268,7 +341,7 @@
       </p>
     </div>
   </div>
-</section>
+</section> -->
 
 <!-- Emergent Properties -->
 <!-- <section class="section">
@@ -310,9 +383,9 @@
     <div class="columns is-centered">
       <div class="column is-four-fifths">
         <div class="content has-text-justified">
-          <p>
-            ThinkMorph delivers <strong>substantial gains</strong> across diverse vision-centric benchmarks:
-          </p>
+          <!-- <p>
+            ThinkMorph delivers <strong>substantial gains</strong> across diverse vision-centric benchmarks: -->
+          <!-- </p>
           <ul style="margin-top: 1rem; margin-left: 2rem;">
             <li><strong>Average improvement of 34.74%</strong> over the base model Bagel-7B across all benchmarks</li>
             <li><strong>85.84% improvement</strong> on Spatial Navigation (VSP)</li>
@@ -327,18 +400,47 @@
             <li>Surpasses <strong>InternVL3.5-38B</strong> on SAT (52.67% vs. 49.33%)</li>
             <li>Outperforms <strong>GPT-4o</strong> by 24.67% on SAT (52.67% vs. 28.00%)</li>
             <li>Matches <strong>Gemini 2.5 Flash</strong> on general perception in MMVP (80.33%)</li>
-          </ul>
-          <p style="margin-top: 1rem;">
-            Compared across reasoning modes, ThinkMorph's interleaved reasoning consistently outperforms text-only and vision-only approaches by <strong>5.33%</strong>, demonstrating the effectiveness of complementary multimodal reasoning.
+          </ul> -->
+          <p style="margin-top: 2rem;">
+            <strong>Reasoning Mode Comparison.</strong>
+            ThinkMorph achieves substantial gains on vision-centric tasks, averaging a <strong>34.74% improvement</strong> over its base model, with striking increases of <strong>85.84%</strong> on <em>Spatial Navigation</em> and <strong>38.75%</strong> on <em>Jigsaw Assembly</em>. 
+            Compared across reasoning modes, ThinkMorph's interleaved reasoning consistently outperforms text-only and vision-only approaches by <strong>5.33%</strong>.
+          </p>
+          <div class="hero-body has-text-centered" style="margin-top: 1rem;">
+            <img src="./static/images/mode_comparision.png" alt="Mode Comparison" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          </div>
+
+          <p style="margin-top: 2rem;">
+            <strong>Comparison with State-of-the-Art VLMs.</strong>
+            Compared to its base model, Bagel-7B, ThinkMorph achieves significant improvements across all benchmarks, with an average gain of <strong>20.74%</strong> over nine diverse tasks. Despite being fine-tuned on only <strong>24K samples</strong>, ThinkMorph achieves performance comparable to, and in several cases exceeding, models an order of magnitude larger: it outperforms Qwen2.5-VL-72B by 34% on VSP and 10.67% on BLINK-J, surpasses InternVL3.5-38B on SAT, and matches Gemini 2.5 Flash on general perception in MMVP (80.33%).
           </p>
           <div class="hero-body has-text-centered" style="margin-top: 1.5rem;">
             <img src="./static/images/main_result.png" alt="Main Results" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
           </div>
-          <div class="hero-body has-text-centered" style="margin-top: 1rem;">
-            <img src="./static/images/mode_comparision.png" alt="Mode Comparison" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-          </div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- Additional Figures -->
+<section class="section" style="background-color: #f9f9f9;">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Further Analysis</h2>
+    <p class="subtitle has-text-centered">
+      Explore more analysis of ThinkMorph's behaviors. For detailed discussions and in-depth analysis, please refer to our paper.
+    </p>
+
+    <div class="case-carousel-container" id="figures-container" style="margin-top: 2rem;">
+      <button class="carousel-nav prev" onclick="changeSlide('paper-figures', -1)">‹</button>
+      <div class="case-carousel">
+        <div class="case-carousel-track" id="paper-figures">
+          <!-- Figures will be loaded dynamically -->
+        </div>
+      </div>
+      <button class="carousel-nav next" onclick="changeSlide('paper-figures', 1)">›</button>
+      <div class="carousel-dots" id="paper-figures-dots"></div>
+      <div class="case-counter" id="paper-figures-counter"></div>
     </div>
   </div>
 </section>
@@ -351,43 +453,16 @@
       Click on any case to view detailed reasoning traces
     </p>
 
-    <h3 class="title is-4 has-text-centered" style="margin-top: 2rem;">Main Reasoning Cases</h3>
-    <div class="case-carousel-container" id="main-cases-container">
-      <button class="carousel-nav prev" onclick="changeSlide('main-cases', -1)">‹</button>
+    <div class="case-carousel-container" id="all-cases-container" style="margin-top: 2rem;">
+      <button class="carousel-nav prev" onclick="changeSlide('all-cases', -1)">‹</button>
       <div class="case-carousel">
-        <div class="case-carousel-track" id="main-cases">
+        <div class="case-carousel-track" id="all-cases">
           <!-- Cases will be loaded dynamically -->
         </div>
       </div>
-      <button class="carousel-nav next" onclick="changeSlide('main-cases', 1)">›</button>
-      <div class="carousel-dots" id="main-cases-dots"></div>
-      <div class="case-counter" id="main-cases-counter"></div>
-    </div>
-
-    <h3 class="title is-4 has-text-centered" style="margin-top: 2rem;">Unseen Visual Manipulations</h3>
-    <div class="case-carousel-container" id="unseen-cases-container">
-      <button class="carousel-nav prev" onclick="changeSlide('unseen-cases', -1)">‹</button>
-      <div class="case-carousel">
-        <div class="case-carousel-track" id="unseen-cases">
-          <!-- Cases will be loaded dynamically -->
-        </div>
-      </div>
-      <button class="carousel-nav next" onclick="changeSlide('unseen-cases', 1)">›</button>
-      <div class="carousel-dots" id="unseen-cases-dots"></div>
-      <div class="case-counter" id="unseen-cases-counter"></div>
-    </div>
-
-    <h3 class="title is-4 has-text-centered" style="margin-top: 2rem;">Mode Switching Examples</h3>
-    <div class="case-carousel-container" id="mode-switch-cases-container">
-      <button class="carousel-nav prev" onclick="changeSlide('mode-switch-cases', -1)">‹</button>
-      <div class="case-carousel">
-        <div class="case-carousel-track" id="mode-switch-cases">
-          <!-- Cases will be loaded dynamically -->
-        </div>
-      </div>
-      <button class="carousel-nav next" onclick="changeSlide('mode-switch-cases', 1)">›</button>
-      <div class="carousel-dots" id="mode-switch-cases-dots"></div>
-      <div class="case-counter" id="mode-switch-cases-counter"></div>
+      <button class="carousel-nav next" onclick="changeSlide('all-cases', 1)">›</button>
+      <div class="carousel-dots" id="all-cases-dots"></div>
+      <div class="case-counter" id="all-cases-counter"></div>
     </div>
   </div>
 </section>
@@ -403,14 +478,28 @@
 
 <!-- Citation -->
 <section class="section" id="BibTeX">
-  <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX</h2>
-    <pre><code>@article{thinkmorph2025,
+  <div class="container is-max-widescreen">
+    <h2 class="title has-text-centered">BibTeX</h2>
+    <div class="box" style="position: relative; margin-top: 2.5rem;">
+
+      <!-- Copy Button -->
+      <button
+        id="copyBibtexBtn"
+        class="button is-normal is-info is-rounded"
+        aria-label="Copy BibTeX"
+        style="position: absolute; top: 0.5rem; right: 0.5rem;"
+      >
+        <span class="icon"><i class="fas fa-copy"></i></span>
+      </button>
+
+      <pre style="overflow-x: auto;"><code id="bibtexCode">@article{thinkmorph2025,
   title={ThinkMorph: Emergent Properties in Multimodal Interleaved Chain-of-Thought Reasoning},
   author={Gu, Jiawei and Hao, Yunzhuo and Wang, Huichen Will and Li, Linjie and Shieh, Michael Qizhe and Choi, Yejin and Krishna, Ranjay and Cheng, Yu},
   journal={arXiv preprint},
   year={2025}
 }</code></pre>
+
+    </div>
   </div>
 </section>
 
@@ -418,8 +507,7 @@
   <div class="container">
     <div class="content has-text-centered">
       <p>
-        Website template adapted from <a href="https://emma-benchmark.github.io/">EMMA</a> and 
-        <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+        Website template adapted from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
       </p>
     </div>
   </div>
@@ -428,23 +516,40 @@
 <script>
   // Case gallery data
   const caseData = {
-    'main-cases': [
-      'case1.pdf', 'case2.pdf', 'case3.pdf', 'case4.pdf', 'case5.pdf'
+    'paper-figures': [
+      // Main figures from paper (excluding Figure 1 & 2)
+      'boundary_case_01.png',
+      'more_unseen_01.png',
+      'case-mode-switch_01.png',
+      'tts_mode_comparison_horizontal_v3.png',
+      'tts_percentage_improvement_v2_01.png',
+      'mode_distribution_01.png',
     ],
-    'unseen-cases': [
-      'unseen-case-1.pdf', 'unseen-case-2.pdf'
-    ],
-    'mode-switch-cases': [
-      'mode-switch-case-1.pdf', 'mode-switch-case-2.pdf', 'mode-switch-case-3.pdf', 
-      'mode-switch-case-4.pdf', 'mode-switch-case-5.pdf'
+    'all-cases': [
+      // Individual case examples
+      'case1_01.png',
+      'case2_01.png',
+      'case3_01.png',
+      'case4_01.png',
+      'case5_01.png',
+      'mode-switch-case-1_01.png',
+      'mode-switch-case-2_01.png',
+      'mode-switch-case-3_01.png',
+      'mode-switch-case-4_01.png',
+      'mode-switch-case-5_01.png',
+      'unseen-case-2_01.png',
+      'unseen-case-9-motion_01.png',
+      'unseen-case-11-image_01.png',
+      'unseen-case-15-Eliminate_01.png',
+      'unseen-case-16-zoom_01.png',
+      'unseen-case-19-inpainting_01.png'
     ]
   };
 
   // Track current slide for each carousel
   const carouselState = {
-    'main-cases': 0,
-    'unseen-cases': 0,
-    'mode-switch-cases': 0
+    'paper-figures': 0,
+    'all-cases': 0
   };
 
   // Initialize carousel
@@ -524,9 +629,8 @@
 
   // Initialize all carousels when page loads
   document.addEventListener('DOMContentLoaded', function() {
-    initCarousel('main-cases');
-    initCarousel('unseen-cases');
-    initCarousel('mode-switch-cases');
+    initCarousel('paper-figures');
+    initCarousel('all-cases');
   });
 
   // Keyboard navigation
@@ -582,6 +686,29 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       closeModal();
+    }
+  });
+
+  // Copy BibTeX functionality
+  document.getElementById('copyBibtexBtn').addEventListener('click', async () => {
+    const code = document.getElementById('bibtexCode').innerText.trim();
+    try {
+      await navigator.clipboard.writeText(code);
+      // Show success message
+      const btn = document.getElementById('copyBibtexBtn');
+      const originalHTML = btn.innerHTML;
+      btn.innerHTML = '<span class="icon"><i class="fas fa-check"></i></span>';
+      btn.classList.remove('is-info');
+      btn.classList.add('is-success');
+      
+      setTimeout(() => {
+        btn.innerHTML = originalHTML;
+        btn.classList.remove('is-success');
+        btn.classList.add('is-info');
+      }, 2000);
+    } catch (err) {
+      console.error('Copy failed', err);
+      alert('Copy failed, please copy manually.');
     }
   });
 </script>
