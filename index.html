@@ -129,19 +129,19 @@
           
           <div class="is-size-5 publication-authors" style="margin-top: 2rem;">
             <span class="author-block">
-              <a href="mailto:kuvvius@gmail.com">Jiawei Gu</a><sup>1,*</sup>,</span>
+              <a href="https://scholar.google.com/citations?user=7p8yEHAAAAAJ&hl=En">Jiawei Gu</a><sup>1,*</sup>,</span>
             <span class="author-block">
               <a href="https://scholar.google.com/citations?user=0SPl0hcAAAAJ&hl=zh-CN">Yunzhuo Hao</a><sup>2,*</sup>,</span>
             <span class="author-block">
-              <a href="https://scholar.google.com/citations?user=P8MF9AQAAAAJ&hl=en">Huichen Will Wang</a><sup>3,*</sup>,</span>
+              <a href="https://homes.cs.washington.edu/~wwill/">Huichen Will Wang</a><sup>3,*</sup>,</span>
             <span class="author-block">
               <a href="https://scholar.google.com/citations?user=WR875gYAAAAJ&hl=en">Linjie Li</a><sup>3,*</sup>,</span>
             <span class="author-block">
-              <a href="#">Michael Qizhe Shieh</a><sup>1</sup>,</span>
+              <a href="https://michaelshieh.com/">Michael Qizhe Shieh</a><sup>1</sup>,</span>
             <span class="author-block">
-              <a href="https://www.yejinchoi.com/">Yejin Choi</a><sup>4</sup>,</span>
+              <a href="https://scholar.google.com/citations?user=vhP-tlcAAAAJ&hl=en">Yejin Choi</a><sup>4</sup>,</span>
             <span class="author-block">
-              <a href="https://www.ranjaykrishna.com/">Ranjay Krishna</a><sup>3</sup>,</span>
+              <a href="https://scholar.google.com/citations?user=IcqahyAAAAAJ&hl=en">Ranjay Krishna</a><sup>3</sup>,</span>
             <span class="author-block">
               <a href="https://ych133.github.io/">Yu Cheng</a><sup>5</sup></span>
           </div>
@@ -242,20 +242,14 @@
       <div class="column is-four-fifths">
         <div class="content has-text-justified">
           <p>
-            ThinkMorph is a unified multimodal model that generates <strong>interleaved text–image reasoning steps</strong> to solve complex multimodal problems. Unlike conventional Chain-of-Thought approaches that only produce textual tokens, ThinkMorph can generate both image tokens and text tokens, resulting in complementary multimodal thoughts that jointly advance reasoning.
-          </p>
-          <p style="margin-top: 1rem;">
-            We fine-tune ThinkMorph on <strong>~24K high-quality interleaved reasoning traces</strong> spanning four representative tasks with varying levels of visual engagement:
-          </p>
+            ThinkMorph is a unified multimodal model that generates <strong>interleaved text–image reasoning steps</strong> to solve complex multimodal problems. Unlike conventional Chain-of-Thought approaches that only produce textual tokens, ThinkMorph can generate both image tokens and text tokens, resulting in complementary multimodal thoughts that jointly advance reasoning.  We fine-tune ThinkMorph on <strong>~24K high-quality interleaved reasoning traces</strong> spanning four representative tasks with varying levels of visual engagement:
+          </p> 
           <ul style="margin-top: 1rem; margin-left: 2rem;">
             <li><strong>Jigsaw Assembly:</strong> Determining correct arrangement of scrambled image patches</li>
             <li><strong>Spatial Navigation:</strong> Finding safe routes through grid maps with obstacles</li>
             <li><strong>Visual Search:</strong> Locating and identifying target objects in images</li>
             <li><strong>Chart Refocus:</strong> Answering questions about data visualizations</li>
           </ul>
-          <p style="margin-top: 1rem;">
-            Each interleaved sequence is carefully designed so that text and images function as <strong>complementary modalities</strong> that progressively guide reasoning toward solutions, rather than isomorphic representations.
-          </p>
         </div>
       </div>
     </div>
@@ -277,7 +271,7 @@
 </section>
 
 <!-- Emergent Properties -->
-<section class="section">
+<!-- <section class="section">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Emergent Properties</h2>
     <div class="columns is-centered">
@@ -307,7 +301,7 @@
       </div>
     </div>
   </div>
-</section>
+</section> -->
 
 <!-- Results -->
 <section class="section" style="background-color: #f9f9f9;">
@@ -337,6 +331,12 @@
           <p style="margin-top: 1rem;">
             Compared across reasoning modes, ThinkMorph's interleaved reasoning consistently outperforms text-only and vision-only approaches by <strong>5.33%</strong>, demonstrating the effectiveness of complementary multimodal reasoning.
           </p>
+          <div class="hero-body has-text-centered" style="margin-top: 1.5rem;">
+            <img src="./static/images/main_result.png" alt="Main Results" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          </div>
+          <div class="hero-body has-text-centered" style="margin-top: 1rem;">
+            <img src="./static/images/mode_comparision.png" alt="Mode Comparison" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          </div>
         </div>
       </div>
     </div>
