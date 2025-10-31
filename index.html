@@ -122,9 +122,78 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
+    /* Navigation styles */
+    .navbar-custom {
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 0.5rem 1rem;
+    }
+    .navbar-dropdown {
+      border: 1px solid #e8e8e8;
+      border-radius: 4px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .navbar-item {
+      padding: 0.75rem 1rem;
+      transition: background-color 0.2s;
+    }
+    .navbar-item:hover {
+      background-color: #f5f5f5;
+    }
+    .navbar-link {
+      font-weight: 500;
+      color: #3273dc;
+    }
+    .navbar-link:hover {
+      color: #667eea;
+    }
   </style>
 </head>
 <body>
+
+<!-- Navigation Bar -->
+<nav class="navbar navbar-custom" role="navigation" aria-label="main navigation">
+  <div class="container is-max-widescreen">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="index.html">
+        <i class="fas fa-home" style="font-size: 1.5rem;"></i>
+      </a>
+    </div>
+
+    <div class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+            More Research
+          </a>
+
+          <div class="navbar-dropdown is-right">
+            <a class="navbar-item" href="https://emma-benchmark.github.io/" target="_blank">
+              <span class="icon"><i class="fas fa-chart-bar"></i></span>
+              <span>EMMA</span>
+            </a>
+            <a class="navbar-item" href="https://muirbench.github.io/" target="_blank">
+              <span class="icon"><i class="fas fa-brain"></i></span>
+              <span>MuirBench</span>
+            </a>
+            <a class="navbar-item" href="https://huggingface.co/datasets/jiaweigu/commonsense-t2i" target="_blank">
+              <span class="icon"><i class="fas fa-lightbulb"></i></span>
+              <span>Commonsense-T2I</span>
+            </a>
+            <a class="navbar-item" href="https://visualsketchpad.github.io/" target="_blank">
+              <span class="icon"><i class="fas fa-pen"></i></span>
+              <span>Visual Sketchpad</span>
+            </a>
+            <a class="navbar-item" href="https://refocusbench.github.io/" target="_blank">
+              <span class="icon"><i class="fas fa-search"></i></span>
+              <span>ReFocus</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
 
 <section class="hero">
   <div class="hero-body">
