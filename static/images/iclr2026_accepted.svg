@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="140" height="32" viewBox="0 0 140 32" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ICLR 2026">
+  <defs>
+    <!-- Match ThinkMorph logo gradient (teal to purple) -->
+    <linearGradient id="tmTextGrad" x1="0" y1="0" x2="140" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2AA6A1"/>
+      <stop offset="0.5" stop-color="#4580B8"/>
+      <stop offset="1" stop-color="#5A54B6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Pure text, no borders or icons -->
+  <text x="70" y="22" fill="url(#tmTextGrad)" font-size="20" font-weight="700"
+        text-anchor="middle"
+        font-family="Google Sans, Noto Sans, Arial, sans-serif" letter-spacing="0.5">
+    ICLR 2026
+  </text>
+</svg>

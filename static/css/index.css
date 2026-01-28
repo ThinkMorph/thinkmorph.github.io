@@ -2,6 +2,24 @@ body {
   font-family: 'Noto Sans', sans-serif;
 }
 
+.conference-badges {
+  display: flex;
+  justify-content: center;
+  margin: 0.5rem 0 0.5rem;
+}
+
+.conference-badge-img {
+  height: 36px;
+  width: auto;
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .conference-badge-img {
+    height: 30px;
+  }
+}
+
 
 .footer .icon-link {
     font-size: 25px;
