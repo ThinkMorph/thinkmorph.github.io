@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ThinkMorph-SSL: Scaling Interleaved Multimodal Reasoning with Pretext Tasks</title>
+  <meta name="description" content="ThinkMorph-SSL turns classical self-supervised pretext tasks into interleaved Thought–Image–Thought traces, giving unified multimodal models practice in generating and reading intermediate images before instruction tuning.">
+  <meta property="og:title" content="ThinkMorph-SSL: Scaling Interleaved Multimodal Reasoning with Pretext Tasks">
+  <meta property="og:description" content="Stage 1 restores corrupted images inside a reasoning trace. Stage 2 teaches which image a question needs.">
+  <meta property="og:url" content="https://thinkmorph.github.io/ssl/">
+  <meta property="og:image" content="https://thinkmorph.github.io/ssl/static/img/fig/stage1.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f4f3ef">
+  <link rel="icon" href="static/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Geist:wght@300..700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+
+<!-- ───────────────────────── top bar ───────────────────────── -->
+<nav class="topbar" aria-label="Sections">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="#top" aria-label="ThinkMorph-SSL, back to top">
+      <svg class="brand-mark" viewBox="0 0 20 20" aria-hidden="true"><rect x="1" y="1" width="8" height="8" rx="1.5"/><rect x="11" y="1" width="8" height="8" rx="1.5"/><rect x="1" y="11" width="8" height="8" rx="1.5"/><rect class="hot" x="11" y="11" width="8" height="8" rx="1.5"/></svg>
+      <span>ThinkMorph-SSL</span>
+    </a>
+    <ul class="toc">
+      <li><a href="#idea">Idea</a></li>
+      <li><a href="#method">Method</a></li>
+      <li><a href="#data">Data</a></li>
+      <li><a href="#results">Results</a></li>
+      <li><a href="#analysis">Analysis</a></li>
+      <li><a href="#cite">Cite</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ───────────────────────── hero ───────────────────────── -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <p class="eyebrow">Interleaved multimodal reasoning <span aria-hidden="true">×</span> self-supervised pretext tasks</p>
+    <h1 class="title">ThinkMorph<span class="title-tail">-SSL</span></h1>
+    <p class="subtitle">Scaling Interleaved Multimodal Reasoning with Pretext Tasks</p>
+
+    <ul class="authors">
+      <li>Jiawei Gu<sup>1</sup><span class="mk mk-lead">*</span></li>
+      <li>Linjie Li<sup>1</sup><span class="mk mk-lead">*</span></li>
+      <li>Yiming Liu<sup>2</sup><span class="mk mk-eq">*</span></li>
+      <li>Yunzhuo Hao<sup>3</sup><span class="mk mk-eq">*</span></li>
+      <li>Huichen Wang<sup>1</sup><span class="mk mk-eq">*</span></li>
+      <li>Guanzheng Chen<sup>4</sup><span class="mk mk-eq">*</span></li>
+      <li>Zhichao Peng<sup>5</sup></li>
+      <li>Luxin Xu<sup>6</sup></li>
+      <li>Xinyu Zhang<sup>6</sup></li>
+      <li>Li Luo<sup>7</sup></li>
+      <li>Disen Lan<sup>6</sup></li>
+      <li>Zican Hu<sup>8</sup></li>
+      <li>Mingyang Song<sup>6</sup></li>
+      <li>David Valente<sup>4</sup></li>
+      <li>Alex Jinpeng Wang<sup>5</sup></li>
+      <li>Yafu Li<sup>9</sup></li>
+      <li>Ganqu Cui<sup>2</sup></li>
+      <li>Zhengyuan Yang<sup>10</sup></li>
+      <li>Qizhe Xie<sup>4</sup><span class="mk mk-adv">†</span></li>
+      <li>Yejin Choi<sup>11</sup><span class="mk mk-adv">†</span></li>
+      <li>Ranjay Krishna<sup>1</sup><span class="mk mk-adv">†</span></li>
+      <li>Yu Cheng<sup>9</sup><span class="mk mk-adv">†</span></li>
+    </ul>
+    <ul class="affils">
+      <li><sup>1</sup>University of Washington</li>
+      <li><sup>2</sup>Tsinghua University</li>
+      <li><sup>3</sup>Zhejiang University</li>
+      <li><sup>4</sup>National University of Singapore</li>
+      <li><sup>5</sup>Central South University</li>
+      <li><sup>6</sup>Fudan University</li>
+      <li><sup>7</sup>The University of Hong Kong</li>
+      <li><sup>8</sup>Nanjing University</li>
+      <li><sup>9</sup>The Chinese University of Hong Kong</li>
+      <li><sup>10</sup>University of Rochester</li>
+      <li><sup>11</sup>Stanford University</li>
+    </ul>
+    <p class="marks-legend">
+      <span><span class="mk mk-lead">*</span> Project lead</span>
+      <span><span class="mk mk-eq">*</span> Equal contribution</span>
+      <span><span class="mk mk-adv">†</span> Equal advising</span>
+    </p>
+
+    <!-- Fill in each href when the resource is public. Buttons with an empty href render as "soon". -->
+    <ul class="links">
+      <li><a class="btn btn-solid" href="" data-link="paper">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L13 5v9.5H4z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9.5 1.5V5H13M6 8.5h5M6 11h5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+        Paper</a></li>
+      <li><a class="btn" href="" data-link="arxiv">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        arXiv</a></li>
+      <li><a class="btn" href="" data-link="code">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 4L1.5 8l4 4M10.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Code</a></li>
+      <li><a class="btn" href="" data-link="pretext">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><ellipse cx="8" cy="4" rx="5.5" ry="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 4v8c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2V4M2.5 8c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+        Pretext-270K</a></li>
+      <li><a class="btn" href="" data-link="instruct">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><ellipse cx="8" cy="4" rx="5.5" ry="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 4v8c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2V4M2.5 8c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+        Instruct-181K</a></li>
+      <li><a class="btn" href="" data-link="model">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2" width="12" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M5 6h6M5 10h3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        Model</a></li>
+      <li><a class="btn btn-ghost" href="#cite">BibTeX</a></li>
+    </ul>
+  </div>
+
+  <!-- the seven pretext transformations: each tile restores itself -->
+  <section class="strip-wrap" aria-label="The seven pretext transformations">
+    <div class="wrap">
+      <ol class="strip" id="strip"></ol>
+      <div class="strip-caption">
+        <p class="trace-formula" aria-label="corrupted image, then thought zero, then generated image, then thought one">
+          <span class="tok tok-img">I<sub>c</sub></span><span class="arr">→</span><span class="tok">T<sub>0</sub></span><span class="arr">→</span><span class="tok tok-gen">I<sub>0</sub></span><span class="arr">→</span><span class="tok">T<sub>1</sub></span>
+        </p>
+        <p>Seven ways to corrupt an ordinary image. In Stage&nbsp;1 the model receives only the corrupted image, describes it, <em>generates</em> the restored image, and describes the result. No question, no instruction.</p>
+        <button class="strip-toggle" id="strip-toggle" type="button" aria-pressed="false">Pause</button>
+      </div>
+    </div>
+  </section>
+</header>
+
+<main>
+
+<!-- ───────────────────────── 1. idea ───────────────────────── -->
+<section class="sec" id="idea">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">01</span>
+      <h2>Reasoning with images needs examples of it.<br><em>Images themselves can supply some.</em></h2>
+    </div>
+
+    <div class="grid-2 idea-grid">
+      <div class="prose">
+        <p class="lede">In <strong>interleaved reasoning</strong>, language guides image generation, and the resulting images inform further reasoning. Unified models support this natively. Training it, however, usually relies on traces built for specific questions, whose visual targets and construction pipelines must be designed for each task family.</p>
+        <p>Classical self-supervised learning faced the same supply problem and solved it with <em>pretext tasks</em>: corrupt an image, then predict the original. The target comes from the image, so supervision grows with the image pool. <strong>ThinkMorph-SSL</strong> turns these tasks into interleaved reasoning traces and uses them as a first training stage, before task-specific instruction tuning.</p>
+        <details class="abstract">
+          <summary>Read the abstract</summary>
+          <p>Interleaved multimodal reasoning allows models to generate intermediate images and use them in subsequent reasoning. Training this ability, however, usually relies on question-specific traces whose visual targets and construction pipelines must be designed for each task family. This dependence limits the supply of supervision even when source images are abundant. We introduce ThinkMorph-SSL, a two-stage recipe that expands this supply through self-supervised learning (SSL) on classical visual pretext tasks. The first stage, <em>pretext reasoning</em>, turns corrupted–clean image pairs into interleaved traces that describe the input, restore the image, and describe the result. The original image supplies the visual target, and a multimodal teacher synthesizes the text, allowing the same construction pipeline to serve different image collections without task questions. Instruction tuning then connects this practice to question-driven reasoning. Experiments show that pretext training improves subsequent learning and that using it before instruction tuning is more effective than mixing the two sources. The resulting model improves perception, spatial understanding, and mental world modeling over its base model with text reasoning. These findings support scaling interleaved supervision by drawing on images themselves alongside task-specific demonstrations.</p>
+        </details>
+      </div>
+
+      <aside class="keynums" aria-label="Headline numbers">
+        <p class="keynums-title">Level averages vs. BAGEL reasoning in text (think-4k), same 7B backbone</p>
+        <div class="keynum" data-level="L1"></div>
+        <div class="keynum" data-level="L2"></div>
+        <div class="keynum" data-level="L3"></div>
+        <p class="keynums-foot">L1 basic visual perception · L2 static spatial understanding · L3 mental world modeling. 12 benchmarks; details in <a href="#results">Results</a>.</p>
+      </aside>
+    </div>
+
+    <figure class="fig fig-wide">
+      <img src="static/img/fig/livingroom.webp" alt="Four photos of the same living room, a bird's-eye view of the room with the camera of image 3 marked, and the same view turned 180 degrees, revealing the three-seat loveseat behind the camera." loading="lazy" width="2200" height="693">
+      <figcaption><strong>A bird's-eye view turns a cross-view question into a visible one.</strong> Four views show the same living room. To find what lies behind the camera of image&nbsp;3, one can picture the room from above and turn around where it stood; the three-seat loveseat then lies straight ahead. Example from Instruct-181K.</figcaption>
+    </figure>
+
+    <div class="sec-sub">
+      <h3>The base model cannot do this yet</h3>
+      <p class="prose-narrow">We first let BAGEL-7B reason without any training. Longer text reasoning <em>lowers</em> its mental-world-modeling average. Inserting an intermediate image into its reasoning, even a correct ground-truth one, also lowers accuracy. Reasoning with images has to be learned.</p>
+      <div class="grid-2 charts-2">
+        <figure class="chart-card">
+          <figcaption class="chart-title">L3 average, BAGEL without training <span class="chart-sub">accuracy (%)</span></figcaption>
+          <div class="chart" id="ch-base-l3"></div>
+          <p class="chart-note">Moving from direct answers to 4K-token text reasoning drops the L3 average by 11.02 points; quadrupling the budget does not recover it.</p>
+        </figure>
+        <figure class="chart-card">
+          <figcaption class="chart-title">Forcing an image step, 500 spatial questions <span class="chart-sub">accuracy (%)</span></figcaption>
+          <div class="chart" id="ch-base-force"></div>
+          <p class="chart-note">Both forced settings are significantly below text reasoning (McNemar |z| = 2.49 and 2.15). The ground-truth image does not recover the loss.</p>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── 2. method ───────────────────────── -->
+<section class="sec sec-alt" id="method">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">02</span>
+      <h2>Two stages, one trace format.<br><em>First the mechanics, then the use.</em></h2>
+    </div>
+
+    <div class="stages">
+      <article class="stage stage-1">
+        <p class="stage-tag">Stage 1 · Pretext reasoning</p>
+        <h3>Restore it, and say what changed</h3>
+        <p>Corrupted–clean pairs become instruction-free traces. The model sees only the corrupted image, describes the visible evidence, generates the restored image, and describes the restored scene. The trace never names the corruption, so the model must infer it.</p>
+        <div class="eq" aria-label="p of T0 T1 I0 given Ic factorizes into three conditionals">
+          <span>p<sub>θ</sub>(T<sub>0</sub>, I<sub>0</sub>, T<sub>1</sub> | I<sub>c</sub>)</span>
+          <span>= p<sub>θ</sub>(T<sub>0</sub> | I<sub>c</sub>) · p<sub>θ</sub>(I<sub>0</sub> | I<sub>c</sub>, T<sub>0</sub>) · p<sub>θ</sub>(T<sub>1</sub> | I<sub>c</sub>, T<sub>0</sub>, I<sub>0</sub>)</span>
+        </div>
+      </article>
+      <article class="stage stage-2">
+        <p class="stage-tag">Stage 2 · Instruction tuning</p>
+        <h3>Build the image the question needs</h3>
+        <p>The same interface, now with a question. Each trace contains reasoning text, one or more intermediate images chosen because they help answer, and a final answer. It teaches when to construct a visual state, which state to construct, and how to read the answer from it.</p>
+        <div class="eq" aria-label="image and question, then T0, I0, and so on, up to TK">
+          <span>(x<sup>img</sup>, x<sup>text</sup>) → T<sub>0</sub> → I<sub>0</sub> → ⋯ → T<sub>K</sub></span>
+        </div>
+      </article>
+    </div>
+
+    <figure class="fig fig-wide fig-zoom">
+      <button class="zoom-btn" type="button" aria-label="Enlarge the overview figure">
+        <img src="static/img/fig/stage1.webp" alt="Overview figure. Top: Stage 1 pretext reasoning, a jigsaw-scrambled alpine village is described, restored, and described again; six more transformations are shown. Bottom: Stage 2 instruction tuning across three levels: basic visual perception, static spatial understanding, and mental world modeling." loading="lazy">
+      </button>
+      <figcaption><strong>Overview of the two training stages.</strong> Stage&nbsp;1 converts visual pretext tasks into Thought–Image–Thought traces. Stage&nbsp;2 grounds these primitives in question-driven traces across three cognitive levels: what is directly visible (L1), how the visible scene is spatially organized (L2), and what scene state must be reconstructed beyond the input (L3).</figcaption>
+    </figure>
+
+    <!-- Stage 1 explorer -->
+    <div class="explorer" id="ex-pretext">
+      <div class="explorer-head">
+        <h3><span class="dot dot-1" aria-hidden="true"></span>Browse Stage 1 traces</h3>
+        <p>Real examples from Pretext-270K. The input carries no text at all.</p>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Pretext task" id="ex-pretext-tabs"></div>
+      <div class="ex-sub">
+        <div class="pager" id="ex-pretext-pager" aria-label="Example"></div>
+        <span class="ex-source" id="ex-pretext-source"></span>
+      </div>
+      <div class="ptrace" id="ex-pretext-body" aria-live="polite"></div>
+    </div>
+
+    <!-- Stage 2 explorer -->
+    <div class="explorer" id="ex-instruct">
+      <div class="explorer-head">
+        <h3><span class="dot dot-2" aria-hidden="true"></span>Browse Stage 2 traces</h3>
+        <p>Examples from Instruct-181K, one per construction pipeline. Each intermediate image appears before the reasoning step that uses it.</p>
+      </div>
+      <div class="tabs tabs-grouped" role="tablist" aria-label="Construction pipeline" id="ex-instruct-tabs"></div>
+      <div class="ex-sub">
+        <div class="pager" id="ex-instruct-pager" aria-label="Example"></div>
+        <span class="ex-source" id="ex-instruct-source"></span>
+      </div>
+      <div class="itrace" id="ex-instruct-body" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── 3. data ───────────────────────── -->
+<section class="sec" id="data">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">03</span>
+      <h2>Two corpora, same interface.<br><em>One grows with images, one with pipelines.</em></h2>
+    </div>
+
+    <div class="corpora">
+      <article class="corpus corpus-1">
+        <p class="corpus-kicker">Stage 1</p>
+        <h3>Pretext-270K</h3>
+        <p class="corpus-big"><span class="num">270,896</span> traces</p>
+        <p>Instruction-free Thought–Image–Thought traces, balanced across seven programmatic transformations. The original image supplies the visual target; GPT-5 writes the two thoughts from both images and a reference caption.</p>
+        <dl class="facts">
+          <div><dt>Transformations</dt><dd>Jigsaw · colorization · super-resolution · masked inpainting · rotation &amp; flip recovery · denoising · deformation recovery</dd></div>
+          <div><dt>Image sources</dt><dd>SA-1B · PixMo-Cap · VSI-590K · LLaVA-OneVision-1.5 · DeepVision-103K · Matterport3D · Realsee3D · 360+x</dd></div>
+          <div><dt>Questions needed</dt><dd>None. New image pools can be added as is.</dd></div>
+        </dl>
+      </article>
+      <article class="corpus corpus-2">
+        <p class="corpus-kicker">Stage 2</p>
+        <h3>Instruct-181K</h3>
+        <p class="corpus-big"><span class="num">181,291</span> traces</p>
+        <p>Question-driven interleaved traces from nine construction pipelines. Wherever possible, answers come from geometry, annotations, or metadata rather than from a language model.</p>
+        <figure class="chart-card chart-card-flat">
+          <figcaption class="chart-title">Traces by level</figcaption>
+          <div class="legend" id="lg-levels"></div>
+          <div class="chart" id="ch-levels"></div>
+        </figure>
+      </article>
+    </div>
+
+    <figure class="fig fig-wide fig-zoom">
+      <button class="zoom-btn" type="button" aria-label="Enlarge the pipelines figure">
+        <img src="static/img/fig/spatial_smile.webp" alt="The nine Instruct-181K construction pipelines grouped by level: visual search and jigsaw QA (L1); object counting and depth perception (L2); object rotation, object editing, allocentric reframing from point clouds, panoramic completion, SAM3D viewpoint rendering, and ego-exo transfer (L3)." loading="lazy">
+      </button>
+      <figcaption><strong>Instruct-181K construction pipelines.</strong> Each panel shows how one pipeline builds the intermediate visual state used in a trace: a localized crop, a reordered view, a depth map, an edited object state, or a synthesized viewpoint.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ───────────────────────── 4. results ───────────────────────── -->
+<section class="sec sec-alt" id="results">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">04</span>
+      <h2>Reasoning with images beats the same model reasoning in text,<br><em>on all twelve benchmarks.</em></h2>
+    </div>
+
+    <p class="prose-narrow">We train BAGEL-7B-MoT with both stages and compare it with the same backbone reasoning in text (think-4k), across twelve benchmarks in three levels. It improves every benchmark, including the nine that share no source dataset or task family with Instruct-181K. A 16K text budget moves the three level averages by at most 2.46 points.</p>
+
+    <figure class="chart-card">
+      <figcaption class="chart-title">Per-benchmark accuracy: BAGEL think-4k → ThinkMorph-SSL <span class="chart-sub">accuracy (%)</span></figcaption>
+      <div class="chart-controls">
+        <div class="legend" id="lg-dumbbell"></div>
+        <label class="check"><input type="checkbox" id="tg-nothink"> Show BAGEL no-think</label>
+      </div>
+      <div class="chart" id="ch-dumbbell"></div>
+    </figure>
+
+    <div class="table-block">
+      <div class="tabs tabs-small" role="tablist" aria-label="Results table" id="tbl-tabs">
+        <button role="tab" aria-selected="true" data-t="l1">Level 1 · Perception</button>
+        <button role="tab" aria-selected="false" data-t="l23">Levels 2 &amp; 3 · Spatial and world modeling</button>
+      </div>
+      <div class="table-scroll" id="tbl-results" tabindex="0" aria-label="Results table"></div>
+      <p class="table-note">Δ is computed against BAGEL think-4k. HR-4K / HR-8K are HRBench at 4K / 8K; MME-RW-L averages its reasoning and perception sub-scores. All models run through the same adapted VLMEvalKit pipeline.</p>
+    </div>
+
+    <div class="callouts">
+      <div class="callout">
+        <h4>Where it stands</h4>
+        <p>On the L2 and L3 averages it exceeds every open-source baseline except the concurrent SenseNova-U1-8B, whose architecture, data, and training scale differ. It leads Qwen2.5-VL-32B by 5.48 and 5.17 points, and its L3 average is slightly above Gemini 2.5 Flash (41.10 vs. 40.35).</p>
+      </div>
+      <div class="callout">
+        <h4>Where it doesn't</h4>
+        <p>GPT-5 leads on all three averages. On L1, Qwen2.5-VL-32B and LongCat-Next-A3B score higher. The model still trails BAGEL's own direct answers on BLINK, OmniSpatial, SpatialViz, and RealWorldQA; on each of these, text reasoning also hurts the base model.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── 5. analysis ───────────────────────── -->
+<section class="sec" id="analysis">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">05</span>
+      <h2>Does the pretext stage matter?<br><em>Held fixed, one variable at a time.</em></h2>
+    </div>
+
+    <div class="grid-2 charts-2 ablation-top">
+      <figure class="chart-card">
+        <figcaption class="chart-title">Same Stage-2 budget (100K samples), full data pools <span class="chart-sub">accuracy (%)</span></figcaption>
+        <div class="legend" id="lg-fixed"></div>
+        <div class="chart" id="ch-fixed"></div>
+        <p class="chart-note">One benchmark per level. This fixes the Stage-2 sample budget, not total compute: the staged run also receives Stage-1 training.</p>
+      </figure>
+      <figure class="chart-card">
+        <figcaption class="chart-title">MindCube accuracy by Stage-2 epoch <span class="chart-sub">accuracy (%)</span></figcaption>
+        <div class="tabs tabs-small" role="tablist" aria-label="Ablation" id="abl-tabs">
+          <button role="tab" aria-selected="true" data-k="order">Staged vs. mixed</button>
+          <button role="tab" aria-selected="false" data-k="instr">Instruction-free</button>
+          <button role="tab" aria-selected="false" data-k="internvl">InternVL-U-4B</button>
+        </div>
+        <div class="legend" id="lg-abl"></div>
+        <div class="chart" id="ch-abl"></div>
+        <p class="chart-note" id="abl-note"></p>
+      </figure>
+    </div>
+
+    <div class="sec-sub">
+      <h3>Does the model use the images it generates?</h3>
+      <p class="prose-narrow">The base model gained nothing from a correct intermediate image. After training, the image matters. We sample eight trajectories per problem and let the model decide whether to generate an image. These are within-problem associations, not interventions.</p>
+      <div class="grid-2 charts-2">
+        <figure class="chart-card">
+          <figcaption class="chart-title">Accuracy with vs. without an intermediate image <span class="chart-sub">%</span></figcaption>
+          <div class="legend" id="lg-use"></div>
+          <div class="chart" id="ch-use"></div>
+          <p class="chart-note">Problems whose samples include both kinds of trajectory: 15 (spatial training split) and 42 (MMSI). 95% CIs of the gap: [20.3, 54.7] and [1.5, 23.9].</p>
+        </figure>
+        <figure class="chart-card">
+          <figcaption class="chart-title">Error rate when the image has a critical defect <span class="chart-sub">%</span></figcaption>
+          <div class="legend" id="lg-defect"></div>
+          <div class="chart" id="ch-defect"></div>
+          <p class="chart-note">A rubric judge that does not see the answer flags reversed geometry, omitted evidence, or hallucinated content (agreement with humans: weighted κ = 0.75).</p>
+        </figure>
+      </div>
+    </div>
+
+    <div class="sec-sub">
+      <h3>What does it cost?</h3>
+      <p class="prose-narrow">Generating an image costs far more FLOPs than writing text (5.73P vs. 0.08P per V<sup>⋆</sup> question for think-16k), but image denoising runs at about 62% hardware utilization while autoregressive text decoding stays below 1.1%. The written reasoning is also much shorter.</p>
+      <div class="grid-2 charts-2">
+        <figure class="chart-card">
+          <figcaption class="chart-title">V<sup>⋆</sup> accuracy vs. latency per question <span class="chart-sub">one H20-3e GPU, batch 1</span></figcaption>
+          <div class="legend" id="lg-cost"></div>
+          <div class="chart" id="ch-cost"></div>
+        </figure>
+        <figure class="chart-card">
+          <figcaption class="chart-title">Mean trace length on the same questions <span class="chart-sub">characters</span></figcaption>
+          <div class="legend" id="lg-len"></div>
+          <div class="chart" id="ch-len"></div>
+          <p class="chart-note">MMSI is the exception: think-4k there often emits only an answer letter.</p>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── 6. cite ───────────────────────── -->
+<section class="sec sec-cite" id="cite">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">06</span>
+      <h2>Citation</h2>
+    </div>
+    <div class="bib">
+      <button class="copy" type="button" id="bib-copy">Copy</button>
+<pre id="bib-text"><code>@article{gu2026thinkmorphssl,
+  title   = {ThinkMorph-SSL: Scaling Interleaved Multimodal Reasoning with Pretext Tasks},
+  author  = {Gu, Jiawei and Li, Linjie and Liu, Yiming and Hao, Yunzhuo and Wang, Huichen and
+             Chen, Guanzheng and Peng, Zhichao and Xu, Luxin and Zhang, Xinyu and Luo, Li and
+             Lan, Disen and Hu, Zican and Song, Mingyang and Valente, David and Wang, Alex Jinpeng and
+             Li, Yafu and Cui, Ganqu and Yang, Zhengyuan and Xie, Qizhe and Choi, Yejin and
+             Krishna, Ranjay and Cheng, Yu},
+  journal = {arXiv preprint},
+  year    = {2026}
+}</code></pre>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <p>ThinkMorph-SSL · 2026</p>
+    <p>Earlier work: <a href="https://thinkmorph.github.io/">ThinkMorph</a></p>
+  </div>
+</footer>
+
+<div class="tooltip" id="tooltip" role="status" aria-live="polite" hidden></div>
+<dialog class="lightbox" id="lightbox" aria-label="Enlarged figure">
+  <button class="lightbox-close" type="button" aria-label="Close">×</button>
+  <img alt="">
+</dialog>
+
+<script src="static/js/examples.js"></script>
+<script src="static/js/main.js"></script>
+</body>
+</html>
