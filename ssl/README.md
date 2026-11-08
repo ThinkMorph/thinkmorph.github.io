@@ -5,8 +5,8 @@ Static page: plain HTML/CSS/JS, no build step and no dependencies. Open `index.h
 
 ## Before publishing
 
-- **Links**: fill in the empty `href=""` of the buttons in `index.html` (Paper, arXiv, Code, Pretext-270K,
-  Instruct-181K, Model). A button with an empty `href` shows as "soon".
+- **Links**: the dataset and model buttons point to Hugging Face. Paper, arXiv, and Code still have an empty
+  `href=""` in `index.html`; a button with an empty `href` shows as "soon".
 - **BibTeX**: update the entry in `index.html` once the arXiv ID exists.
 - **Numbers**: every result shown on the page lives in one block at the top of `static/js/main.js`, copied from
   `section/5_experiments.tex` and `section/A_appendix.tex`. If the paper changes, edit that block.

@@ -98,15 +98,18 @@
       <li><a class="btn" href="" data-link="code">
         <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 4L1.5 8l4 4M10.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Code</a></li>
-      <li><a class="btn" href="" data-link="pretext">
+      <li><a class="btn" href="https://huggingface.co/datasets/ThinkMorph/Pretext-270K" data-link="pretext">
         <svg viewBox="0 0 16 16" aria-hidden="true"><ellipse cx="8" cy="4" rx="5.5" ry="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 4v8c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2V4M2.5 8c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
         Pretext-270K</a></li>
-      <li><a class="btn" href="" data-link="instruct">
+      <li><a class="btn" href="https://huggingface.co/datasets/ThinkMorph/Instruct-180K" data-link="instruct">
         <svg viewBox="0 0 16 16" aria-hidden="true"><ellipse cx="8" cy="4" rx="5.5" ry="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 4v8c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2V4M2.5 8c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
-        Instruct-181K</a></li>
-      <li><a class="btn" href="" data-link="model">
+        Instruct-180K</a></li>
+      <li><a class="btn" href="https://huggingface.co/ThinkMorph/ThinkMorph-SSL-Base" data-link="model-base">
         <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2" width="12" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M5 6h6M5 10h3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-        Model</a></li>
+        Base model</a></li>
+      <li><a class="btn" href="https://huggingface.co/ThinkMorph/ThinkMorph-SSL-Instruct" data-link="model-instruct">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2" width="12" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M5 6h6M5 10h3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        Instruct model</a></li>
       <li><a class="btn btn-ghost" href="#cite">BibTeX</a></li>
     </ul>
   </div>
@@ -157,7 +160,7 @@
 
     <figure class="fig fig-wide">
       <img src="static/img/fig/livingroom.webp" alt="Four photos of the same living room, a bird's-eye view of the room with the camera of image 3 marked, and the same view turned 180 degrees, revealing the three-seat loveseat behind the camera." loading="lazy" width="2200" height="693">
-      <figcaption><strong>A bird's-eye view turns a cross-view question into a visible one.</strong> Four views show the same living room. To find what lies behind the camera of image&nbsp;3, one can picture the room from above and turn around where it stood; the three-seat loveseat then lies straight ahead. Example from Instruct-181K.</figcaption>
+      <figcaption><strong>A bird's-eye view turns a cross-view question into a visible one.</strong> Four views show the same living room. To find what lies behind the camera of image&nbsp;3, one can picture the room from above and turn around where it stood; the three-seat loveseat then lies straight ahead. Example from Instruct-180K.</figcaption>
     </figure>
 
     <div class="sec-sub">
@@ -232,7 +235,7 @@
     <div class="explorer" id="ex-instruct">
       <div class="explorer-head">
         <h3><span class="dot dot-2" aria-hidden="true"></span>Browse Stage 2 traces</h3>
-        <p>Examples from Instruct-181K, one per construction pipeline. Each intermediate image appears before the reasoning step that uses it.</p>
+        <p>Examples from Instruct-180K, one per construction pipeline. Each intermediate image appears before the reasoning step that uses it.</p>
       </div>
       <div class="tabs tabs-grouped" role="tablist" aria-label="Construction pipeline" id="ex-instruct-tabs"></div>
       <div class="ex-sub">
@@ -263,25 +266,27 @@
           <div><dt>Image sources</dt><dd>SA-1B · PixMo-Cap · VSI-590K · LLaVA-OneVision-1.5 · DeepVision-103K · Matterport3D · Realsee3D · 360+x</dd></div>
           <div><dt>Questions needed</dt><dd>None. New image pools can be added as is.</dd></div>
         </dl>
+        <a class="corpus-link" href="https://huggingface.co/datasets/ThinkMorph/Pretext-270K">Download on Hugging Face →</a>
       </article>
       <article class="corpus corpus-2">
         <p class="corpus-kicker">Stage 2</p>
-        <h3>Instruct-181K</h3>
-        <p class="corpus-big"><span class="num">181,291</span> traces</p>
+        <h3>Instruct-180K</h3>
+        <p class="corpus-big"><span class="num">180,490</span> traces</p>
         <p>Question-driven interleaved traces from nine construction pipelines. Wherever possible, answers come from geometry, annotations, or metadata rather than from a language model.</p>
         <figure class="chart-card chart-card-flat">
           <figcaption class="chart-title">Traces by level</figcaption>
           <div class="legend" id="lg-levels"></div>
           <div class="chart" id="ch-levels"></div>
         </figure>
+        <a class="corpus-link" href="https://huggingface.co/datasets/ThinkMorph/Instruct-180K">Download on Hugging Face →</a>
       </article>
     </div>
 
     <figure class="fig fig-wide fig-zoom">
       <button class="zoom-btn" type="button" aria-label="Enlarge the pipelines figure">
-        <img src="static/img/fig/spatial_smile.webp" alt="The nine Instruct-181K construction pipelines grouped by level: visual search and jigsaw QA (L1); object counting and depth perception (L2); object rotation, object editing, allocentric reframing from point clouds, panoramic completion, SAM3D viewpoint rendering, and ego-exo transfer (L3)." loading="lazy">
+        <img src="static/img/fig/spatial_smile.webp" alt="The nine Instruct-180K construction pipelines grouped by level: visual search and jigsaw QA (L1); object counting and depth perception (L2); object rotation, object editing, allocentric reframing from point clouds, panoramic completion, SAM3D viewpoint rendering, and ego-exo transfer (L3)." loading="lazy">
       </button>
-      <figcaption><strong>Instruct-181K construction pipelines.</strong> Each panel shows how one pipeline builds the intermediate visual state used in a trace: a localized crop, a reordered view, a depth map, an edited object state, or a synthesized viewpoint.</figcaption>
+      <figcaption><strong>Instruct-180K construction pipelines.</strong> Each panel shows how one pipeline builds the intermediate visual state used in a trace: a localized crop, a reordered view, a depth map, an edited object state, or a synthesized viewpoint.</figcaption>
     </figure>
   </div>
 </section>
@@ -294,7 +299,7 @@
       <h2>Reasoning with images beats the same model reasoning in text,<br><em>on all twelve benchmarks.</em></h2>
     </div>
 
-    <p class="prose-narrow">We train BAGEL-7B-MoT with both stages and compare it with the same backbone reasoning in text (think-4k), across twelve benchmarks in three levels. It improves every benchmark, including the nine that share no source dataset or task family with Instruct-181K. A 16K text budget moves the three level averages by at most 2.46 points.</p>
+    <p class="prose-narrow">We train BAGEL-7B-MoT with both stages and compare it with the same backbone reasoning in text (think-4k), across twelve benchmarks in three levels. It improves every benchmark, including the nine that share no source dataset or task family with Instruct-180K. A 16K text budget moves the three level averages by at most 2.46 points.</p>
 
     <figure class="chart-card">
       <figcaption class="chart-title">Per-benchmark accuracy: BAGEL think-4k → ThinkMorph-SSL <span class="chart-sub">accuracy (%)</span></figcaption>

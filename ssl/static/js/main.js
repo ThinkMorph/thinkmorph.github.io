@@ -104,10 +104,10 @@
     { label: "SAT", a: 3578, b: 1091 },
     { label: "MMSI", a: 1007, b: 1268 },
   ];
-  const INSTRUCT_LEVELS = [ // Section 4.2
+  const INSTRUCT_LEVELS = [ // Instruct-180K dataset card on Hugging Face (180,490 traces)
     { label: "L1 · Basic visual perception", short: "L1", v: 62100, color: "#ea8eab" },
-    { label: "L2 · Static spatial understanding", short: "L2", v: 16544, color: "#cf3f6c" },
-    { label: "L3 · Mental world modeling", short: "L3", v: 102647, color: "#8f0f37" },
+    { label: "L2 · Static spatial understanding", short: "L2", v: 15144, color: "#cf3f6c" },
+    { label: "L3 · Mental world modeling", short: "L3", v: 103246, color: "#8f0f37" },
   ];
 
   /* ────────────────────────────── helpers ────────────────────────────── */

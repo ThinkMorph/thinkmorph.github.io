@@ -122,6 +122,8 @@ button { font: inherit; color: inherit; }
 .btn-ghost { background: transparent; }
 .btn.is-soon { color: var(--ink-3); border-style: dashed; cursor: default; background: transparent; }
 .btn.is-soon::after { content: "soon"; font: 500 10.5px/1 var(--mono); letter-spacing: .04em; padding: 3px 6px; border-radius: 999px; background: var(--sunken); color: var(--ink-3); }
+.corpus-link { display: inline-block; margin-top: 18px; font: 500 13px/1.4 var(--mono); color: var(--rose); text-decoration: none; border-bottom: 1px solid currentColor; }
+.corpus-link:hover { color: var(--ink); }
 .btn-solid.is-soon { color: var(--ink-3); border-color: var(--rule-2); }
 
 /* pretext strip */
