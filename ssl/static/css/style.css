@@ -175,16 +175,17 @@ button { font: inherit; color: inherit; }
 /* ── sections ────────────────────────────────────────────────────────────── */
 .sec { padding: 104px 0; }
 .sec-alt { background: var(--surface); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
-.sec-head { display: grid; grid-template-columns: 64px 1fr; gap: 10px; align-items: start; margin-bottom: 44px; }
+.sec-head { margin-bottom: 56px; }
 .sec-no { font: 500 13px/1 var(--mono); color: var(--rose); padding-top: 14px; letter-spacing: .04em; }
 .sec-no::before { content: "§ "; color: var(--ink-3); }
 .sec-head h2 {
-  margin: 0; font: 500 clamp(30px, 3.8vw, 48px)/1.08 var(--serif); letter-spacing: -.02em;
-  font-variation-settings: "opsz" 60; max-width: 24ch;
+  margin: 0; font: 400 clamp(48px, 6.6vw, 92px)/1 var(--serif); letter-spacing: -.03em;
+  font-variation-settings: "opsz" 72;
 }
+.sec-tag { margin: 16px 0 0; max-width: 48ch; font: 400 clamp(21px, 2.3vw, 28px)/1.3 var(--serif); color: var(--ink-3); }
 .sec-head h2 em { font-style: italic; font-weight: 400; color: var(--ink-3); }
 .sec-sub { margin-top: 84px; }
-.sec-sub > h3, .explorer-head h3 {
+.sec-sub > h3, .cost-grid h3, .explorer-head h3 {
   margin: 0 0 12px; font: 500 26px/1.2 var(--serif); letter-spacing: -.01em; font-variation-settings: "opsz" 36;
 }
 .prose p, .prose-narrow { max-width: 68ch; }
@@ -254,6 +255,7 @@ button { font: inherit; color: inherit; }
 .chart-note { margin: 12px 0 0; font-size: 13px; color: var(--ink-3); line-height: 1.5; }
 .chart-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
 .charts-2 { align-items: stretch; }
+.cost-grid { align-items: center; gap: 56px; }
 
 .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 0 0 10px; font-size: 12.5px; color: var(--ink-2); }
 .legend .sw { display: inline-flex; align-items: center; gap: 7px; }
@@ -265,7 +267,7 @@ button { font: inherit; color: inherit; }
 .check { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--ink-2); cursor: pointer; user-select: none; }
 .check input { accent-color: var(--ink); width: 15px; height: 15px; margin: 0; }
 
-.data-table { margin-top: 10px; }
+.data-table { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .data-table summary { cursor: pointer; font: 500 12px/1 var(--mono); color: var(--ink-3); padding: 6px 0; }
 .data-table table { border-collapse: collapse; font: 400 12.5px/1.4 var(--mono); margin-top: 6px; }
 .data-table th, .data-table td { padding: 4px 12px 4px 0; text-align: left; border-bottom: 1px solid var(--grid); }
@@ -387,6 +389,8 @@ button { font: inherit; color: inherit; }
 .corpus-big { margin: 18px 0 14px; font: 400 15px/1 var(--sans); color: var(--ink-3); }
 .corpus-big .num { font: 500 54px/1 var(--serif); color: var(--ink); letter-spacing: -.03em; margin-right: 6px; font-variant-numeric: tabular-nums; }
 .corpus > p { color: var(--ink-2); font-size: 15px; margin: 0; }
+.corpus > .corpus-kicker { margin: 0 0 10px; }
+.corpus > .corpus-big { margin: 18px 0 14px; }
 .facts { margin: 18px 0 0; display: grid; gap: 12px; }
 .facts div { display: grid; grid-template-columns: 128px 1fr; gap: 12px; padding-top: 12px; border-top: 1px solid var(--rule); }
 .facts dt { font: 500 12px/1.5 var(--mono); color: var(--ink-3); }
@@ -416,7 +420,7 @@ button { font: inherit; color: inherit; }
 .callout h4 { margin: 0 0 6px; font: 600 14px/1.3 var(--sans); }
 .callout p { margin: 0; font-size: 14.5px; color: var(--ink-2); }
 
-.ablation-top { margin-top: 0; }
+.ablation-top { margin-top: 0; align-items: start; }
 
 /* ── cite + footer ───────────────────────────────────────────────────────── */
 .sec-cite { padding-bottom: 80px; }
@@ -461,7 +465,7 @@ button { font: inherit; color: inherit; }
   .hero { padding-top: 40px; }
   .grid-2, .stages, .corpora, .callouts { grid-template-columns: 1fr; }
   .sec { padding: 72px 0; }
-  .sec-head { grid-template-columns: 1fr; gap: 8px; margin-bottom: 30px; }
+  .sec-head { margin-bottom: 32px; }
   .sec-no { padding-top: 0; }
   .ptrace { grid-template-columns: 1fr; }
   .ptrace .step { border-left: 0; border-top: 1px solid var(--rule); }
