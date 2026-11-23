@@ -29,7 +29,6 @@ Every figure on the page is a figure from the paper; the page draws no charts of
 | `cost_scatter.webp` | `figures/cost_scatter.pdf` |
 | `ablation_row.webp` | `figures/fig_ablation_row.pdf` |
 | `instruction_free.webp` | `figures/fig_instruction_free.pdf` |
-| `livingroom.webp` | `figures/intro_livingroom.jpg` |
 
 To render the PDF figures again (needs PyMuPDF and Pillow):
 
@@ -37,6 +36,6 @@ To render the PDF figures again (needs PyMuPDF and Pillow):
 python3 _tools/render_paper_figs.py <paper>/figures static/img/fig
 ```
 
-The overview, pipelines and living-room images, the strip at the top and the example traces
+The overview and pipelines images, the strip at the top and the example traces
 (`static/img/pretext/`, `static/img/instruct/`, `static/js/examples.js`) were made from the paper's figures and
 appendix cards with `webpage/_tools/build_assets.py` in the paper repository.
