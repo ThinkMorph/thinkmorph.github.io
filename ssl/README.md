@@ -9,7 +9,7 @@ Static page: plain HTML/CSS/JS, no build step and no dependencies. Open `index.h
   `href=""` in `index.html`; a button with an empty `href` shows as "soon".
 - **BibTeX**: update the entry in `index.html` once the arXiv ID exists.
 - **Numbers**: every result shown on the page lives in one block at the top of `static/js/main.js`, copied from
-  `section/5_experiments.tex` and `section/A_appendix.tex`. If the paper changes, edit that block.
+  `section/5_experiments_v2.tex` and `section/A_appendix.tex`. If the paper changes, edit that block.
   The two MindCube curves marked "≈" (Stage 2 only, mixed) are read from the plotted data of the ablation figure,
   since the paper has no table for them.
 

@@ -3,7 +3,7 @@
   "use strict";
 
   /* ────────────────────────────── numbers from the paper ──────────────────────────────
-     Every number below is copied from the paper (section/5_experiments.tex and
+     Every number below is copied from the paper (section/5_experiments_v2.tex and
      section/A_appendix.tex). Update here if the paper changes.                         */
 
   const L1_COLS = ["V*", "HR-4K", "HR-8K", "MME-RW-L", "RealWorldQA"];
@@ -24,8 +24,8 @@
     ["Show-o2-7B", "Unified", [42.93, 49.75, 43.25, 41.01, 64.05], 48.20, [43.35, 67.95, 74.08, 26.00], [29.00, 40.00, 40.51, 30.68], 52.84, 35.05],
     ["BAGEL no-think", "BAGEL inference variants", [52.88, 46.88, 39.50, 41.88, 70.59], 50.35, [63.91, 70.92, 43.17, 46.67], [31.60, 34.71, 45.79, 33.56], 56.17, 36.42],
     ["BAGEL think-4k", "BAGEL inference variants", [58.64, 59.38, 48.88, 25.64, 64.44], 51.40, [53.39, 72.81, 85.17, 47.33], [27.40, 29.66, 31.57, 12.97], 64.67, 25.40],
-    ["BAGEL think-16k", "BAGEL inference variants", [61.26, 63.00, 50.50, 25.64, 68.89], 53.86, [52.97, 74.30, 83.00, 46.67], [29.00, 29.66, 35.09, 13.56], 64.23, 25.83],
-    ["ThinkMorph-SSL (ours)", "ours", [71.20, 66.88, 56.13, 45.75, 69.02], 61.80, [56.34, 74.79, 89.92, 61.33], [32.50, 57.40, 43.12, 31.36], 70.60, 41.10],
+    ["BAGEL think-16k", "BAGEL inference variants", [61.26, 63.00, 50.50, 25.64, 68.89], 53.86, [52.97, 74.30, 83.00, 46.67], [29.00, 29.66, 35.09, 13.56], 64.23, 26.83],
+    ["ThinkMorph-SSL (ours)", "ours", [68.06, 67.00, 55.38, 45.28, 70.46], 61.24, [58.02, 74.79, 86.75, 56.00], [34.40, 60.38, 45.27, 33.22], 68.89, 43.32],
   ];
   const row = (name) => RESULTS.find((r) => r[0] === name);
   const OURS = row("ThinkMorph-SSL (ours)");
@@ -41,12 +41,12 @@
   const BASE_L3 = [ // Table 1
     { label: "Answer directly (no-think)", v: 36.42 },
     { label: "Text reasoning, 4K (think-4k)", v: 25.40 },
-    { label: "Text reasoning, 16K (think-16k)", v: 25.83 },
+    { label: "Text reasoning, 16K (think-16k)", v: 26.83 },
   ];
   const BASE_FORCE = [ // Table 2
-    { label: "Text reasoning", v: 47.40 },
-    { label: "Forced image step (ForceTIT)", v: 41.20 },
-    { label: "ForceTIT + ground-truth image", v: 42.00 },
+    { label: "Text reasoning (16k)", v: 47.40 },
+    { label: "Forced interleaved (16k)", v: 41.20 },
+    { label: "Forced interleaved + ground-truth image", v: 42.00 },
   ];
 
   const FIXED_BUDGET = [ // Table 5: Stage 2 only -> Stage 1 -> Stage 2
@@ -60,7 +60,7 @@
   // figure reproduce their table values exactly with the same read-off).
   const ABL = {
     order: {
-      note: "Stage-1 traces are built from the same images as the MindCube instruction data, so the staged run sees no extra images. Mixing samples traces in proportion to corpus size, so most of its steps are pretext traces; this shows that mixing at natural proportions does not reach the staged schedule within this budget, not that order alone is responsible.",
+      note: "Stage-1 traces are built from the same images as the spatial instruction data, so the staged run sees no extra images. Against Stage 2 alone, the staged run leads from the second epoch and finishes 4.9 points ahead. At the same instruction-tuning budget, the mixed run, which samples both corpora in proportion to their size, stays near 57%.",
       series: [
         { name: "Stage 1 → Stage 2 (ours)", color: "var(--rose)", values: [59.0, 63.9, 66.8, 66.6] },
         { name: "Stage 2 only", color: "var(--gray-mark)", values: [62.6, 63.3, 59.3, 61.7], approx: true },
@@ -68,14 +68,14 @@
       ],
     },
     instr: {
-      note: "Only the Stage-1 traces change: the instructed variant adds an explicit instruction to restore the image. Instruction-free leads at every checkpoint (mean 64.1 vs. 61.42), suggesting that inferring the transformation is part of what makes the traces useful.",
+      note: "Only the Stage-1 traces change: the instructed variant adds an explicit instruction to restore the image. Instruction-free leads at every checkpoint, by 2.7 points on average (64.08 vs. 61.42), suggesting that Stage 1 can build the skill without task instructions.",
       series: [
         { name: "Instruction-free Stage 1 (ours)", color: "var(--rose)", values: [59.0, 63.9, 66.8, 66.6] },
         { name: "Instructed Stage 1", color: "var(--amber)", dash: true, values: [58.75, 63.17, 58.65, 65.10] },
       ],
     },
     internvl: {
-      note: "Preliminary: same comparison with InternVL-U-4B, changing only the backbone. Most of the gap appears in the last epoch of a single run on one benchmark, so we read it as consistent with the BAGEL results rather than as independent confirmation.",
+      note: "Same comparison with InternVL-U-4B, changing only the backbone. The gain stays below 0.5 points for the first three epochs and reaches 4.72 points in the fourth: the benefit emerges as instruction tuning progresses.",
       series: [
         { name: "Stage 1 → Stage 2", color: "var(--rose)", values: [54.62, 55.77, 56.63, 62.12] },
         { name: "Stage 2 only", color: "var(--gray-mark)", values: [54.62, 55.29, 56.25, 57.40] },
@@ -95,8 +95,8 @@
     { name: "BAGEL no-think", x: 1.3, y: 52.88, kind: "base", dx: 10, dy: 16 },
     { name: "BAGEL think-4k", x: 44.3, y: 58.64, kind: "base", dx: 10, dy: 15 },
     { name: "BAGEL think-16k", x: 112.4, y: 61.26, kind: "base", dx: -10, dy: 17, anchor: "end" },
-    { name: "ThinkMorph-SSL", x: 62.3, y: 71.20, kind: "ours", dx: 10, dy: -8 },
-    { name: "ThinkMorph-SSL + TeaCache", x: 21.3, y: 69.10, kind: "ours-hollow", dx: 10, dy: 17 },
+    { name: "ThinkMorph-SSL", x: 62.3, y: 68.06, kind: "ours", dx: 10, dy: 17 },
+    { name: "ThinkMorph-SSL + TeaCache", x: 21.3, y: 69.10, kind: "ours-hollow", dx: 10, dy: -8 },
   ];
   const TRACE_LEN = [ // Figure 4 (right), mean characters
     { label: "V*", a: 5102, b: 1104 },
