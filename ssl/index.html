@@ -27,7 +27,7 @@
       <span>ThinkMorph-SSL</span>
     </a>
     <ul class="toc">
-      <li><a href="#idea">Idea</a></li>
+      <li><a href="#idea">Motivation</a></li>
       <li><a href="#method">Method</a></li>
       <li><a href="#data">Data</a></li>
       <li><a href="#results">Results</a></li>
@@ -40,7 +40,6 @@
 <!-- ───────────────────────── hero ───────────────────────── -->
 <header class="hero" id="top">
   <div class="wrap">
-    <p class="eyebrow">Interleaved multimodal reasoning <span aria-hidden="true">×</span> self-supervised pretext tasks</p>
     <h1 class="title">ThinkMorph<span class="title-tail">-SSL</span></h1>
     <p class="subtitle">Scaling Interleaved Multimodal Reasoning with Pretext Tasks</p>
 
@@ -131,18 +130,17 @@
 
 <main>
 
-<!-- ───────────────────────── 1. idea ───────────────────────── -->
+<!-- ───────────────────────── 1. motivation ───────────────────────── -->
 <section class="sec" id="idea">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-no">01</span>
-      <h2>Reasoning with images needs examples of it.<br><em>Images themselves can supply some.</em></h2>
+      <h2>Motivation</h2>
+      <p class="sec-tag">Images can supply their own supervision.</p>
     </div>
 
     <div class="grid-2 idea-grid">
       <div class="prose">
-        <p class="lede">In <strong>interleaved reasoning</strong>, language guides image generation, and the resulting images inform further reasoning. Unified models support this natively. Training it, however, usually relies on traces built for specific questions, whose visual targets and construction pipelines must be designed for each task family.</p>
-        <p>Classical self-supervised learning faced the same supply problem and solved it with <em>pretext tasks</em>: corrupt an image, then predict the original. The target comes from the image, so supervision grows with the image pool. <strong>ThinkMorph-SSL</strong> turns these tasks into interleaved reasoning traces and uses them as a first training stage, before task-specific instruction tuning.</p>
+        <p class="lede">Reasoning with intermediate images is usually trained on traces built for each task family. Pretext tasks from self-supervised learning take their targets from the image itself: corrupt it, then restore it. <strong>ThinkMorph-SSL</strong> turns them into interleaved reasoning traces and trains on them before instruction tuning.</p>
         <details class="abstract">
           <summary>Read the abstract</summary>
           <p>People reason with pictures as well as words. Interleaved multimodal reasoning gives models a similar way to solve problems by creating intermediate images and using them to guide further reasoning. Training models with this ability usually relies on task-specific demonstrations, which are difficult to collect. We introduce ThinkMorph-SSL, a two-stage training recipe that uses images themselves as a source of supervision. The first stage, <em>pretext reasoning</em>, converts visual pretext tasks, such as image colorization and denoising, into <em>instruction-free</em> interleaved traces. Models describe a corrupted or transformed image, generate a restored or canonical image, and interpret the result. The second stage uses automatically constructed demonstrations for question-driven instruction tuning. At the same instruction-tuning budget, models trained with pretext reasoning outperform those trained with instruction tuning alone. The full recipe improves over the base model by an average of 11.33 accuracy points across twelve benchmarks. These results show that supervision derived from images can build the visual skills needed for interleaved reasoning and improve learning from task-specific demonstrations.</p>
@@ -150,32 +148,29 @@
       </div>
 
       <aside class="keynums" aria-label="Headline numbers">
-        <p class="keynums-title">Level averages vs. BAGEL reasoning in text (think-4k), same 7B backbone</p>
+        <p class="keynums-title">Level averages vs. BAGEL think-4k</p>
         <div class="keynum" data-level="L1"></div>
         <div class="keynum" data-level="L2"></div>
         <div class="keynum" data-level="L3"></div>
-        <p class="keynums-foot">L1 basic visual perception · L2 static spatial understanding · L3 mental world modeling. 12 benchmarks; details in <a href="#results">Results</a>.</p>
+        <p class="keynums-foot">L1 perception · L2 spatial understanding · L3 mental world modeling</p>
       </aside>
     </div>
 
     <figure class="fig fig-wide">
       <img src="static/img/fig/livingroom.webp" alt="Four photos of the same living room, a bird's-eye view of the room with the camera of image 3 marked, and the same view turned 180 degrees, revealing the three-seat loveseat behind the camera." loading="lazy" width="2200" height="693">
-      <figcaption><strong>A bird's-eye view turns a cross-view question into a visible one.</strong> Four views show the same living room. To find what lies behind the camera of image&nbsp;3, one can picture the room from above and turn around where it stood; the three-seat loveseat then lies straight ahead. Example from Instruct-180K.</figcaption>
     </figure>
 
     <div class="sec-sub">
       <h3>The base model cannot do this yet</h3>
-      <p class="prose-narrow">We first let BAGEL-7B reason without any training. Longer text reasoning <em>lowers</em> its mental-world-modeling average. Inserting an intermediate image into its reasoning, even a correct ground-truth one, also lowers accuracy. Reasoning with images has to be learned.</p>
+      <p class="prose-narrow">Without training, longer text reasoning lowers BAGEL's mental-world-modeling average, and so does an intermediate image, even a ground-truth one.</p>
       <div class="grid-2 charts-2">
         <figure class="chart-card">
-          <figcaption class="chart-title">L3 average, BAGEL without training <span class="chart-sub">accuracy (%)</span></figcaption>
+          <figcaption class="chart-title">L3 average, BAGEL without training</figcaption>
           <div class="chart" id="ch-base-l3"></div>
-          <p class="chart-note">Moving from direct answers to 4K-token text reasoning drops the L3 average by 11.02 points; quadrupling the budget does not recover it.</p>
         </figure>
         <figure class="chart-card">
-          <figcaption class="chart-title">Forcing an image step, 500 spatial questions <span class="chart-sub">accuracy (%)</span></figcaption>
+          <figcaption class="chart-title">Forcing an image step, 500 spatial questions</figcaption>
           <div class="chart" id="ch-base-force"></div>
-          <p class="chart-note">Forcing an image step costs 6.20 points, and a ground-truth image wins back only 0.80. On V<sup>⋆</sup> the forced step ties text reasoning (61.26); on MMSI it loses 1.80 points.</p>
         </figure>
       </div>
     </div>
@@ -186,15 +181,15 @@
 <section class="sec sec-alt" id="method">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-no">02</span>
-      <h2>Two stages, one trace format.<br><em>First the mechanics, then the use.</em></h2>
+      <h2>Method</h2>
+      <p class="sec-tag">Pretext reasoning first, then instruction tuning.</p>
     </div>
 
     <div class="stages">
       <article class="stage stage-1">
         <p class="stage-tag">Stage 1 · Pretext reasoning</p>
         <h3>Restore it, and say what changed</h3>
-        <p>Corrupted–clean pairs become instruction-free traces. The model sees only the corrupted image, describes the visible evidence, generates the restored image, and describes the restored scene. The trace never names the corruption, so the model must infer it.</p>
+        <p>Only a corrupted image goes in. The model describes it, generates the restored image, and describes the result.</p>
         <div class="eq" aria-label="p of T0 T1 I0 given Ic factorizes into three conditionals">
           <span>p<sub>θ</sub>(T<sub>0</sub>, I<sub>0</sub>, T<sub>1</sub> | I<sub>c</sub>)</span>
           <span>= p<sub>θ</sub>(T<sub>0</sub> | I<sub>c</sub>) · p<sub>θ</sub>(I<sub>0</sub> | I<sub>c</sub>, T<sub>0</sub>) · p<sub>θ</sub>(T<sub>1</sub> | I<sub>c</sub>, T<sub>0</sub>, I<sub>0</sub>)</span>
@@ -203,7 +198,7 @@
       <article class="stage stage-2">
         <p class="stage-tag">Stage 2 · Instruction tuning</p>
         <h3>Build the image the question needs</h3>
-        <p>The same interface, now with a question. Each trace contains reasoning text, one or more intermediate images chosen because they help answer, and a final answer. It teaches when to construct a visual state, which state to construct, and how to read the answer from it.</p>
+        <p>The same trace format, now with a question. The intermediate images are the ones that help answer it.</p>
         <div class="eq" aria-label="image and question, then T0, I0, and so on, up to TK">
           <span>(x<sup>img</sup>, x<sup>text</sup>) → T<sub>0</sub> → I<sub>0</sub> → ⋯ → T<sub>K</sub></span>
         </div>
@@ -214,14 +209,11 @@
       <button class="zoom-btn" type="button" aria-label="Enlarge the overview figure">
         <img src="static/img/fig/stage1.webp" alt="Overview figure. Top: Stage 1 pretext reasoning, a jigsaw-scrambled alpine village is described, restored, and described again; six more transformations are shown. Bottom: Stage 2 instruction tuning across three levels: basic visual perception, static spatial understanding, and mental world modeling." loading="lazy">
       </button>
-      <figcaption><strong>Overview of the two training stages.</strong> Stage&nbsp;1 converts visual pretext tasks into Text–Image–Text traces. Stage&nbsp;2 grounds these primitives in question-driven traces across three cognitive levels: what is directly visible (L1), how the visible scene is spatially organized (L2), and what scene state must be reconstructed beyond the input (L3).</figcaption>
     </figure>
 
-    <!-- Stage 1 explorer -->
     <div class="explorer" id="ex-pretext">
       <div class="explorer-head">
-        <h3><span class="dot dot-1" aria-hidden="true"></span>Browse Stage 1 traces</h3>
-        <p>Real examples from Pretext-270K. The input carries no text at all.</p>
+        <h3><span class="dot dot-1" aria-hidden="true"></span>Stage 1 traces</h3>
       </div>
       <div class="tabs" role="tablist" aria-label="Pretext task" id="ex-pretext-tabs"></div>
       <div class="ex-sub">
@@ -231,11 +223,9 @@
       <div class="ptrace" id="ex-pretext-body" aria-live="polite"></div>
     </div>
 
-    <!-- Stage 2 explorer -->
     <div class="explorer" id="ex-instruct">
       <div class="explorer-head">
-        <h3><span class="dot dot-2" aria-hidden="true"></span>Browse Stage 2 traces</h3>
-        <p>Examples from Instruct-180K, one per construction pipeline. Each intermediate image appears before the reasoning step that uses it.</p>
+        <h3><span class="dot dot-2" aria-hidden="true"></span>Stage 2 traces</h3>
       </div>
       <div class="tabs tabs-grouped" role="tablist" aria-label="Construction pipeline" id="ex-instruct-tabs"></div>
       <div class="ex-sub">
@@ -251,8 +241,8 @@
 <section class="sec" id="data">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-no">03</span>
-      <h2>Two corpora, same interface.<br><em>One grows with images, one with pipelines.</em></h2>
+      <h2>Data</h2>
+      <p class="sec-tag">Two corpora, one trace format.</p>
     </div>
 
     <div class="corpora">
@@ -260,11 +250,10 @@
         <p class="corpus-kicker">Stage 1</p>
         <h3>Pretext-270K</h3>
         <p class="corpus-big"><span class="num">270,896</span> traces</p>
-        <p>Instruction-free Text–Image–Text traces, balanced across seven programmatic transformations. The original image supplies the visual target; GPT-5 writes the two thoughts from both images and a reference caption.</p>
+        <p>Instruction-free Text–Image–Text traces, balanced across seven programmatic transformations.</p>
         <dl class="facts">
           <div><dt>Transformations</dt><dd>Jigsaw · colorization · super-resolution · masked inpainting · rotation &amp; flip recovery · denoising · deformation recovery</dd></div>
           <div><dt>Image sources</dt><dd>SA-1B · PixMo-Cap · VSI-590K · LLaVA-OneVision-1.5 · DeepVision-103K · Matterport3D · Realsee3D · 360+x</dd></div>
-          <div><dt>Questions needed</dt><dd>None. New image pools can be added as is.</dd></div>
         </dl>
         <a class="corpus-link" href="https://huggingface.co/datasets/ThinkMorph/Pretext-270K">Download on Hugging Face →</a>
       </article>
@@ -272,7 +261,7 @@
         <p class="corpus-kicker">Stage 2</p>
         <h3>Instruct-180K</h3>
         <p class="corpus-big"><span class="num">180,490</span> traces</p>
-        <p>Question-driven interleaved traces from nine construction pipelines. Wherever possible, answers come from geometry, annotations, or metadata rather than from a language model.</p>
+        <p>Question-driven interleaved traces from nine construction pipelines.</p>
         <figure class="chart-card chart-card-flat">
           <figcaption class="chart-title">Traces by level</figcaption>
           <div class="legend" id="lg-levels"></div>
@@ -286,7 +275,6 @@
       <button class="zoom-btn" type="button" aria-label="Enlarge the pipelines figure">
         <img src="static/img/fig/spatial_smile.webp" alt="The nine Instruct-180K construction pipelines grouped by level: visual search and jigsaw QA (L1); object counting and depth perception (L2); object rotation, object editing, allocentric reframing from point clouds, panoramic completion, SAM3D viewpoint rendering, and ego-exo transfer (L3)." loading="lazy">
       </button>
-      <figcaption><strong>Instruct-180K construction pipelines.</strong> Each panel shows how one pipeline builds the intermediate visual state used in a trace: a localized crop, a reordered view, a depth map, an edited object state, or a synthesized viewpoint.</figcaption>
     </figure>
   </div>
 </section>
@@ -295,14 +283,14 @@
 <section class="sec sec-alt" id="results">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-no">04</span>
-      <h2>Reasoning with images beats the same model reasoning in text,<br><em>on all twelve benchmarks.</em></h2>
+      <h2>Results</h2>
+      <p class="sec-tag">Better than text reasoning on all twelve benchmarks.</p>
     </div>
 
-    <p class="prose-narrow">We train BAGEL-7B-MoT with both stages and compare it with the same backbone reasoning in text (think-4k), across twelve benchmarks in three levels. It improves every benchmark, by 11.33 points on average, including the nine that share no source dataset or task family with Instruct-180K. A 16K text budget moves the three level averages by at most 2.46 points.</p>
+    <p class="prose-narrow">BAGEL-7B-MoT trained with both stages gains 11.33 points on average over the same model reasoning in text (think-4k).</p>
 
     <figure class="chart-card">
-      <figcaption class="chart-title">Per-benchmark accuracy: BAGEL think-4k → ThinkMorph-SSL <span class="chart-sub">accuracy (%)</span></figcaption>
+      <figcaption class="chart-title">Per-benchmark accuracy</figcaption>
       <div class="chart-controls">
         <div class="legend" id="lg-dumbbell"></div>
         <label class="check"><input type="checkbox" id="tg-nothink"> Show BAGEL no-think</label>
@@ -316,18 +304,6 @@
         <button role="tab" aria-selected="false" data-t="l23">Levels 2 &amp; 3 · Spatial and world modeling</button>
       </div>
       <div class="table-scroll" id="tbl-results" tabindex="0" aria-label="Results table"></div>
-      <p class="table-note">Δ is computed against BAGEL think-4k. HR-4K / HR-8K are HRBench at 4K / 8K; MME-RW-L averages its reasoning and perception sub-scores. All models run through the same adapted VLMEvalKit pipeline.</p>
-    </div>
-
-    <div class="callouts">
-      <div class="callout">
-        <h4>Where it stands</h4>
-        <p>On the L2 and L3 averages it exceeds every open-source baseline except the concurrent SenseNova-U1-8B, whose architecture, data, and training scale differ. It leads Qwen2.5-VL-32B by 3.77 and 7.39 points and Claude Sonnet 4.6 on both levels, and its L3 average is 2.97 points above Gemini 2.5 Flash (43.32 vs. 40.35). On the in-domain MindCube benchmark it scores 18.05 points above GPT-5.</p>
-      </div>
-      <div class="callout">
-        <h4>Where it doesn't</h4>
-        <p>GPT-5 leads on all three averages, and Gemini 2.5 Flash on L1 and L2. On L1, Claude Sonnet 4.6, Qwen2.5-VL-32B, and LongCat-Next-A3B also score higher. The model still trails BAGEL's own direct answers on BLINK, OmniSpatial, SpatialViz, and RealWorldQA; on each of these, text reasoning also hurts the base model.</p>
-      </div>
     </div>
   </div>
 </section>
@@ -336,19 +312,18 @@
 <section class="sec" id="analysis">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-no">05</span>
-      <h2>Does the pretext stage matter?<br><em>Held fixed, one variable at a time.</em></h2>
+      <h2>Analysis</h2>
+      <p class="sec-tag">What pretext reasoning adds.</p>
     </div>
 
     <div class="grid-2 charts-2 ablation-top">
       <figure class="chart-card">
-        <figcaption class="chart-title">Same Stage-2 budget (100K samples), full data pools <span class="chart-sub">accuracy (%)</span></figcaption>
+        <figcaption class="chart-title">Same Stage-2 budget (100K samples), with and without Stage 1</figcaption>
         <div class="legend" id="lg-fixed"></div>
         <div class="chart" id="ch-fixed"></div>
-        <p class="chart-note">One benchmark per level; Stage&nbsp;1 adds 6.49 points on average. This fixes the Stage-2 sample budget, not total compute: the staged run also receives Stage-1 training.</p>
       </figure>
       <figure class="chart-card">
-        <figcaption class="chart-title">MindCube accuracy by Stage-2 epoch <span class="chart-sub">accuracy (%)</span></figcaption>
+        <figcaption class="chart-title">MindCube accuracy by Stage-2 epoch</figcaption>
         <div class="tabs tabs-small" role="tablist" aria-label="Ablation" id="abl-tabs">
           <button role="tab" aria-selected="true" data-k="order">Staged vs. mixed</button>
           <button role="tab" aria-selected="false" data-k="instr">Instruction-free</button>
@@ -356,45 +331,36 @@
         </div>
         <div class="legend" id="lg-abl"></div>
         <div class="chart" id="ch-abl"></div>
-        <p class="chart-note" id="abl-note"></p>
       </figure>
     </div>
 
     <div class="sec-sub">
-      <h3>Does the model use the images it generates?</h3>
-      <p class="prose-narrow">The base model gained nothing from a correct intermediate image. After training, the image matters. We sample eight trajectories per problem and let the model decide whether to generate an image. These are within-problem associations, not interventions.</p>
+      <h3>Does the model use its images?</h3>
+      <p class="prose-narrow">Eight traces per problem; the model decides whether to draw. Accuracy is compared within problems.</p>
       <div class="grid-2 charts-2">
         <figure class="chart-card">
-          <figcaption class="chart-title">Accuracy with vs. without an intermediate image <span class="chart-sub">%</span></figcaption>
+          <figcaption class="chart-title">Accuracy with vs. without an intermediate image</figcaption>
           <div class="legend" id="lg-use"></div>
           <div class="chart" id="ch-use"></div>
-          <p class="chart-note">Problems whose samples include both kinds of trajectory: 15 (spatial training split) and 42 (MMSI). 95% CIs of the gap: [20.3, 54.7] and [1.5, 23.9].</p>
         </figure>
         <figure class="chart-card">
-          <figcaption class="chart-title">Error rate when the image has a critical defect <span class="chart-sub">%</span></figcaption>
+          <figcaption class="chart-title">Error rate when the image has a critical defect</figcaption>
           <div class="legend" id="lg-defect"></div>
           <div class="chart" id="ch-defect"></div>
-          <p class="chart-note">A judge that does not see the final answer flags critical defects in the image: reversed geometry, omitted evidence, or hallucinated content.</p>
         </figure>
       </div>
     </div>
 
-    <div class="sec-sub">
-      <h3>What does it cost?</h3>
-      <p class="prose-narrow">Without caching, the model is more accurate than BAGEL think-4k but slower per V<sup>⋆</sup> question (62.3&nbsp;s vs. 44.3&nbsp;s). Image generation accounts for nearly all of its FLOPs, so we apply TeaCache, which reuses computation across denoising steps: total FLOPs drop by 77% without lowering accuracy, and latency falls to 21.3&nbsp;s. The written reasoning is also much shorter.</p>
-      <div class="grid-2 charts-2">
-        <figure class="chart-card">
-          <figcaption class="chart-title">V<sup>⋆</sup> accuracy vs. latency per question <span class="chart-sub">one H20-3e GPU, batch 1</span></figcaption>
-          <div class="legend" id="lg-cost"></div>
-          <div class="chart" id="ch-cost"></div>
-        </figure>
-        <figure class="chart-card">
-          <figcaption class="chart-title">Mean trace length on the same questions <span class="chart-sub">characters</span></figcaption>
-          <div class="legend" id="lg-len"></div>
-          <div class="chart" id="ch-len"></div>
-          <p class="chart-note">MMSI is the exception: think-4k there often emits only an answer letter.</p>
-        </figure>
+    <div class="sec-sub grid-2 cost-grid">
+      <div>
+        <h3>Cost</h3>
+        <p class="prose-narrow">TeaCache cuts the latency per V<sup>⋆</sup> question from 62.3&nbsp;s to 21.3&nbsp;s without lowering accuracy.</p>
       </div>
+      <figure class="chart-card">
+        <figcaption class="chart-title">V<sup>⋆</sup> accuracy vs. latency per question</figcaption>
+        <div class="legend" id="lg-cost"></div>
+        <div class="chart" id="ch-cost"></div>
+      </figure>
     </div>
   </div>
 </section>
@@ -403,7 +369,6 @@
 <section class="sec sec-cite" id="cite">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-no">06</span>
       <h2>Citation</h2>
     </div>
     <div class="bib">

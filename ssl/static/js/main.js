@@ -98,12 +98,6 @@
     { name: "ThinkMorph-SSL", x: 62.3, y: 68.06, kind: "ours", dx: 10, dy: 17 },
     { name: "ThinkMorph-SSL + TeaCache", x: 21.3, y: 69.10, kind: "ours-hollow", dx: 10, dy: -8 },
   ];
-  const TRACE_LEN = [ // Figure 4 (right), mean characters
-    { label: "V*", a: 5102, b: 1104 },
-    { label: "BLINK", a: 3926, b: 1593 },
-    { label: "SAT", a: 3578, b: 1091 },
-    { label: "MMSI", a: 1007, b: 1268 },
-  ];
   const INSTRUCT_LEVELS = [ // Instruct-180K dataset card on Hugging Face (180,490 traces)
     { label: "L1 · Basic visual perception", short: "L1", v: 62100, color: "#ea8eab" },
     { label: "L2 · Static spatial understanding", short: "L2", v: 15144, color: "#cf3f6c" },
@@ -270,35 +264,6 @@
   }
 
   // two-series horizontal bars per row
-  function pairBars(el, rows, { domain, step, aName, bName, aColor = "var(--gray-mark)", bColor = "var(--rose)", fmt = fmtInt, tickFmt = (t) => t } = {}) {
-    chart(el, (el, W) => {
-      const labW = Math.min(90, W * 0.2), padR = 56, rowH = 46, barH = 12, gap = 2, top = 2, axisH = 24;
-      const H = top + rows.length * rowH + axisH;
-      const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": `${aName} versus ${bName}` }, el);
-      const x = linear(domain[0], domain[1], labW, W - padR);
-      const g = s("g", { class: "grid" }, svg);
-      ticks(domain[0], domain[1], step).forEach((t) => {
-        s("line", { x1: x(t), x2: x(t), y1: top, y2: top + rows.length * rowH }, g);
-        text(svg, x(t), H - 6, tickFmt(t), "tick ax", { "text-anchor": "middle" });
-      });
-      rows.forEach((r, i) => {
-        const y = top + i * rowH, gy = s("g", { class: "row" }, svg);
-        const y0 = y + (rowH - 2 * barH - gap) / 2;
-        s("rect", { class: "hit", x: 0, y, width: W, height: rowH, rx: 6 }, gy);
-        const lab = text(gy, labW - 12, y + rowH / 2 + 4, "", "lbl", { "text-anchor": "end" });
-        lab.innerHTML = star(r.label).replace("<sup>", '<tspan baseline-shift="super" font-size="70%">').replace("</sup>", "</tspan>");
-        s("path", { d: hbar(x(domain[0]), y0, x(r.a) - x(domain[0]), barH), fill: aColor }, gy);
-        s("path", { d: hbar(x(domain[0]), y0 + barH + gap, x(r.b) - x(domain[0]), barH), fill: bColor }, gy);
-        text(gy, x(r.a) + 6, y0 + barH - 2, fmt(r.a), "val");
-        text(gy, x(r.b) + 6, y0 + 2 * barH + gap - 2, fmt(r.b), "val-strong");
-        bindTip(gy, () => `<div class="tt-head">${star(r.label)}</div>${ttRow(aColor, esc(aName), fmt(r.a))}${ttRow(bColor, esc(bName), fmt(r.b))}`);
-      });
-      s("line", { class: "baseline", x1: x(domain[0]), x2: x(domain[0]), y1: top, y2: top + rows.length * rowH }, svg);
-    });
-    dataTable(el, ["", aName, bName], rows.map((r) => [r.label, fmt(r.a), fmt(r.b)]));
-  }
-
-  // multi-line with crosshair tooltip and end labels
   function lineChart(el, cfg) {
     chart(el, (el, W) => {
       const { series, xs, domain, step } = cfg();
@@ -617,7 +582,7 @@
     const draw = () => {
       const a = ABL[key];
       legend($("#lg-abl"), a.series.map((se) => ({ name: se.name + (se.approx ? " (≈, read from figure)" : ""), color: se.color, shape: "line", dash: se.dash })));
-      note.textContent = a.note;
+      if (note) note.textContent = a.note;
       dataTable(el, ["Series", "Epoch 1", "Epoch 2", "Epoch 3", "Epoch 4"], a.series.map((se) => [se.name + (se.approx ? " (≈)" : ""), ...se.values.map((v) => String(v))]));
     };
     lineChart(el, () => ({ series: ABL[key].series.map((se) => ({ ...se, short: se.name.replace(" (ours)", "").replace("Stage 1", "S1").replace("Stage 2", "S2") })), xs: [1, 2, 3, 4], domain: [50, 70], step: 5 }));
@@ -636,8 +601,6 @@
   legend($("#lg-cost"), [{ name: "BAGEL (text)", color: "var(--gray-mark)", shape: "dot" }, { name: "ThinkMorph-SSL", color: "var(--rose)", shape: "dot" }, { name: "+ TeaCache", color: "var(--rose)", shape: "ring" }]);
   scatter($("#ch-cost"), COST, { xDomain: [0, 120], yDomain: [50, 75], xStep: 30, yStep: 5 });
 
-  legend($("#lg-len"), [{ name: "BAGEL think-4k", color: "var(--gray-mark)" }, { name: "ThinkMorph-SSL", color: "var(--rose)" }]);
-  pairBars($("#ch-len"), TRACE_LEN, { domain: [0, 6000], step: 2000, aName: "BAGEL think-4k", bName: "ThinkMorph-SSL", tickFmt: (t) => (t ? t / 1000 + "k" : "0") });
 
   /* bibtex copy */
   const copyBtn = $("#bib-copy");
