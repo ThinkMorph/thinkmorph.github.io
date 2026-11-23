@@ -30,7 +30,6 @@
   const row = (name) => RESULTS.find((r) => r[0] === name);
   const OURS = row("ThinkMorph-SSL (ours)");
   const T4K = row("BAGEL think-4k");
-  const NOTHINK = row("BAGEL no-think");
 
   const LEVELS = {
     L1: { name: "Basic visual perception", ours: OURS[3], base: T4K[3] },
@@ -38,79 +37,11 @@
     L3: { name: "Mental world modeling", ours: OURS[7], base: T4K[7] },
   };
 
-  const BASE_L3 = [ // Table 1
-    { label: "Answer directly (no-think)", v: 36.42 },
-    { label: "Text reasoning, 4K (think-4k)", v: 25.40 },
-    { label: "Text reasoning, 16K (think-16k)", v: 26.83 },
-  ];
-  const BASE_FORCE = [ // Table 2
-    { label: "Text reasoning (16k)", v: 47.40 },
-    { label: "Forced interleaved (16k)", v: 41.20 },
-    { label: "Forced interleaved + ground-truth image", v: 42.00 },
-  ];
-
-  const FIXED_BUDGET = [ // Table 5: Stage 2 only -> Stage 1 -> Stage 2
-    { label: "V*", sub: "L1", a: 52.88, b: 59.16 },
-    { label: "SAT", sub: "L2", a: 52.67, b: 60.00 },
-    { label: "SpatialViz", sub: "L3", a: 26.86, b: 32.71 },
-  ];
-
-  // MindCube ablation (Figure 4 + Tables staging-internvlu, app-instruction-free).
-  // "approx": values read off the plotted data of the paper figure (the other series in that
-  // figure reproduce their table values exactly with the same read-off).
-  const ABL = {
-    order: {
-      note: "Stage-1 traces are built from the same images as the spatial instruction data, so the staged run sees no extra images. Against Stage 2 alone, the staged run leads from the second epoch and finishes 4.9 points ahead. At the same instruction-tuning budget, the mixed run, which samples both corpora in proportion to their size, stays near 57%.",
-      series: [
-        { name: "Stage 1 → Stage 2 (ours)", color: "var(--rose)", values: [59.0, 63.9, 66.8, 66.6] },
-        { name: "Stage 2 only", color: "var(--gray-mark)", values: [62.6, 63.3, 59.3, 61.7], approx: true },
-        { name: "Stage 1 + Stage 2 mixed", color: "var(--blue)", values: [53.2, 56.9, 57.3, 57.1], approx: true },
-      ],
-    },
-    instr: {
-      note: "Only the Stage-1 traces change: the instructed variant adds an explicit instruction to restore the image. Instruction-free leads at every checkpoint, by 2.7 points on average (64.08 vs. 61.42), suggesting that Stage 1 can build the skill without task instructions.",
-      series: [
-        { name: "Instruction-free Stage 1 (ours)", color: "var(--rose)", values: [59.0, 63.9, 66.8, 66.6] },
-        { name: "Instructed Stage 1", color: "var(--amber)", dash: true, values: [58.75, 63.17, 58.65, 65.10] },
-      ],
-    },
-    internvl: {
-      note: "Same comparison with InternVL-U-4B, changing only the backbone. The gain stays below 0.5 points for the first three epochs and reaches 4.72 points in the fourth: the benefit emerges as instruction tuning progresses.",
-      series: [
-        { name: "Stage 1 → Stage 2", color: "var(--rose)", values: [54.62, 55.77, 56.63, 62.12] },
-        { name: "Stage 2 only", color: "var(--gray-mark)", values: [54.62, 55.29, 56.25, 57.40] },
-      ],
-    },
-  };
-
-  const IMAGE_USE = [ // Table app-image-use
-    { label: "Spatial (training split)", sub: "15 problems", a: 32.2, b: 69.4 },
-    { label: "MMSI (test)", sub: "42 problems", a: 18.5, b: 31.3 },
-  ];
-  const DEFECT = [ // Table app-fidelity (error rates)
-    { label: "Spatial (training split)", sub: "501 traces", a: 15.4, b: 40.7 },
-    { label: "MMSI (test)", sub: "1,052 traces", a: 47.4, b: 67.8 },
-  ];
-  const COST = [ // Table app-cost, V* (191 questions)
-    { name: "BAGEL no-think", x: 1.3, y: 52.88, kind: "base", dx: 10, dy: 16 },
-    { name: "BAGEL think-4k", x: 44.3, y: 58.64, kind: "base", dx: 10, dy: 15 },
-    { name: "BAGEL think-16k", x: 112.4, y: 61.26, kind: "base", dx: -10, dy: 17, anchor: "end" },
-    { name: "ThinkMorph-SSL", x: 62.3, y: 68.06, kind: "ours", dx: 10, dy: 17 },
-    { name: "ThinkMorph-SSL + TeaCache", x: 21.3, y: 69.10, kind: "ours-hollow", dx: 10, dy: -8 },
-  ];
-  const INSTRUCT_LEVELS = [ // Instruct-180K dataset card on Hugging Face (180,490 traces)
-    { label: "L1 · Basic visual perception", short: "L1", v: 62100, color: "#ea8eab" },
-    { label: "L2 · Static spatial understanding", short: "L2", v: 15144, color: "#cf3f6c" },
-    { label: "L3 · Mental world modeling", short: "L3", v: 103246, color: "#8f0f37" },
-  ];
-
   /* ────────────────────────────── helpers ────────────────────────────── */
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
-  const NS = "http://www.w3.org/2000/svg";
   const fmt2 = (v) => v.toFixed(2);
   const fmtD = (v) => (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(2);
-  const fmtInt = (v) => v.toLocaleString("en-US");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const star = (s) => esc(s).replace("V*", "V<sup>⋆</sup>");
@@ -123,243 +54,6 @@
     }
     if (html != null) el.innerHTML = html;
     return el;
-  }
-  function s(tag, attrs = {}, parent) {
-    const el = document.createElementNS(NS, tag);
-    for (const [k, v] of Object.entries(attrs)) if (v != null) el.setAttribute(k, v);
-    if (parent) parent.appendChild(el);
-    return el;
-  }
-  function text(parent, x, y, str, cls, extra = {}) {
-    const t = s("text", { x, y, class: cls, ...extra }, parent);
-    t.textContent = str;
-    return t;
-  }
-  const linear = (d0, d1, r0, r1) => (v) => r0 + ((v - d0) / (d1 - d0)) * (r1 - r0);
-  function ticks(d0, d1, step) { const out = []; for (let v = Math.ceil(d0 / step) * step; v <= d1 + 1e-9; v += step) out.push(+v.toFixed(6)); return out; }
-  // horizontal bar with 4px rounded data end, square at the baseline
-  function hbar(x0, y, w, hgt, r = 4) {
-    r = Math.min(r, w / 2, hgt / 2);
-    if (w <= 0) return "";
-    return `M${x0},${y}H${x0 + w - r}Q${x0 + w},${y} ${x0 + w},${y + r}V${y + hgt - r}Q${x0 + w},${y + hgt} ${x0 + w - r},${y + hgt}H${x0}Z`;
-  }
-  function legend(el, items) {
-    if (!el) return;
-    el.innerHTML = items.map((it) =>
-      `<span class="sw"><i class="${it.shape || ""}${it.dash ? " dash" : ""}" style="${it.shape === "ring" || it.shape?.startsWith("line") ? `border-color:${it.color}` : `background:${it.color}`}"></i>${esc(it.name)}</span>`).join("");
-  }
-  function dataTable(chartEl, head, rows) {
-    const card = chartEl.closest(".chart-card") || chartEl.parentElement;
-    let d = card.querySelector(":scope > .data-table");
-    if (!d) { d = h("details", { class: "data-table" }); card.appendChild(d); }
-    d.innerHTML = `<summary>View as table</summary><table><thead><tr>${head.map((c) => `<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
-  }
-
-  /* tooltip */
-  const tip = $("#tooltip");
-  function showTip(html, x, y) {
-    tip.innerHTML = html;
-    tip.hidden = false;
-    const w = tip.offsetWidth || 200;
-    const cx = Math.max(w / 2 + 8, Math.min(window.innerWidth - w / 2 - 8, x));
-    tip.style.left = cx + "px";
-    tip.style.top = Math.max(tip.offsetHeight + 20, y) + "px";
-  }
-  const hideTip = () => { tip.hidden = true; };
-  function bindTip(node, htmlFn) {
-    node.setAttribute("tabindex", "0");
-    node.addEventListener("pointermove", (e) => showTip(htmlFn(), e.clientX, e.clientY));
-    node.addEventListener("pointerleave", hideTip);
-    node.addEventListener("focus", () => { const r = node.getBoundingClientRect(); showTip(htmlFn(), r.left + r.width / 2, r.top); });
-    node.addEventListener("blur", hideTip);
-  }
-  const ttRow = (color, name, val, ring) => `<div class="tt-row"><span><i style="${ring ? `border:2px solid ${color};background:transparent` : `background:${color}`}"></i>${name}</span><span>${val}</span></div>`;
-
-  /* responsive redraw */
-  const charts = [];
-  function chart(el, draw) {
-    if (!el) return;
-    const run = () => { const w = el.clientWidth; if (w > 0 && w !== el._w) { el._w = w; el.innerHTML = ""; draw(el, w); } };
-    el._redraw = () => { el._w = 0; run(); };
-    charts.push(run);
-    run();
-  }
-  let rT;
-  window.addEventListener("resize", () => { clearTimeout(rT); rT = setTimeout(() => charts.forEach((f) => f()), 120); });
-
-  /* ────────────────────────────── chart types ────────────────────────────── */
-
-  // single-series horizontal bars (baselines → gray)
-  function barChart(el, rows, { domain = [0, 50], step = 10, color = "var(--gray-mark)", unit = "%" } = {}) {
-    chart(el, (el, W) => {
-      const stacked = W < 520;   // narrow: label above its bar
-      const labW = stacked ? 0 : Math.min(210, W * 0.42), padR = 52, rowH = stacked ? 44 : 34, barH = 14, top = 4, axisH = 24;
-      const H = top + rows.length * rowH + axisH;
-      const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": rows.map((r) => `${r.label}: ${r.v}${unit}`).join("; ") }, el);
-      const x = linear(domain[0], domain[1], stacked ? 1 : labW, W - padR);
-      const g = s("g", { class: "grid" }, svg);
-      ticks(domain[0], domain[1], step).forEach((t) => {
-        s("line", { x1: x(t), x2: x(t), y1: top, y2: top + rows.length * rowH }, g);
-        text(svg, x(t), H - 6, t, "tick ax", { "text-anchor": t === domain[0] && stacked ? "start" : "middle" });
-      });
-      rows.forEach((r, i) => {
-        const y = top + i * rowH, gy = s("g", { class: "row" }, svg);
-        const by = stacked ? y + 20 : y + (rowH - barH) / 2;
-        s("rect", { class: "hit", x: 0, y, width: W, height: rowH, rx: 6 }, gy);
-        if (stacked) text(gy, x(domain[0]) + 2, y + 14, r.label, "lbl");
-        else text(gy, labW - 12, y + rowH / 2 + 4, r.label, "lbl", { "text-anchor": "end" });
-        s("path", { d: hbar(x(domain[0]), by, x(r.v) - x(domain[0]), barH), fill: color }, gy);
-        text(gy, x(r.v) + 7, by + barH - 3, fmt2(r.v), "val");
-        bindTip(gy, () => `<div class="tt-head">${esc(r.label)}</div>${ttRow(color, "Accuracy", fmt2(r.v) + unit)}`);
-      });
-      s("line", { class: "baseline", x1: x(domain[0]), x2: x(domain[0]), y1: top, y2: top + rows.length * rowH }, svg);
-    });
-    dataTable(el, ["Setting", "Accuracy (%)"], rows.map((r) => [r.label, fmt2(r.v)]));
-  }
-
-  // dumbbell: a (gray) → b (accent), grouped rows, optional third marker c
-  function dumbbell(el, groups, opts) {
-    const { domain, step = 10, aName, bName, bColor = "var(--rose)", aColor = "var(--gray-mark)", cName, delta = true, unit = "", fmt = fmt2, rowH = 28, labMax = 150 } = opts;
-    const fD = (v) => (v >= 0 ? "+" : "−") + fmt(Math.abs(v));
-    chart(el, (el, W) => {
-      const showC = opts.showC && opts.showC();
-      const labW = Math.min(labMax, W * 0.36), padR = delta ? 70 : 20, grpH = 26, top = 2, axisH = 26;
-      const nRows = groups.reduce((n, g) => n + g.rows.length, 0);
-      const nGrp = groups.filter((g) => g.name).length;
-      const H = top + nRows * rowH + nGrp * grpH + axisH;
-      const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": `${aName} versus ${bName}` }, el);
-      const x = linear(domain[0], domain[1], labW, W - padR);
-      const gGrid = s("g", { class: "grid" }, svg);
-      ticks(domain[0], domain[1], step).forEach((t) => {
-        s("line", { x1: x(t), x2: x(t), y1: top, y2: H - axisH }, gGrid);
-        text(svg, x(t), H - 8, t, "tick ax", { "text-anchor": "middle" });
-      });
-      if (delta) text(svg, W - 4, H - 8, "Δ", "tick ax", { "text-anchor": "end" });
-      let y = top;
-      groups.forEach((g) => {
-        if (g.name) { text(svg, 0, y + grpH - 9, g.name, "grp"); y += grpH; }
-        g.rows.forEach((r) => {
-          const gy = s("g", { class: "row" }, svg), cy = y + rowH / 2;
-          s("rect", { class: "hit", x: 0, y, width: W, height: rowH, rx: 6 }, gy);
-          const lab = text(gy, labW - 14, cy + (r.sub && opts.showSub ? -1 : 4), "", r.strong || opts.showSub ? "lbl" : "lbl-muted", { "text-anchor": "end" });
-          lab.innerHTML = star(r.label).replace("<sup>", '<tspan baseline-shift="super" font-size="70%">').replace("</sup>", "</tspan>");
-          if (r.strong) lab.style.fontWeight = 600;
-          const xa = x(r.a), xb = x(r.b);
-          s("line", { x1: xa, x2: xb, y1: cy, y2: cy, stroke: bColor, "stroke-opacity": 0.35, "stroke-width": 2 }, gy);
-          if (showC && r.c != null) s("circle", { cx: x(r.c), cy, r: 4.5, fill: "var(--surface)", stroke: "var(--ink-3)", "stroke-width": 1.6 }, gy);
-          s("circle", { cx: xa, cy, r: 5, fill: aColor, stroke: "var(--surface)", "stroke-width": 2 }, gy);
-          s("circle", { cx: xb, cy, r: r.strong ? 6 : 5, fill: bColor, stroke: "var(--surface)", "stroke-width": 2 }, gy);
-          if (delta) text(gy, W - 4, cy + 4, fD(r.b - r.a), r.strong ? "val-strong" : "val", { "text-anchor": "end" });
-          if (r.sub && opts.showSub) text(gy, labW - 14, cy + 17, r.sub, "tick", { "text-anchor": "end" });
-          bindTip(gy, () => `<div class="tt-head">${star(r.label)}${r.sub ? ` <span style="color:#a9a7a0;font-weight:400">· ${esc(r.sub)}</span>` : ""}</div>` +
-            (showC && r.c != null ? ttRow("var(--ink-3)", esc(cName), fmt(r.c) + unit, true) : "") +
-            ttRow(aColor, esc(aName), fmt(r.a) + unit) + ttRow(bColor, esc(bName), fmt(r.b) + unit) +
-            (delta ? `<div class="tt-foot">Δ ${fD(r.b - r.a)}</div>` : ""));
-          y += rowH;
-        });
-      });
-    });
-    const head = ["", ...(cName ? [cName] : []), aName, bName, ...(delta ? ["Δ"] : [])];
-    dataTable(el, head, groups.flatMap((g) => g.rows.map((r) => [(g.name ? g.name + " · " : "") + r.label, ...(cName ? [r.c != null ? fmt(r.c) : ""] : []), fmt(r.a), fmt(r.b), ...(delta ? [fD(r.b - r.a)] : [])])));
-  }
-
-  // two-series horizontal bars per row
-  function lineChart(el, cfg) {
-    chart(el, (el, W) => {
-      const { series, xs, domain, step } = cfg();
-      const padL = 34, padR = Math.min(150, W * 0.34), top = 10, H = 250, axisH = 30;
-      const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": series.map((se) => `${se.name}: ${se.values.join(", ")}`).join("; ") }, el);
-      const x = linear(xs[0], xs[xs.length - 1], padL + 12, W - padR);
-      const y = linear(domain[0], domain[1], H - axisH, top);
-      const g = s("g", { class: "grid" }, svg);
-      ticks(domain[0], domain[1], step).forEach((t) => {
-        s("line", { x1: padL, x2: W - padR + 8, y1: y(t), y2: y(t) }, g);
-        text(svg, padL - 8, y(t) + 4, t, "tick ax", { "text-anchor": "end" });
-      });
-      xs.forEach((v) => text(svg, x(v), H - 10, v, "tick ax", { "text-anchor": "middle" }));
-      // lines
-      series.forEach((se) => {
-        s("path", { d: se.values.map((v, i) => `${i ? "L" : "M"}${x(xs[i])},${y(v)}`).join(""), fill: "none", stroke: se.color, "stroke-width": 2, "stroke-dasharray": se.dash ? "5 4" : null, "stroke-linejoin": "round" }, svg);
-      });
-      series.forEach((se) => se.values.forEach((v, i) => s("circle", { cx: x(xs[i]), cy: y(v), r: 4.5, fill: se.dash ? "var(--surface)" : se.color, stroke: se.dash ? se.color : "var(--surface)", "stroke-width": 2 }, svg)));
-      // end labels, nudged apart
-      const ends = series.map((se) => ({ se, y: y(se.values[se.values.length - 1]) })).sort((a, b) => a.y - b.y);
-      for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 15) ends[i].y = ends[i - 1].y + 15;
-      ends.forEach((e) => {
-        const v = e.se.values[e.se.values.length - 1];
-        const t = text(svg, x(xs[xs.length - 1]) + 12, e.y + 4, "", "val");
-        t.innerHTML = `<tspan class="val-strong">${e.se.approx ? "≈" : ""}${v.toFixed(1)}</tspan><tspan class="lbl-muted" dx="6">${esc(e.se.short || e.se.name)}</tspan>`;
-      });
-      // crosshair
-      const cross = s("line", { y1: top, y2: H - axisH, stroke: "var(--ink-3)", "stroke-width": 1, opacity: 0 }, svg);
-      const hit = s("rect", { x: padL, y: top, width: W - padR - padL + 10, height: H - axisH - top, fill: "transparent", tabindex: 0 }, svg);
-      let idx = xs.length - 1;
-      const html = (i) => `<div class="tt-head">Stage-2 epoch ${xs[i]}</div>` + series.map((se) => ttRow(se.color, esc(se.name), (se.approx ? "≈" : "") + String(se.values[i]), se.dash)).join("");
-      const at = (i, cx, cy) => { idx = i; cross.setAttribute("x1", x(xs[i])); cross.setAttribute("x2", x(xs[i])); cross.setAttribute("opacity", 1); showTip(html(i), cx, cy); };
-      hit.addEventListener("pointermove", (e) => {
-        const r = svg.getBoundingClientRect(), px = (e.clientX - r.left) * (W / r.width);
-        let best = 0; xs.forEach((v, i) => { if (Math.abs(x(v) - px) < Math.abs(x(xs[best]) - px)) best = i; });
-        at(best, e.clientX, e.clientY);
-      });
-      hit.addEventListener("pointerleave", () => { cross.setAttribute("opacity", 0); hideTip(); });
-      hit.addEventListener("focus", () => { const r = svg.getBoundingClientRect(); at(idx, r.left + (x(xs[idx]) / W) * r.width, r.top + 20); });
-      hit.addEventListener("keydown", (e) => {
-        if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-          e.preventDefault(); idx = Math.max(0, Math.min(xs.length - 1, idx + (e.key === "ArrowRight" ? 1 : -1)));
-          const r = svg.getBoundingClientRect(); at(idx, r.left + (x(xs[idx]) / W) * r.width, r.top + 20);
-        }
-      });
-      hit.addEventListener("blur", () => { cross.setAttribute("opacity", 0); hideTip(); });
-    });
-  }
-
-  // scatter: latency vs accuracy
-  function scatter(el, pts, { xDomain, yDomain, xStep, yStep }) {
-    chart(el, (el, W) => {
-      const padL = 36, padR = 18, top = 12, H = 270, axisH = 38;
-      const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": pts.map((p) => `${p.name}: ${p.y}% at ${p.x} s`).join("; ") }, el);
-      const x = linear(xDomain[0], xDomain[1], padL + 6, W - padR);
-      const y = linear(yDomain[0], yDomain[1], H - axisH, top);
-      const g = s("g", { class: "grid" }, svg);
-      ticks(yDomain[0], yDomain[1], yStep).forEach((t) => { s("line", { x1: padL, x2: W - padR, y1: y(t), y2: y(t) }, g); text(svg, padL - 8, y(t) + 4, t, "tick ax", { "text-anchor": "end" }); });
-      ticks(xDomain[0], xDomain[1], xStep).forEach((t) => { s("line", { x1: x(t), x2: x(t), y1: top, y2: H - axisH }, g); text(svg, x(t), H - axisH + 16, t + " s", "tick ax", { "text-anchor": "middle" }); });
-      text(svg, W - padR, H - 4, "latency per question →", "tick ax", { "text-anchor": "end" });
-      pts.forEach((p) => {
-        const gp = s("g", { class: "row" }, svg), cx = x(p.x), cy = y(p.y);
-        const col = p.kind === "base" ? "var(--gray-mark)" : "var(--rose)";
-        s("circle", { class: "hit", cx, cy, r: 16 }, gp);
-        s("circle", { cx, cy, r: p.kind === "ours" ? 7 : 6, fill: p.kind === "ours-hollow" ? "var(--surface)" : col, stroke: p.kind === "ours-hollow" ? col : "var(--surface)", "stroke-width": p.kind === "ours-hollow" ? 2.2 : 2 }, gp);
-        const anchor = p.anchor || (cx > W * 0.7 ? "end" : "start");
-        const dx = anchor === "end" ? -Math.abs(p.dx) : Math.abs(p.dx);
-        text(gp, cx + dx, cy + p.dy, p.name, p.kind === "base" ? "lbl-muted" : "lbl", { "text-anchor": anchor });
-        bindTip(gp, () => `<div class="tt-head">${esc(p.name)}</div>${ttRow(col, "V⋆ accuracy", fmt2(p.y) + "%", p.kind === "ours-hollow")}${ttRow(col, "Latency", p.x + " s", p.kind === "ours-hollow")}`);
-      });
-    });
-    dataTable(el, ["Method", "V* accuracy (%)", "Latency (s)"], pts.map((p) => [p.name, fmt2(p.y), p.x]));
-  }
-
-  // single stacked bar (part-to-whole), 2px surface gaps
-  function stackBar(el, parts) {
-    const total = parts.reduce((a, p) => a + p.v, 0);
-    chart(el, (el, W) => {
-      const H = 34, barH = 22;
-      const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": parts.map((p) => `${p.label}: ${fmtInt(p.v)}`).join("; ") }, el);
-      let x0 = 0;
-      parts.forEach((p, i) => {
-        const w = (p.v / total) * W - (i < parts.length - 1 ? 2 : 0);
-        const gp = s("g", { class: "row" }, svg);
-        const r = 4, first = i === 0, last = i === parts.length - 1;
-        s("rect", { class: "hit", x: x0, y: 0, width: w, height: H }, gp);
-        s("rect", { x: x0, y: 4, width: w, height: barH, rx: first || last ? r : 0, fill: p.color }, gp);
-        if (!first && last) s("rect", { x: x0, y: 4, width: Math.min(r, w), height: barH, fill: p.color }, gp);
-        if (first && !last) s("rect", { x: x0 + w - Math.min(r, w), y: 4, width: Math.min(r, w), height: barH, fill: p.color }, gp);
-        const pct = ((p.v / total) * 100).toFixed(1);
-        if (w > 64) text(gp, x0 + 9, 4 + barH / 2 + 4, `${p.short} ${pct}%`, "val", { fill: i === 0 ? "var(--ink)" : "#fff", style: `fill:${i === 0 ? "var(--ink)" : "#fff"}` });
-        bindTip(gp, () => `<div class="tt-head">${esc(p.label)}</div>${ttRow(p.color, "Traces", fmtInt(p.v))}${ttRow(p.color, "Share", pct + "%")}`);
-        x0 += w + 2;
-      });
-    });
-    dataTable(el, ["Level", "Traces", "Share"], parts.map((p) => [p.label, fmtInt(p.v), ((p.v / total) * 100).toFixed(1) + "%"]));
   }
 
   /* ────────────────────────────── page parts ────────────────────────────── */
@@ -419,26 +113,9 @@
 
   /* key numbers */
   $$(".keynum").forEach((el) => {
-    const L = LEVELS[el.dataset.level]; const d = L.ours - L.base;
-    el.innerHTML = `<span class="lv">${el.dataset.level}</span><div class="bar"><span class="from"></span></div><div class="val">${fmt2(L.ours)}<small>${fmtD(d)}</small></div>`;
-    const bar = $(".bar", el);
-    const W = 200, H = 26, x = linear(20, 75, 4, W - 4);
-    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, preserveAspectRatio: "none", "aria-label": `${L.name}: ${fmt2(L.base)} to ${fmt2(L.ours)}` });
-    s("line", { x1: 4, x2: W - 4, y1: H / 2, y2: H / 2, stroke: "var(--grid)", "stroke-width": 1 }, svg);
-    s("line", { x1: x(L.base), x2: x(L.ours), y1: H / 2, y2: H / 2, stroke: "var(--rose)", "stroke-opacity": .4, "stroke-width": 2 }, svg);
-    bar.appendChild(svg);
-    // dots as HTML so they stay round under preserveAspectRatio="none"
-    const dot = (v, col, size) => { const i = h("i"); i.style.cssText = `position:absolute;top:50%;left:${(x(v) / W) * 100}%;width:${size}px;height:${size}px;margin:-${size / 2}px 0 0 -${size / 2}px;border-radius:50%;background:${col};box-shadow:0 0 0 2px var(--surface)`; bar.appendChild(i); };
-    dot(L.base, "var(--gray-mark)", 9); dot(L.ours, "var(--rose)", 11);
-    $(".from", el).textContent = "";
-    el.title = `${L.name}: BAGEL think-4k ${fmt2(L.base)} → ThinkMorph-SSL ${fmt2(L.ours)}`;
-    const lab = h("div", { class: "from" }, `think-4k ${fmt2(L.base)}`); lab.style.cssText = "position:absolute;left:0;top:100%;margin-top:2px;white-space:nowrap";
-    bar.appendChild(lab);
+    const L = LEVELS[el.dataset.level];
+    el.innerHTML = `<span class="lv">${el.dataset.level}</span><span class="name">${esc(L.name)}</span><span class="val">${fmt2(L.ours)}<small>${fmtD(L.ours - L.base)}</small></span>`;
   });
-
-  /* base-model charts */
-  barChart($("#ch-base-l3"), BASE_L3, { domain: [0, 40], step: 10 });
-  barChart($("#ch-base-force"), BASE_FORCE, { domain: [0, 50], step: 10 });
 
   /* Stage 1 explorer */
   let selectPretext = () => {};
@@ -518,27 +195,6 @@
     render();
   })();
 
-  /* data: level breakdown */
-  legend($("#lg-levels"), INSTRUCT_LEVELS.map((p) => ({ name: `${p.label} · ${fmtInt(p.v)}`, color: p.color })));
-  stackBar($("#ch-levels"), INSTRUCT_LEVELS);
-
-  /* results dumbbell */
-  const tgNoThink = $("#tg-nothink");
-  const dbGroups = [
-    { name: "L1 · Basic visual perception", rows: [...L1_COLS.map((c, i) => ({ label: c, a: T4K[2][i], b: OURS[2][i], c: NOTHINK[2][i] })), { label: "L1 average", a: T4K[3], b: OURS[3], c: NOTHINK[3], strong: true }] },
-    { name: "L2 · Static spatial understanding", rows: [...L2_COLS.map((c, i) => ({ label: c, a: T4K[4][i], b: OURS[4][i], c: NOTHINK[4][i] })), { label: "L2 average", a: T4K[6], b: OURS[6], c: NOTHINK[6], strong: true }] },
-    { name: "L3 · Mental world modeling", rows: [...L3_COLS.map((c, i) => ({ label: c, a: T4K[5][i], b: OURS[5][i], c: NOTHINK[5][i] })), { label: "L3 average", a: T4K[7], b: OURS[7], c: NOTHINK[7], strong: true }] },
-  ];
-  const dbEl = $("#ch-dumbbell");
-  const lgDb = () => legend($("#lg-dumbbell"), [
-    ...(tgNoThink.checked ? [{ name: "BAGEL no-think", color: "var(--ink-3)", shape: "ring" }] : []),
-    { name: "BAGEL think-4k", color: "var(--gray-mark)", shape: "dot" },
-    { name: "ThinkMorph-SSL", color: "var(--rose)", shape: "dot" },
-  ]);
-  lgDb();
-  dumbbell(dbEl, dbGroups, { domain: [0, 100], step: 20, aName: "BAGEL think-4k", bName: "ThinkMorph-SSL", cName: "BAGEL no-think", showC: () => tgNoThink.checked, unit: "%" });
-  tgNoThink.addEventListener("change", () => { lgDb(); dbEl._redraw(); });
-
   /* results table */
   (function resultsTable() {
     const box = $("#tbl-results"), tabs = $("#tbl-tabs"); if (!box) return;
@@ -571,37 +227,6 @@
     build("l1");
   })();
 
-  /* ablations */
-  legend($("#lg-fixed"), [{ name: "Stage 2 only", color: "var(--gray-mark)", shape: "dot" }, { name: "Stage 1 → Stage 2", color: "var(--rose)", shape: "dot" }]);
-  dumbbell($("#ch-fixed"), [{ rows: FIXED_BUDGET.map((r) => ({ ...r, label: `${r.label}`, sub: r.sub })) }],
-    { domain: [20, 70], step: 10, aName: "Stage 2 only", bName: "Stage 1 → Stage 2", unit: "%", rowH: 52, showSub: true, labMax: 110 });
-
-  (function ablation() {
-    const tabs = $("#abl-tabs"), el = $("#ch-abl"), note = $("#abl-note"); if (!el) return;
-    let key = "order";
-    const draw = () => {
-      const a = ABL[key];
-      legend($("#lg-abl"), a.series.map((se) => ({ name: se.name + (se.approx ? " (≈, read from figure)" : ""), color: se.color, shape: "line", dash: se.dash })));
-      if (note) note.textContent = a.note;
-      dataTable(el, ["Series", "Epoch 1", "Epoch 2", "Epoch 3", "Epoch 4"], a.series.map((se) => [se.name + (se.approx ? " (≈)" : ""), ...se.values.map((v) => String(v))]));
-    };
-    lineChart(el, () => ({ series: ABL[key].series.map((se) => ({ ...se, short: se.name.replace(" (ours)", "").replace("Stage 1", "S1").replace("Stage 2", "S2") })), xs: [1, 2, 3, 4], domain: [50, 70], step: 5 }));
-    draw();
-    $$("button", tabs).forEach((b) => b.addEventListener("click", () => {
-      $$("button", tabs).forEach((x) => x.setAttribute("aria-selected", x === b ? "true" : "false"));
-      key = b.dataset.k; draw(); el._redraw();
-    }));
-  })();
-
-  legend($("#lg-use"), [{ name: "Without image", color: "var(--gray-mark)", shape: "dot" }, { name: "With image", color: "var(--rose)", shape: "dot" }]);
-  dumbbell($("#ch-use"), [{ rows: IMAGE_USE }], { domain: [0, 80], step: 20, aName: "Without image", bName: "With image", unit: "%", fmt: (v) => v.toFixed(1), rowH: 52, showSub: true, labMax: 170 });
-  legend($("#lg-defect"), [{ name: "No critical defect", color: "var(--gray-mark)", shape: "dot" }, { name: "Critical defect", color: "var(--amber)", shape: "dot" }]);
-  dumbbell($("#ch-defect"), [{ rows: DEFECT }], { domain: [0, 80], step: 20, aName: "No critical defect", bName: "Critical defect", bColor: "var(--amber)", unit: "%", fmt: (v) => v.toFixed(1), rowH: 52, showSub: true, labMax: 170 });
-
-  legend($("#lg-cost"), [{ name: "BAGEL (text)", color: "var(--gray-mark)", shape: "dot" }, { name: "ThinkMorph-SSL", color: "var(--rose)", shape: "dot" }, { name: "+ TeaCache", color: "var(--rose)", shape: "ring" }]);
-  scatter($("#ch-cost"), COST, { xDomain: [0, 120], yDomain: [50, 75], xStep: 30, yStep: 5 });
-
-
   /* bibtex copy */
   const copyBtn = $("#bib-copy");
   copyBtn?.addEventListener("click", async () => {
@@ -621,7 +246,7 @@
 
   /* reveal */
   if (!reduceMotion && "IntersectionObserver" in window) {
-    const els = $$(".chart-card, .fig, .stage, .corpus, .explorer, .callout");
+    const els = $$(".fig, .stage, .corpus, .explorer, .table-scroll");
     els.forEach((el) => el.classList.add("reveal"));
     const ro = new IntersectionObserver((ents) => ents.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-in"); ro.unobserve(e.target); } }), { rootMargin: "0px 0px -8% 0px" });
     els.forEach((el) => ro.observe(el));
