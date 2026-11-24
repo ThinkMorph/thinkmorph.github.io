@@ -1,30 +1,30 @@
 {
  "jigsaw": {
-  "row_id": "5274934efa450604ac26cc2856bfd073504f313c13d91d027272643e794c4235",
+  "example": "static/img/pretext/jigsaw_1_in.webp / _out.webp (trace explorer example 1)",
   "how": "input and target from the data"
  },
  "colorization": {
-  "row_id": "90b03dfd111f0d835f8cb8e29826a00b4c298734741783a1f0197ac9028385d0",
+  "example": "static/img/pretext/colorization_2_in.webp / _out.webp (trace explorer example 2)",
   "how": "input and target from the data"
  },
  "super_resolution": {
-  "row_id": "64dee386573d33822d9675f99e63f0acec6b8d0002639367a35dc6b217f3d2d3",
+  "example": "static/img/pretext/super_resolution_4_in.webp / _out.webp (trace explorer example 4)",
   "how": "target from the data, input made coarser"
  },
  "masked_inpainting": {
-  "row_id": "3f43bc6b7d2ed1caaa6c94e0d6c05d2024213464bcad42f6673ca300b3eded37",
+  "example": "static/img/pretext/masked_inpainting_2_in.webp / _out.webp (trace explorer example 2)",
   "how": "input and target from the data"
  },
  "orthogonal_transform": {
-  "row_id": "4a0b05cc4e7cf5d5c32c55e9fb4b48661a61f35aae13d3b1dfe740d820a3938e",
+  "example": "static/img/pretext/orthogonal_transform_3_in.webp / _out.webp (trace explorer example 3)",
   "how": "input and target from the data"
  },
  "denoising": {
-  "row_id": "2f2e35bbbd69f3fab3175e507c391ede0314e8b57c500d463fee1d4db169d9c4",
+  "example": "static/img/pretext/denoising_4_in.webp / _out.webp (trace explorer example 4)",
   "how": "target from the data, input made noisier"
  },
  "deformation_recovery": {
-  "row_id": "821d2893b88f74614f004982bb36952872be4ce655473ac2baa80597ebe662e3",
+  "example": "static/img/pretext/deformation_recovery_3_in.webp / _out.webp (trace explorer example 3)",
   "how": "input and target from the data"
  }
 }
