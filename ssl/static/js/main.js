@@ -181,19 +181,23 @@
       });
       src.textContent = `${t.level} · ${t.name} · source: ${ex.source}`;
       const n = ex.inputs.length;
-      const ins = ex.inputs.map((im) => `<figure><img src="${im.src}" alt="Input: ${esc(im.label)}" width="${im.w}" height="${im.h}" loading="lazy">${n > 1 ? `<figcaption class="cap">${esc(im.label)}</figcaption>` : ""}</figure>`).join("");
-      let steps = "";
-      ex.thoughts.forEach((th, k) => {
-        steps += `<div class="istep"><div class="rail"><span>T${sub(k)}</span></div><div><p class="lab">${esc(th.label)}</p><p class="thought">${esc(th.text)}</p></div></div>`;
-        const g = ex.gens[k];
-        if (g) steps += `<div class="istep is-gen"><div class="rail"><span>I${sub(k)}</span></div><div><p class="lab">&lt;gen_image&gt; · ${esc(g.label)}</p><figure><img src="${g.src}" alt="Intermediate image: ${esc(g.label)}" width="${g.w}" height="${g.h}" loading="lazy"></figure></div></div>`;
+      const ins = ex.inputs.map((im) => `<figure><img src="${im.src}" alt="Input: ${esc(im.label)}" width="${im.w}" height="${im.h}" loading="lazy">${n > 1 ? `<figcaption>${esc(im.label)}</figcaption>` : ""}</figure>`).join("");
+      // same layout as the Stage 1 trace: question + input, then T0, I0, T1, ... in one card; the answer closes the last cell
+      const seq = [];
+      ex.thoughts.forEach((th, k) => { seq.push({ kind: "t", k, x: th }); if (ex.gens[k]) seq.push({ kind: "g", k, x: ex.gens[k] }); });
+      ex.gens.slice(ex.thoughts.length).forEach((g, j) => seq.push({ kind: "g", k: ex.thoughts.length + j, x: g }));
+      const arrow = `<span class="step-arrow" aria-hidden="true">→</span>`;
+      const ans = `<div class="q-ans"><span class="step-name">answer</span><span class="ans">${esc(ex.answer)}</span></div>`;
+      const cells = [`<div class="step"><div class="step-head"><span class="step-tok in">Q</span><span class="step-name">${n > 1 ? `question + ${n} input images` : "question + input image"}</span></div>`
+        + `<div class="q-imgs n${Math.min(n, 5)}">${ins}</div><p class="q-text">${esc(ex.question)}</p></div>`];
+      seq.forEach((st, idx) => {
+        const tail = idx === seq.length - 1 ? ans : "";
+        if (st.kind === "t") cells.push(`<div class="step">${arrow}<div class="step-head"><span class="step-tok">T${sub(st.k)}</span><span class="step-name">${esc(st.x.label.toLowerCase())}</span></div><p class="thought">${esc(st.x.text)}</p>${tail}</div>`);
+        else cells.push(`<div class="step">${arrow}<div class="step-head"><span class="step-tok gen">I${sub(st.k)}</span><span class="step-name">generate</span></div>`
+          + `<span class="gen-tag">&lt;gen_image&gt; · ${esc(st.x.label.toLowerCase())}</span><img class="q-gen" src="${st.x.src}" alt="Intermediate image: ${esc(st.x.label)}"${st.x.w ? ` width="${st.x.w}" height="${st.x.h}"` : ""} loading="lazy">${tail}</div>`);
       });
-      ex.gens.slice(ex.thoughts.length).forEach((g, j) => {
-        const k = ex.thoughts.length + j;
-        steps += `<div class="istep is-gen"><div class="rail"><span>I${sub(k)}</span></div><div><p class="lab">&lt;gen_image&gt; · ${esc(g.label)}</p><figure><img src="${g.src}" alt="Intermediate image: ${esc(g.label)}" loading="lazy"></figure></div></div>`;
-      });
-      steps += `<div class="istep is-ans"><div class="rail"><span>A</span></div><div><p class="lab">answer</p><span class="ans">${esc(ex.answer)}</span></div></div>`;
-      body.innerHTML = `<div class="iq"><div class="iq-text"><p class="k">Question</p><p>${esc(ex.question)}</p></div><div class="iq-imgs n${Math.min(n, 5)}">${ins}</div></div><div class="isteps">${steps}</div>`;
+      body.className = `ptrace ptrace-q n${cells.length}`;
+      body.innerHTML = cells.join("");
     }
     render();
   })();
@@ -206,11 +210,11 @@
     const overall = (r) => (sum(r[2]) + r[4][0] + (r[4][1] + r[4][2]) / 2 + r[4][3] + sum(r[5])) / 12;
     const OVERALL_TIP = "Mean of the 12 benchmarks; CV-2D and CV-3D count once as CV-Bench";
     const VIEWS = {
-      all: { band: null, cols: ["L1 · Basic visual perception", "L2 · Static spatial understanding", "L3 · Mental world modeling", "Overall"], avg: [3],
+      all: { band: null, cols: ["L1", "L2", "L3", "Overall"], avg: [3],
              vals: (r) => [r[3], r[6], r[7], overall(r)] },
-      l1: { band: ["Level 1 · Basic visual perception", 5], cols: [...L1_COLS, "L1 avg"], avg: [5], vals: (r) => [...r[2], r[3]] },
-      l2: { band: ["Level 2 · Static spatial understanding", 4], cols: [...L2_COLS, "L2 avg"], avg: [4], vals: (r) => [...r[4], r[6]] },
-      l3: { band: ["Level 3 · Mental world modeling", 4], cols: [...L3_COLS, "L3 avg"], avg: [4], vals: (r) => [...r[5], r[7]] },
+      l1: { band: ["L1", 5], cols: [...L1_COLS, "L1 avg"], avg: [5], vals: (r) => [...r[2], r[3]] },
+      l2: { band: ["L2", 4], cols: [...L2_COLS, "L2 avg"], avg: [4], vals: (r) => [...r[4], r[6]] },
+      l3: { band: ["L3", 4], cols: [...L3_COLS, "L3 avg"], avg: [4], vals: (r) => [...r[5], r[7]] },
     };
     function build(which) {
       const V = VIEWS[which], n = V.cols.length;
