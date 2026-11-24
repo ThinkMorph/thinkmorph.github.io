@@ -206,7 +206,7 @@
     const overall = (r) => (sum(r[2]) + r[4][0] + (r[4][1] + r[4][2]) / 2 + r[4][3] + sum(r[5])) / 12;
     const OVERALL_TIP = "Mean of the 12 benchmarks; CV-2D and CV-3D count once as CV-Bench";
     const VIEWS = {
-      all: { band: null, cols: ["L1 · Perception", "L2 · Static spatial", "L3 · World modeling", "Overall"], avg: [3],
+      all: { band: null, cols: ["L1 · Basic visual perception", "L2 · Static spatial understanding", "L3 · Mental world modeling", "Overall"], avg: [3],
              vals: (r) => [r[3], r[6], r[7], overall(r)] },
       l1: { band: ["Level 1 · Basic visual perception", 5], cols: [...L1_COLS, "L1 avg"], avg: [5], vals: (r) => [...r[2], r[3]] },
       l2: { band: ["Level 2 · Static spatial understanding", 4], cols: [...L2_COLS, "L2 avg"], avg: [4], vals: (r) => [...r[4], r[6]] },
@@ -215,8 +215,12 @@
     function build(which) {
       const V = VIEWS[which], n = V.cols.length;
       const vals = RESULTS.map((r) => V.vals(r).map((x) => Math.round(x * 100) / 100));
-      const best = V.cols.map((_, i) => Math.max(...vals.map((v) => v[i])));
-      const cls = (i, x) => [V.avg.includes(i) ? "avg" : "", x === best[i] ? "top" : ""].join(" ").trim();
+      // best and second best per column among open models; closed-source rows are not ranked
+      const open = RESULTS.map((r, k) => (r[1] === "Closed-source" ? -1 : k)).filter((k) => k >= 0);
+      const rank = V.cols.map((_, i) => [...new Set(open.map((k) => vals[k][i]))].sort((a, b) => b - a));
+      const cls = (k, i, x) => [V.avg.includes(i) ? "avg" : "",
+        RESULTS[k][1] !== "Closed-source" && x === rank[i][0] ? "best" : "",
+        RESULTS[k][1] !== "Closed-source" && x === rank[i][1] ? "second" : ""].join(" ").trim();
       let head = V.band
         ? `<tr class="lv"><th></th><th colspan="${V.band[1]}">${esc(V.band[0])}</th><th class="avg">Avg</th></tr>` : "";
       head += `<tr><th>Model</th>${V.cols.map((c, i) => `<th class="${V.avg.includes(i) ? "avg" : ""}"${c === "Overall" ? ` title="${OVERALL_TIP}"` : ""}>${star(c)}</th>`).join("")}</tr>`;
@@ -225,13 +229,14 @@
         if (r[1] !== grp && r[1] !== "ours") { grp = r[1]; body += `<tr class="grp"><td colspan="${n + 1}">${esc(grp)}</td></tr>`; }
         const v = vals[k];
         const rowCls = r[1] === "ours" ? "ours" : `m${r[0] === "BAGEL think-4k" ? " ref" : ""}`;
-        body += `<tr class="${rowCls}"><td>${esc(r[0])}</td>${v.map((x, i) => `<td class="${cls(i, x)}">${fmt2(x)}</td>`).join("")}</tr>`;
+        body += `<tr class="${rowCls}"><td>${esc(r[0])}</td>${v.map((x, i) => `<td class="${cls(k, i, x)}">${fmt2(x)}</td>`).join("")}</tr>`;
         if (r[1] === "ours") {
           const b = vals[RESULTS.indexOf(T4K)];
           body += `<tr class="delta"><td>Δ vs. think-4k</td>${v.map((x, i) => `<td class="${V.avg.includes(i) ? "avg" : ""}">${fmtD(x - b[i])}</td>`).join("")}</tr>`;
         }
       });
-      box.innerHTML = `<table class="rtable rtable-${which}"><thead>${head}</thead><tbody>${body}</tbody></table>`;
+      box.innerHTML = `<table class="rtable rtable-${which}"><thead>${head}</thead><tbody>${body}</tbody></table>`
+        + `<p class="tbl-note">Bold: best; underlined: second best, among open models (closed-source models are not ranked).</p>`;
     }
     $$("button", tabs).forEach((b) => b.addEventListener("click", () => {
       $$("button", tabs).forEach((x) => x.setAttribute("aria-selected", x === b ? "true" : "false"));
