@@ -150,54 +150,42 @@
       <p class="sec-tag">Pretext reasoning comes first, and instruction tuning follows.</p>
     </div>
 
-    <div class="stages">
-      <article class="stage stage-1">
-        <p class="stage-tag">Stage 1 · Pretext reasoning</p>
-        <h3>Restore it, and say what changed</h3>
-        <p>Only a corrupted image goes in. The model describes it, generates the restored image, and describes the result.</p>
-        <p class="stage-data"><span class="num">270,896</span> traces in <a href="https://huggingface.co/datasets/ThinkMorph/Pretext-270K">Pretext-270K</a>. Each one restores an image after one of seven programmatic corruptions, on images from eight public datasets.</p>
-      </article>
-      <article class="stage stage-2">
-        <p class="stage-tag">Stage 2 · Instruction tuning</p>
-        <h3>Build the image the question needs</h3>
-        <p>Stage&nbsp;2 keeps the trace format and adds a question. The model draws the images that help answer it.</p>
-        <p class="stage-data"><span class="num">180,490</span> traces in <a href="https://huggingface.co/datasets/ThinkMorph/Instruct-180K">Instruct-180K</a>. Nine construction pipelines build them at three levels.</p>
-      </article>
-    </div>
-
-
-    <figure class="fig fig-zoom fig-mid">
-      <button class="zoom-btn" type="button" aria-label="Enlarge the corpus composition figure"><img src="static/img/fig/composition.webp" alt="Two donut charts. Left: Pretext-270K, 270,896 traces over seven transformations. Right: Instruct-180K, 180,490 traces by level (L1, L2, L3) and by task." loading="lazy" width="2000" height="690"></button>
-    </figure>
-
-    <figure class="fig fig-wide fig-zoom">
-      <button class="zoom-btn" type="button" aria-label="Enlarge the pipelines figure">
-        <img src="static/img/fig/spatial_smile.webp" alt="The nine Instruct-180K construction pipelines grouped by level: visual search and jigsaw QA (L1); object counting and depth perception (L2); object rotation, object editing, allocentric reframing from point clouds, panoramic completion, SAM3D viewpoint rendering, and ego-exo transfer (L3)." loading="lazy">
-      </button>
-    </figure>
-
-    <div class="explorer" id="ex-pretext">
-      <div class="explorer-head">
-        <h3><span class="dot dot-1" aria-hidden="true"></span>Stage 1 traces</h3>
-      </div>
+    <div class="stage-block" id="stage-1">
+      <h3>Stage&nbsp;1 · Pretext reasoning</h3>
+      <p class="prose-narrow">Only a corrupted image goes in. The model describes it, generates the restored image, and describes the result. <a href="https://huggingface.co/datasets/ThinkMorph/Pretext-270K">Pretext-270K</a> holds 270,896 such traces, built with seven programmatic corruptions on images from eight public datasets.</p>
+      <div class="explorer" id="ex-pretext">
       <div class="tabs" role="tablist" aria-label="Pretext task" id="ex-pretext-tabs"></div>
       <div class="ex-sub">
         <div class="pager" id="ex-pretext-pager" aria-label="Example"></div>
         <span class="ex-source" id="ex-pretext-source"></span>
       </div>
       <div class="ptrace" id="ex-pretext-body" aria-live="polite"></div>
+      </div>
     </div>
 
-    <div class="explorer" id="ex-instruct">
-      <div class="explorer-head">
-        <h3><span class="dot dot-2" aria-hidden="true"></span>Stage 2 traces</h3>
-      </div>
+    <div class="stage-block" id="stage-2">
+      <h3>Stage&nbsp;2 · Instruction tuning</h3>
+      <p class="prose-narrow">Stage&nbsp;2 keeps the trace format and adds a question. The model draws the images that help answer it. <a href="https://huggingface.co/datasets/ThinkMorph/Instruct-180K">Instruct-180K</a> holds 180,490 question-driven traces from nine construction pipelines at three levels.</p>
+      <figure class="fig fig-wide fig-zoom">
+        <button class="zoom-btn" type="button" aria-label="Enlarge the pipelines figure">
+        <img src="static/img/fig/spatial_smile.webp" alt="The nine Instruct-180K construction pipelines grouped by level: visual search and jigsaw QA (L1); object counting and depth perception (L2); object rotation, object editing, allocentric reframing from point clouds, panoramic completion, SAM3D viewpoint rendering, and ego-exo transfer (L3)." loading="lazy">
+      </button>
+      </figure>
+      <div class="explorer" id="ex-instruct">
       <div class="tabs tabs-grouped" role="tablist" aria-label="Construction pipeline" id="ex-instruct-tabs"></div>
       <div class="ex-sub">
         <div class="pager" id="ex-instruct-pager" aria-label="Example"></div>
         <span class="ex-source" id="ex-instruct-source"></span>
       </div>
       <div class="itrace" id="ex-instruct-body" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="stage-block" id="data">
+      <h3>Data</h3>
+      <figure class="fig fig-zoom fig-mid fig-plain">
+        <button class="zoom-btn" type="button" aria-label="Enlarge the corpus composition figure"><img src="static/img/fig/composition.webp" alt="Two donut charts. Left: Pretext-270K, 270,896 traces over seven transformations. Right: Instruct-180K, 180,490 traces by level (L1, L2, L3) and by task." loading="lazy" width="2000" height="690"></button>
+      </figure>
     </div>
   </div>
 </section>
