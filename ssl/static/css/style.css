@@ -582,3 +582,16 @@ button { font: inherit; color: inherit; }
 #tbl-results .rtable tr.grp td { font-size: 11.5px; padding-top: 12px; padding-bottom: 4px; }
 /* smaller order-and-instructions figure */
 .fig.fig-small { max-width: 420px; justify-self: center; }
+
+/* ── v2 round 2: Method as Stage 1 / Stage 2 / Data blocks ── */
+.stage-block { margin-top: 64px; }
+.stage-block:first-of-type, .sec-head + .stage-block { margin-top: 8px; }
+.stage-block > h3 { margin: 0 0 10px; font: 600 24px/1.25 var(--sans); letter-spacing: -.025em; }
+.stage-block > .prose-narrow { margin-bottom: 0; }
+.stage-block .prose-narrow a { color: var(--ink); text-decoration-color: var(--rule-2); }
+.stage-block .prose-narrow a:hover { text-decoration-color: currentColor; }
+.stage-block .explorer { margin-top: 24px; }
+.stage-block > .fig { margin-top: 24px; }
+.stage-block > .fig + .explorer { margin-top: 28px; }
+/* no frame on the corpus figure */
+.fig.fig-plain img { border: 0; }
