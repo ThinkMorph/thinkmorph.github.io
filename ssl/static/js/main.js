@@ -73,7 +73,7 @@
   const secObs = new IntersectionObserver((ents) => {
     ents.forEach((e) => { if (e.isIntersecting) tocLinks.forEach((a) => a.classList.toggle("is-active", a.getAttribute("href") === "#" + e.target.id)); });
   }, { rootMargin: "-45% 0px -50% 0px" });
-  ["idea", "method", "data", "results", "analysis", "cite"].forEach((id) => { const el = document.getElementById(id); if (el) secObs.observe(el); });
+  ["idea", "method", "results", "examples", "cite"].forEach((id) => { const el = document.getElementById(id); if (el) secObs.observe(el); });
 
   const EX = window.TM_EXAMPLES || { pretext: [], instruct: [] };
 
@@ -173,13 +173,15 @@
     function render() {
       $$("button", tabs).forEach((b) => b.setAttribute("aria-selected", +b.dataset.i === ti ? "true" : "false"));
       const t = EX.instruct[ti], ex = t.examples[ei];
-      pager.innerHTML = "";
-      t.examples.forEach((e, i) => {
-        const b = h("button", { type: "button", "aria-pressed": i === ei ? "true" : "false", "aria-label": `Example ${i + 1}` }, String(i + 1));
-        b.addEventListener("click", () => { ei = i; render(); });
-        pager.appendChild(b);
-      });
-      src.textContent = `${t.level} · ${t.name} · source: ${ex.source}`;
+      if (pager) {
+        pager.innerHTML = "";
+        t.examples.forEach((e, i) => {
+          const b = h("button", { type: "button", "aria-pressed": i === ei ? "true" : "false", "aria-label": `Example ${i + 1}` }, String(i + 1));
+          b.addEventListener("click", () => { ei = i; render(); });
+          pager.appendChild(b);
+        });
+      }
+      if (src) src.textContent = `${t.level} · ${t.name} · source: ${ex.source}`;
       const n = ex.inputs.length;
       const ins = ex.inputs.map((im) => `<figure><img src="${im.src}" alt="Input: ${esc(im.label)}" width="${im.w}" height="${im.h}" loading="lazy">${n > 1 ? `<figcaption class="cap">${esc(im.label)}</figcaption>` : ""}</figure>`).join("");
       let steps = "";

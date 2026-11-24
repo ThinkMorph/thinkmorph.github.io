@@ -29,9 +29,8 @@
     <ul class="toc">
       <li><a href="#idea">Motivation</a></li>
       <li><a href="#method">Method</a></li>
-      <li><a href="#data">Data</a></li>
       <li><a href="#results">Results</a></li>
-      <li><a href="#analysis">Analysis</a></li>
+      <li><a href="#examples">Examples</a></li>
       <li><a href="#cite">Cite</a></li>
     </ul>
   </div>
@@ -130,103 +129,38 @@
 <!-- ───────────────────────── 1. motivation ───────────────────────── -->
 <section class="sec" id="idea">
   <div class="wrap">
-    <div class="sec-head">
-      <h2>Motivation</h2>
-      <p class="sec-tag">Images can supply their own supervision.</p>
-    </div>
-
-    <div class="idea">
-      <div class="prose">
-        <p class="lede">Models that reason with intermediate images are usually trained on traces built for one task family at a time. Self-supervised pretext tasks need no such traces, because the original image is the answer. <strong>ThinkMorph-SSL</strong> turns these tasks into interleaved reasoning traces and trains on them before instruction tuning. Compared with the same model reasoning in text, it gains 9.84 points on perception, 4.22 on static spatial understanding and 17.92 on mental world modeling.</p>
-      </div>
-
-    </div>
+    <div class="sec-head"><h2>Motivation</h2></div>
+    <p class="lede">Models that reason with intermediate images are usually trained on traces built for one task family at a time. Self-supervised pretext tasks need no such traces, because the original image is the answer. <strong>ThinkMorph-SSL</strong> turns these tasks into interleaved reasoning traces and trains on them before instruction tuning. Compared with the same model reasoning in text, it gains 9.84 points on perception, 4.22 on static spatial understanding and 17.92 on mental world modeling.</p>
   </div>
 </section>
 
 <!-- ───────────────────────── 2. method ───────────────────────── -->
-<section class="sec sec-alt" id="method">
+<section class="sec" id="method">
   <div class="wrap">
-    <div class="sec-head">
-      <h2>Method</h2>
-      <p class="sec-tag">Pretext reasoning comes first, and instruction tuning follows.</p>
-    </div>
-
+    <div class="sec-head"><h2>Method</h2></div>
     <div class="stages">
-      <article class="stage stage-1">
-        <p class="stage-tag">Stage 1 · Pretext reasoning</p>
-        <h3>Restore it, and say what changed</h3>
+      <div class="stage-col">
+        <h3>Stage&nbsp;1 · Pretext reasoning</h3>
         <p>Only a corrupted image goes in. The model describes it, generates the restored image, and describes the result.</p>
         <div class="eq"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="right left" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>T</mi><mn>0</mn></msub><mo separator="true">,</mo><msub><mi>I</mi><mn>0</mn></msub><mo separator="true">,</mo><msub><mi>T</mi><mn>1</mn></msub><mo>∣</mo><msub><mi>I</mi><mi>c</mi></msub><mo stretchy="false">)</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>T</mi><mn>0</mn></msub><mo>∣</mo><msub><mi>I</mi><mi>c</mi></msub><mo stretchy="false">)</mo><mtext> </mtext><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>I</mi><mn>0</mn></msub><mo>∣</mo><msub><mi>I</mi><mi>c</mi></msub><mo separator="true">,</mo><msub><mi>T</mi><mn>0</mn></msub><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mphantom><mo>=</mo></mphantom><mtext>  </mtext><mtext> </mtext><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>T</mi><mn>1</mn></msub><mo>∣</mo><msub><mi>I</mi><mi>c</mi></msub><mo separator="true">,</mo><msub><mi>T</mi><mn>0</mn></msub><mo separator="true">,</mo><msub><mi>I</mi><mn>0</mn></msub><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
 p_\theta(T_0, I_0, T_1 \mid I_c)
 &amp;= p_\theta(T_0 \mid I_c)\, p_\theta(I_0 \mid I_c, T_0) \\
 &amp;\phantom{=}\;\, p_\theta(T_1 \mid I_c, T_0, I_0)
 \end{aligned}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.7em;vertical-align:-1.1em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6em;"><span style="top:-3.76em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span><span style="top:-2.26em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.1em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6em;"><span style="top:-3.76em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span><span style="top:-2.26em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel" style="color:transparent;">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.1em;"><span></span></span></span></span></span></span></span></span></span></span></span></div>
-      </article>
-      <article class="stage stage-2">
-        <p class="stage-tag">Stage 2 · Instruction tuning</p>
-        <h3>Build the image the question needs</h3>
+      </div>
+      <div class="stage-col">
+        <h3>Stage&nbsp;2 · Instruction tuning</h3>
         <p>Stage&nbsp;2 keeps the trace format and adds a question. The model draws the images that help answer it.</p>
         <div class="eq"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo stretchy="false">(</mo><msup><mi>x</mi><mtext>img</mtext></msup><mo separator="true">,</mo><msup><mi>x</mi><mtext>text</mtext></msup><mo stretchy="false">)</mo><mo>→</mo><msub><mi>T</mi><mn>0</mn></msub><mo>→</mo><msub><mi>I</mi><mn>0</mn></msub><mo>→</mo><mo>⋯</mo><mo>→</mo><msub><mi>T</mi><mi>K</mi></msub></mrow><annotation encoding="application/x-tex">(x^{\text{img}}, x^{\text{text}}) \rightarrow T_0 \rightarrow I_0 \rightarrow \cdots \rightarrow T_K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1305em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8805em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">img</span></span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8436em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">text</span></span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0715em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></div>
-      </article>
-    </div>
-
-
-    <div class="explorer" id="ex-pretext">
-      <div class="explorer-head">
-        <h3><span class="dot dot-1" aria-hidden="true"></span>Stage 1 traces</h3>
       </div>
-      <div class="tabs" role="tablist" aria-label="Pretext task" id="ex-pretext-tabs"></div>
-      <div class="ex-sub">
-        <div class="pager" id="ex-pretext-pager" aria-label="Example"></div>
-        <span class="ex-source" id="ex-pretext-source"></span>
-      </div>
-      <div class="ptrace" id="ex-pretext-body" aria-live="polite"></div>
     </div>
-
-    <div class="explorer" id="ex-instruct">
-      <div class="explorer-head">
-        <h3><span class="dot dot-2" aria-hidden="true"></span>Stage 2 traces</h3>
-      </div>
-      <div class="tabs tabs-grouped" role="tablist" aria-label="Construction pipeline" id="ex-instruct-tabs"></div>
-      <div class="ex-sub">
-        <div class="pager" id="ex-instruct-pager" aria-label="Example"></div>
-        <span class="ex-source" id="ex-instruct-source"></span>
-      </div>
-      <div class="itrace" id="ex-instruct-body" aria-live="polite"></div>
+    <div class="sub">
+      <h3>Data</h3>
+      <p class="prose-narrow"><a href="https://huggingface.co/datasets/ThinkMorph/Pretext-270K">Pretext-270K</a> holds 270,896 traces. Each one restores an image after one of seven programmatic corruptions, on images from eight public datasets. <a href="https://huggingface.co/datasets/ThinkMorph/Instruct-180K">Instruct-180K</a> holds 180,490 question-driven traces from nine construction pipelines at three levels.</p>
     </div>
-  </div>
-</section>
-
-<!-- ───────────────────────── 3. data ───────────────────────── -->
-<section class="sec" id="data">
-  <div class="wrap">
-    <div class="sec-head">
-      <h2>Data</h2>
-      <p class="sec-tag">Both corpora use the same trace format.</p>
-    </div>
-
-    <div class="corpora">
-      <article class="corpus corpus-1">
-        <p class="corpus-kicker">Stage 1</p>
-        <h3>Pretext-270K</h3>
-        <p class="corpus-big"><span class="num">270,896</span> traces</p>
-        <p>Each trace restores an image after one of seven programmatic corruptions. The images come from eight public datasets.</p>
-        <a class="corpus-link" href="https://huggingface.co/datasets/ThinkMorph/Pretext-270K">Download on Hugging Face →</a>
-      </article>
-      <article class="corpus corpus-2">
-        <p class="corpus-kicker">Stage 2</p>
-        <h3>Instruct-180K</h3>
-        <p class="corpus-big"><span class="num">180,490</span> traces</p>
-        <p>Nine construction pipelines build question-driven traces at three levels.</p>
-        <a class="corpus-link" href="https://huggingface.co/datasets/ThinkMorph/Instruct-180K">Download on Hugging Face →</a>
-      </article>
-    </div>
-
     <figure class="fig fig-wide fig-zoom">
       <button class="zoom-btn" type="button" aria-label="Enlarge the corpus composition figure"><img src="static/img/fig/composition.webp" alt="Two donut charts. Left: Pretext-270K, 270,896 traces over seven transformations. Right: Instruct-180K, 180,490 traces by level (L1, L2, L3) and by task." loading="lazy" width="2000" height="690"></button>
     </figure>
-
     <figure class="fig fig-wide fig-zoom">
       <button class="zoom-btn" type="button" aria-label="Enlarge the pipelines figure">
         <img src="static/img/fig/spatial_smile.webp" alt="The nine Instruct-180K construction pipelines grouped by level: visual search and jigsaw QA (L1); object counting and depth perception (L2); object rotation, object editing, allocentric reframing from point clouds, panoramic completion, SAM3D viewpoint rendering, and ego-exo transfer (L3)." loading="lazy">
@@ -235,16 +169,11 @@ p_\theta(T_0, I_0, T_1 \mid I_c)
   </div>
 </section>
 
-<!-- ───────────────────────── 4. results ───────────────────────── -->
-<section class="sec sec-alt" id="results">
+<!-- ───────────────────────── 3. results ───────────────────────── -->
+<section class="sec" id="results">
   <div class="wrap">
-    <div class="sec-head">
-      <h2>Results</h2>
-      <p class="sec-tag">ThinkMorph-SSL beats text reasoning on all twelve benchmarks.</p>
-    </div>
-
-    <p class="prose-narrow">BAGEL-7B-MoT trained with both stages gains 11.33 points on average over the same model reasoning in text (think-4k).</p>
-
+    <div class="sec-head"><h2>Results</h2></div>
+    <p class="prose-narrow">Trained with both stages, BAGEL-7B-MoT beats the same model reasoning in text (think-4k) on all twelve benchmarks, by 11.33 points on average.</p>
     <div class="table-block">
       <div class="tabs tabs-small" role="tablist" aria-label="Results table" id="tbl-tabs">
         <button role="tab" aria-selected="true" data-t="all">Overview</button>
@@ -254,63 +183,27 @@ p_\theta(T_0, I_0, T_1 \mid I_c)
       </div>
       <div class="table-scroll" id="tbl-results" tabindex="0" aria-label="Results table"></div>
     </div>
-
     <figure class="fig fig-wide fig-zoom">
       <button class="zoom-btn" type="button" aria-label="Enlarge the MMSI example"><img src="static/img/fig/case_study_mmsi.webp" alt="An MMSI question with two first-person views asks where the blue glass bottle is at the last view. Five other models answer D or C. ThinkMorph-SSL generates a merged panoramic view and answers A (right), the ground truth." loading="lazy" width="2240" height="1043"></button>
     </figure>
-  </div>
-</section>
-
-<!-- ───────────────────────── 5. analysis ───────────────────────── -->
-<section class="sec" id="analysis">
-  <div class="wrap">
-    <div class="sec-head">
-      <h2>Analysis</h2>
-      <p class="sec-tag">We test what pretext reasoning adds.</p>
-    </div>
-
-    <figure class="fig fig-wide fig-zoom fig-flush">
+    <p class="prose-narrow sub">With the same Stage-2 budget, Stage&nbsp;1 adds 6.49 points on average across the three levels. On MindCube it helps both backbones, by 4.9 points on BAGEL-7B and 4.72 points on InternVL-U-4B.</p>
+    <figure class="fig fig-wide fig-zoom fig-tight">
       <button class="zoom-btn" type="button" aria-label="Enlarge the ablation figure"><img src="static/img/fig/ablation_row.webp" alt="Left: Stage-2-only accuracy and the gain from Stage 1 on V* (+6.28), SAT (+7.33) and SpatialViz (+5.85). Middle and right: MindCube accuracy over four Stage-2 epochs; with Stage 1, BAGEL-7B ends 4.9 points higher and InternVL-U-4B 4.7 points higher." loading="lazy" width="2240" height="774"></button>
     </figure>
-
-    <div class="sec-sub grid-2 side-grid">
-      <div>
-        <h3>Order and instructions</h3>
-        <p class="prose-narrow">Pretext training before instruction tuning reaches 66.6% on MindCube, while mixing both corpora stays near 57%. Instruction-free pretext traces lead instructed ones by 2.7 points on average.</p>
-      </div>
+    <div class="grid-2 side-grid sub">
+      <p class="prose-narrow">Pretext training before instruction tuning reaches 66.6% on MindCube, while mixing both corpora stays near 57%. Instruction-free pretext traces lead instructed ones by 2.7 points on average.</p>
       <figure class="fig fig-zoom fig-side">
       <button class="zoom-btn" type="button" aria-label="Enlarge the training order figure"><img src="static/img/fig/instruction_free.webp" alt="MindCube accuracy by Stage-2 epoch: two-stage instruction-free (ThinkMorph-SSL), two-stage instructed, and one-stage mixed training." loading="lazy" width="1100" height="1058"></button>
     </figure>
     </div>
-
-    <div class="sec-sub">
-      <h3>Does the model use its images?</h3>
-      <p class="prose-narrow">We sample eight traces for each of 150 problems per split, and the model decides whether to draw an image.</p>
-      <div class="grid-2 side-grid">
-        <div>
-          <p class="table-title">Does the image matter?</p>
-          <div class="table-scroll tp-scroll"><table class="rtable stable">
-            <thead>
-              <tr class="lv"><th></th><th colspan="3">Accuracy (%)</th><th colspan="2">Error rate (%)</th></tr>
-              <tr><th>Split</th><th>with image</th><th>without</th><th>Δ</th><th>defect</th><th>none</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>Spatial (train)</td><td>69.4</td><td>32.2</td><td>+37.2</td><td>40.7</td><td>15.4</td></tr>
-              <tr><td>MMSI (test)</td><td>31.3</td><td>18.5</td><td>+12.8</td><td>67.8</td><td>47.4</td></tr>
-            </tbody>
-          </table></div>
-        </div>
-        <figure class="fig fig-zoom fig-side">
+    <div class="grid-2 side-grid sub">
+      <p class="prose-narrow">Traces with an intermediate image are more accurate, by 37.2 points on the spatial training split and 12.8 points on MMSI. When the image has a critical defect, errors are more frequent, as in this failure case.</p>
+      <figure class="fig fig-zoom fig-side">
       <button class="zoom-btn" type="button" aria-label="Enlarge the failure case"><img src="static/img/fig/case_failure_mmsi.webp" alt="A failure case: the generated panorama omits the desk and monitors and duplicates the sofa, so the model answers front right instead of directly in front." loading="lazy" width="1400" height="932"></button>
     </figure>
-      </div>
     </div>
-
-    <div class="sec-sub grid-2 side-grid">
-      <div>
-        <h3>Cost</h3>
-        <p class="prose-narrow">TeaCache cuts the latency per V<sup>⋆</sup> question from 62.3&nbsp;s to 21.3&nbsp;s without lowering accuracy.</p>
-      </div>
+    <div class="grid-2 side-grid sub">
+      <p class="prose-narrow">TeaCache cuts the latency per V<sup>⋆</sup> question from 62.3&nbsp;s to 21.3&nbsp;s without lowering accuracy.</p>
       <figure class="fig fig-zoom fig-side">
       <button class="zoom-btn" type="button" aria-label="Enlarge the cost figure"><img src="static/img/fig/cost_scatter.webp" alt="V* accuracy and latency per question: ThinkMorph-SSL 68.06% at 62.3 s, with TeaCache 69.10% at 21.3 s, BAGEL think-16k 61.26% at 112.4 s, think-4k 58.64% at 44.3 s, no-think 52.88% at 1.3 s." loading="lazy" width="1400" height="748"></button>
     </figure>
@@ -318,12 +211,21 @@ p_\theta(T_0, I_0, T_1 \mid I_c)
   </div>
 </section>
 
-<!-- ───────────────────────── 6. cite ───────────────────────── -->
+<!-- ───────────────────────── 4. examples ───────────────────────── -->
+<section class="sec" id="examples">
+  <div class="wrap">
+    <div class="sec-head"><h2>Examples</h2></div>
+    <div class="explorer" id="ex-instruct">
+      <div class="tabs tabs-grouped" role="tablist" aria-label="Construction pipeline" id="ex-instruct-tabs"></div>
+      <div class="itrace" id="ex-instruct-body" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── 5. cite ───────────────────────── -->
 <section class="sec sec-cite" id="cite">
   <div class="wrap">
-    <div class="sec-head">
-      <h2>Citation</h2>
-    </div>
+    <div class="sec-head"><h2>Citation</h2></div>
     <div class="bib">
       <button class="copy" type="button" id="bib-copy">Copy</button>
 <pre id="bib-text"><code>@article{gu2026thinkmorphssl,
