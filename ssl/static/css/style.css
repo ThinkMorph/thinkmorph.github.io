@@ -595,3 +595,33 @@ button { font: inherit; color: inherit; }
 .stage-block > .fig + .explorer { margin-top: 28px; }
 /* no frame on the corpus figure */
 .fig.fig-plain img { border: 0; }
+
+/* ── v2 round 3: results table ── */
+/* tabs as wide as the table, same type size */
+#tbl-tabs { display: flex; width: 100%; gap: 4px; margin-bottom: 12px; }
+#tbl-tabs button { flex: 1 1 0; padding: 10px 12px; font-size: 15px; }
+/* no blanket bold; best bold, second underlined (open models only) */
+#tbl-results .rtable td.avg, #tbl-results .rtable th.avg { font-weight: 400; }
+#tbl-results .rtable td.best { font-weight: 700; color: var(--ink); }
+#tbl-results .rtable td.second { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
+/* our rows in pink */
+#tbl-results .rtable tr.ours td { background: var(--rose-soft); font-weight: 400; }
+#tbl-results .rtable tr.ours td:first-child { color: var(--rose-ink); font-weight: 600; }
+#tbl-results .rtable tr.ours td.best { font-weight: 700; }
+#tbl-results .rtable tr.delta td { background: color-mix(in srgb, var(--rose-soft) 45%, #fff); }
+#tbl-results .rtable tr.delta td:first-child { color: var(--rose-ink); }
+.tbl-note { margin: 10px 2px 0; font-size: 13px; color: var(--ink-3); }
+
+/* ── v2 round 3: Motivation art (the mark's mosaic spilling out) ── */
+.idea { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 460px); gap: 40px; align-items: center; }
+.idea-art .ma-svg { display: block; width: 100%; height: auto; overflow: visible; }
+.idea-art .px { transform-box: fill-box; transform-origin: center; opacity: var(--o); animation: ma-wave 7s ease-in-out var(--d) infinite both; }
+@keyframes ma-wave {
+  0%   { opacity: 0; transform: scale(.35); }
+  22%  { opacity: var(--o); transform: scale(1); }
+  70%  { opacity: var(--o); transform: scale(1); }
+  100% { opacity: 0; transform: scale(.35); }
+}
+@media (prefers-reduced-motion: reduce) { .idea-art .px { animation: none; opacity: var(--o); } }
+@media (max-width: 900px) { .idea { grid-template-columns: 1fr; } .idea-art { max-width: 300px; margin: 8px auto 0; } }
+#tbl-results .rtable tr.delta td, #tbl-results .rtable tr.delta td.avg { font-weight: 600; }
