@@ -1,6 +1,6 @@
 # ThinkMorph-SSL project page
 
-Static page: plain HTML/CSS/JS, no build step and no dependencies. Open `index.html` directly or serve the folder
+Static page: plain HTML/CSS/JS, no build step; fonts and the KaTeX stylesheet load from CDNs. Open `index.html` directly or serve the folder
 (`python3 -m http.server`).
 
 Every figure on the page is a figure from the paper; the page draws no charts of its own.
@@ -39,3 +39,12 @@ python3 _tools/render_paper_figs.py <paper>/figures static/img/fig
 The overview and pipelines images, the strip at the top and the example traces
 (`static/img/pretext/`, `static/img/instruct/`, `static/js/examples.js`) were made from the paper's figures and
 appendix cards with `webpage/_tools/build_assets.py` in the paper repository.
+
+## Equations
+
+The two method equations are KaTeX HTML rendered ahead of time from the paper's LaTeX (`section/3_method.tex`),
+so the page needs only the KaTeX stylesheet (0.16.47, from jsDelivr). To render them again:
+
+```bash
+npm install katex@0.16.47 && node _tools/render_eqs.mjs eqs.json   # then paste eqs.json into the two .eq blocks
+```
