@@ -302,13 +302,6 @@ button { font: inherit; color: inherit; }
 .stage-tag { margin: 0 0 8px; font: 500 14px/1.3 var(--sans); color: var(--ink-3); }
 .stage h3 { margin: 0 0 10px; font: 600 21px/1.25 var(--sans); letter-spacing: -.025em; }
 .stage p { margin: 0 0 16px; color: var(--ink-2); font-size: 15.5px; }
-.eq {
-  padding: 14px 16px; border-radius: 10px;
-  background: var(--surface); border: 1px solid var(--rule); color: var(--ink);
-  overflow-x: auto; overflow-y: hidden;
-}
-.eq .katex-display { margin: 0; }
-.eq .katex { font-size: 1.16em; }
 
 .explorer { margin-top: 84px; }
 .explorer-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; margin-bottom: 16px; }
@@ -553,12 +546,6 @@ button { font: inherit; color: inherit; }
 .marks-legend .lg-lead { color: var(--rose); }
 .marks-legend .lg-eq { color: var(--ink); }
 .marks-legend .lg-adv { color: var(--teal); }
-@media (max-width: 560px) {
-  .stage { padding: 22px 18px; }
-  .eq { padding: 12px 10px; }
-  .eq .katex { font-size: .94em; }
-}
-@media (max-width: 380px) { .eq .katex { font-size: .88em; } }
 
 /* trace explorer tabs: full width, larger labels; Stage 2 puts L3 on its own row */
 .explorer .tabs { width: 100%; gap: 4px; }
@@ -575,8 +562,6 @@ button { font: inherit; color: inherit; }
 .sub > p, p.sub { margin-bottom: 0; }
 .stages { gap: 40px; }
 .stage-col p { margin: 0 0 12px; color: var(--ink-2); font-size: 15.5px; line-height: 1.6; }
-.stage-col .eq { border: 0; background: transparent; padding: 4px 0 0; }
-.stage-col .katex-display { text-align: left; }
 .fig { margin-top: 36px; }
 .fig.fig-tight { margin-top: 20px; }
 .side-grid.sub { margin-top: 48px; }
@@ -584,7 +569,6 @@ button { font: inherit; color: inherit; }
 .explorer { margin-top: 0; }
 .prose a, .prose-narrow a { color: var(--ink); text-decoration-color: var(--rule-2); }
 .prose-narrow a:hover { text-decoration-color: currentColor; }
-.stage-col .katex-display > .katex { text-align: left; }
 .side-grid.sub { align-items: start; gap: 40px; }
 .side-grid .fig-side { justify-self: end; width: 100%; }
 .side-grid .fig-side:has(img[src*="instruction_free"]) { max-width: 440px; }
