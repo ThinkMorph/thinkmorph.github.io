@@ -105,7 +105,7 @@ button { font: inherit; color: inherit; }
   text-wrap: balance;
 }
 .authors, .affils { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; }
-.authors { gap: 6px 22px; font: 500 19px/1.5 var(--sans); max-width: 1120px; color: #3a3935; }
+.authors { gap: 6px 20px; font: 500 17.5px/1.5 var(--sans); max-width: 1120px; color: #3a3935; }
 .authors li { white-space: nowrap; }
 .authors sup { color: var(--ink-3); font-weight: 500; margin-left: 1px; }
 .affils { gap: 3px 20px; margin-top: 16px; font-size: 16px; color: var(--ink-2); max-width: 1120px; }
@@ -553,3 +553,8 @@ button { font: inherit; color: inherit; }
 .authors sup { color: #8b8983; }
 .affils { color: #6c6a64; }
 .affils sup { color: #9a9892; }
+
+/* legend text in the colour of its mark */
+.marks-legend .lg-lead { color: var(--rose); }
+.marks-legend .lg-eq { color: var(--ink); }
+.marks-legend .lg-adv { color: var(--teal); }
