@@ -131,13 +131,26 @@
 
 <main>
 
-<section class="sec" id="intro">
-  <div class="wrap narrow">
-    <h2>Introduction</h2>
-    <p>Models that reason with intermediate images are usually trained on traces built for one task family at a time. Self-supervised pretext tasks need no such traces, because the original image is the answer. <strong>ThinkMorph-SSL</strong> turns these tasks into interleaved reasoning traces and trains on them before instruction tuning. Compared with the same model reasoning in text, it gains 9.84 points on perception, 4.22 on static spatial understanding and 17.92 on mental world modeling.</p>
-    <h3>The base model cannot do this yet</h3>
-    <p>Without training, more text reasoning lowers BAGEL's L3 average. Forcing an image step lowers accuracy, even when the image is the ground truth.</p>
-    <div class="table-pair">
+<!-- ───────────────────────── 1. motivation ───────────────────────── -->
+<section class="sec" id="idea">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Motivation</h2>
+      <p class="sec-tag">Images can supply their own supervision.</p>
+    </div>
+
+    <div class="idea">
+      <div class="prose">
+        <p class="lede">Models that reason with intermediate images are usually trained on traces built for one task family at a time. Self-supervised pretext tasks need no such traces, because the original image is the answer. <strong>ThinkMorph-SSL</strong> turns these tasks into interleaved reasoning traces and trains on them before instruction tuning. Compared with the same model reasoning in text, it gains 9.84 points on perception, 4.22 on static spatial understanding and 17.92 on mental world modeling.</p>
+      </div>
+
+    </div>
+
+
+    <div class="sec-sub">
+      <h3>The base model cannot do this yet</h3>
+      <p class="prose-narrow">Without training, more text reasoning lowers BAGEL's L3 average, and forcing an image step lowers accuracy even with a ground-truth image.</p>
+      <div class="table-pair">
         <div>
           <p class="table-title">More text reasoning effort at inference time</p>
           <div class="table-scroll tp-scroll"><table class="rtable stable">
@@ -161,102 +174,48 @@
           </table></div>
         </div>
       </div>
+    </div>
   </div>
 </section>
 
-<section class="sec" id="method">
-  <div class="wrap narrow">
-    <h2>Method</h2>
-    <p>Both stages use the same interleaved trace format. Stage&nbsp;1 trains on pretext traces, which have no question. Stage&nbsp;2 trains on question-driven traces, and the model draws the images that help answer the question.</p>
-  </div>
+<!-- ───────────────────────── 2. method ───────────────────────── -->
+<section class="sec sec-alt" id="method">
   <div class="wrap">
-    <figure class="fig">
+    <div class="sec-head">
+      <h2>Method</h2>
+      <p class="sec-tag">Pretext reasoning comes first, and instruction tuning follows.</p>
+    </div>
+
+    <div class="stages">
+      <article class="stage stage-1">
+        <p class="stage-tag">Stage 1 · Pretext reasoning</p>
+        <h3>Restore it, and say what changed</h3>
+        <p>Only a corrupted image goes in. The model describes it, generates the restored image, and describes the result.</p>
+        <div class="eq" aria-label="p of T0 T1 I0 given Ic factorizes into three conditionals">
+          <span>p<sub>θ</sub>(T<sub>0</sub>, I<sub>0</sub>, T<sub>1</sub> | I<sub>c</sub>)</span>
+          <span>= p<sub>θ</sub>(T<sub>0</sub> | I<sub>c</sub>) · p<sub>θ</sub>(I<sub>0</sub> | I<sub>c</sub>, T<sub>0</sub>) · p<sub>θ</sub>(T<sub>1</sub> | I<sub>c</sub>, T<sub>0</sub>, I<sub>0</sub>)</span>
+        </div>
+      </article>
+      <article class="stage stage-2">
+        <p class="stage-tag">Stage 2 · Instruction tuning</p>
+        <h3>Build the image the question needs</h3>
+        <p>Stage&nbsp;2 keeps the trace format and adds a question. The model draws the images that help answer it.</p>
+        <div class="eq" aria-label="image and question, then T0, I0, and so on, up to TK">
+          <span>(x<sup>img</sup>, x<sup>text</sup>) → T<sub>0</sub> → I<sub>0</sub> → ⋯ → T<sub>K</sub></span>
+        </div>
+      </article>
+    </div>
+
+    <figure class="fig fig-wide fig-zoom">
       <button class="zoom-btn" type="button" aria-label="Enlarge the overview figure">
         <img src="static/img/fig/stage1.webp" alt="Overview figure. Top: Stage 1 pretext reasoning, a jigsaw-scrambled alpine village is described, restored, and described again; six more transformations are shown. Bottom: Stage 2 instruction tuning across three levels: basic visual perception, static spatial understanding, and mental world modeling." loading="lazy">
       </button>
     </figure>
-  </div>
-</section>
 
-<section class="sec" id="data">
-  <div class="wrap narrow">
-    <h2>Data</h2>
-    <p>Pretext-270K holds 270,896 traces. Each one restores an image after one of seven programmatic corruptions, and the images come from eight public datasets. Instruct-180K holds 180,490 question-driven traces from nine construction pipelines at three levels.</p>
-  </div>
-  <div class="wrap">
-    <figure class="fig">
-      <button class="zoom-btn" type="button" aria-label="Enlarge the corpus composition figure"><img src="static/img/fig/composition.webp" alt="Two donut charts. Left: Pretext-270K, 270,896 traces over seven transformations. Right: Instruct-180K, 180,490 traces by level (L1, L2, L3) and by task." loading="lazy" width="2000" height="690"></button>
-    </figure>
-    <figure class="fig">
-      <button class="zoom-btn" type="button" aria-label="Enlarge the pipelines figure">
-        <img src="static/img/fig/spatial_smile.webp" alt="The nine Instruct-180K construction pipelines grouped by level: visual search and jigsaw QA (L1); object counting and depth perception (L2); object rotation, object editing, allocentric reframing from point clouds, panoramic completion, SAM3D viewpoint rendering, and ego-exo transfer (L3)." loading="lazy">
-      </button>
-    </figure>
-  </div>
-</section>
-
-<section class="sec" id="results">
-  <div class="wrap narrow">
-    <h2>Results</h2>
-    <p>Trained with both stages, BAGEL-7B-MoT beats the same model reasoning in text (think-4k) on all twelve benchmarks, by 11.33 points on average.</p>
-    <div class="table-block">
-      <div class="tabs tabs-small" role="tablist" aria-label="Results table" id="tbl-tabs">
-        <button role="tab" aria-selected="true" data-t="all">Overview</button>
-        <button role="tab" aria-selected="false" data-t="l1">L1 · Perception</button>
-        <button role="tab" aria-selected="false" data-t="l2">L2 · Static spatial</button>
-        <button role="tab" aria-selected="false" data-t="l3">L3 · World modeling</button>
-      </div>
-      <div class="table-scroll" id="tbl-results" tabindex="0" aria-label="Results table"></div>
-    </div>
-  </div>
-  <div class="wrap">
-    <figure class="fig">
-      <button class="zoom-btn" type="button" aria-label="Enlarge the MMSI example"><img src="static/img/fig/case_study_mmsi.webp" alt="An MMSI question with two first-person views asks where the blue glass bottle is at the last view. Five other models answer D or C. ThinkMorph-SSL generates a merged panoramic view and answers A (right), the ground truth." loading="lazy" width="2240" height="1043"></button>
-    </figure>
-  </div>
-</section>
-
-<section class="sec" id="analysis">
-  <div class="wrap narrow">
-    <h2>Analysis</h2>
-    <p>With the same Stage-2 budget, pretext reasoning adds 6.28 points on V<sup>⋆</sup>, 7.33 on SAT and 5.85 on SpatialViz. On MindCube, the staged run ends 4.9 points higher on BAGEL-7B and 4.72 points higher on InternVL-U-4B.</p>
-  </div>
-  <div class="wrap">
-    <figure class="fig">
-      <button class="zoom-btn" type="button" aria-label="Enlarge the ablation figure"><img src="static/img/fig/ablation_row.webp" alt="Left: Stage-2-only accuracy and the gain from Stage 1 on V* (+6.28), SAT (+7.33) and SpatialViz (+5.85). Middle and right: MindCube accuracy over four Stage-2 epochs; with Stage 1, BAGEL-7B ends 4.9 points higher and InternVL-U-4B 4.7 points higher." loading="lazy" width="2240" height="774"></button>
-    </figure>
-  </div>
-  <div class="wrap narrow">
-    <p>Pretext training before instruction tuning reaches 66.6% on MindCube, while mixing both corpora stays near 57%. Instruction-free pretext traces lead instructed ones by 2.7 points on average.</p>
-    <figure class="fig fig-narrow">
-      <button class="zoom-btn" type="button" aria-label="Enlarge the training order figure"><img src="static/img/fig/instruction_free.webp" alt="MindCube accuracy by Stage-2 epoch: two-stage instruction-free (ThinkMorph-SSL), two-stage instructed, and one-stage mixed training." loading="lazy" width="1100" height="1058"></button>
-    </figure>
-    <p>We sample eight traces for each of 150 problems per split, and the model decides whether to draw an image. Traces with an image are more accurate, and images with critical defects come with more errors.</p>
-    <div class="table-scroll"><table class="rtable stable">
-            <thead>
-              <tr class="lv"><th></th><th colspan="3">Accuracy (%)</th><th colspan="2">Error rate (%)</th></tr>
-              <tr><th>Split</th><th>with image</th><th>without</th><th>Δ</th><th>defect</th><th>none</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>Spatial (train)</td><td>69.4</td><td>32.2</td><td>+37.2</td><td>40.7</td><td>15.4</td></tr>
-              <tr><td>MMSI (test)</td><td>31.3</td><td>18.5</td><td>+12.8</td><td>67.8</td><td>47.4</td></tr>
-            </tbody>
-          </table></div>
-    <figure class="fig fig-mid">
-      <button class="zoom-btn" type="button" aria-label="Enlarge the failure case"><img src="static/img/fig/case_failure_mmsi.webp" alt="A failure case: the generated panorama omits the desk and monitors and duplicates the sofa, so the model answers front right instead of directly in front." loading="lazy" width="1400" height="932"></button>
-    </figure>
-    <p>TeaCache cuts the latency per V<sup>⋆</sup> question from 62.3&nbsp;s to 21.3&nbsp;s without lowering accuracy.</p>
-    <figure class="fig fig-mid">
-      <button class="zoom-btn" type="button" aria-label="Enlarge the cost figure"><img src="static/img/fig/cost_scatter.webp" alt="V* accuracy and latency per question: ThinkMorph-SSL 68.06% at 62.3 s, with TeaCache 69.10% at 21.3 s, BAGEL think-16k 61.26% at 112.4 s, think-4k 58.64% at 44.3 s, no-think 52.88% at 1.3 s." loading="lazy" width="1400" height="748"></button>
-    </figure>
-  </div>
-</section>
-
-<section class="sec" id="examples">
-  <div class="wrap">
-    <h2>Example Traces</h2>
     <div class="explorer" id="ex-pretext">
-      <div class="explorer-head"><h3>Stage 1</h3></div>
+      <div class="explorer-head">
+        <h3><span class="dot dot-1" aria-hidden="true"></span>Stage 1 traces</h3>
+      </div>
       <div class="tabs" role="tablist" aria-label="Pretext task" id="ex-pretext-tabs"></div>
       <div class="ex-sub">
         <div class="pager" id="ex-pretext-pager" aria-label="Example"></div>
@@ -264,8 +223,11 @@
       </div>
       <div class="ptrace" id="ex-pretext-body" aria-live="polite"></div>
     </div>
+
     <div class="explorer" id="ex-instruct">
-      <div class="explorer-head"><h3>Stage 2</h3></div>
+      <div class="explorer-head">
+        <h3><span class="dot dot-2" aria-hidden="true"></span>Stage 2 traces</h3>
+      </div>
       <div class="tabs tabs-grouped" role="tablist" aria-label="Construction pipeline" id="ex-instruct-tabs"></div>
       <div class="ex-sub">
         <div class="pager" id="ex-instruct-pager" aria-label="Example"></div>
@@ -276,9 +238,132 @@
   </div>
 </section>
 
-<section class="sec" id="cite">
-  <div class="wrap narrow">
-    <h2>BibTeX</h2>
+<!-- ───────────────────────── 3. data ───────────────────────── -->
+<section class="sec" id="data">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Data</h2>
+      <p class="sec-tag">Both corpora use the same trace format.</p>
+    </div>
+
+    <div class="corpora">
+      <article class="corpus corpus-1">
+        <p class="corpus-kicker">Stage 1</p>
+        <h3>Pretext-270K</h3>
+        <p class="corpus-big"><span class="num">270,896</span> traces</p>
+        <p>Each trace restores an image after one of seven programmatic corruptions. The images come from eight public datasets.</p>
+        <a class="corpus-link" href="https://huggingface.co/datasets/ThinkMorph/Pretext-270K">Download on Hugging Face →</a>
+      </article>
+      <article class="corpus corpus-2">
+        <p class="corpus-kicker">Stage 2</p>
+        <h3>Instruct-180K</h3>
+        <p class="corpus-big"><span class="num">180,490</span> traces</p>
+        <p>Nine construction pipelines build question-driven traces at three levels.</p>
+        <a class="corpus-link" href="https://huggingface.co/datasets/ThinkMorph/Instruct-180K">Download on Hugging Face →</a>
+      </article>
+    </div>
+
+    <figure class="fig fig-wide fig-zoom">
+      <button class="zoom-btn" type="button" aria-label="Enlarge the corpus composition figure"><img src="static/img/fig/composition.webp" alt="Two donut charts. Left: Pretext-270K, 270,896 traces over seven transformations. Right: Instruct-180K, 180,490 traces by level (L1, L2, L3) and by task." loading="lazy" width="2000" height="690"></button>
+    </figure>
+
+    <figure class="fig fig-wide fig-zoom">
+      <button class="zoom-btn" type="button" aria-label="Enlarge the pipelines figure">
+        <img src="static/img/fig/spatial_smile.webp" alt="The nine Instruct-180K construction pipelines grouped by level: visual search and jigsaw QA (L1); object counting and depth perception (L2); object rotation, object editing, allocentric reframing from point clouds, panoramic completion, SAM3D viewpoint rendering, and ego-exo transfer (L3)." loading="lazy">
+      </button>
+    </figure>
+  </div>
+</section>
+
+<!-- ───────────────────────── 4. results ───────────────────────── -->
+<section class="sec sec-alt" id="results">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Results</h2>
+      <p class="sec-tag">ThinkMorph-SSL beats text reasoning on all twelve benchmarks.</p>
+    </div>
+
+    <p class="prose-narrow">BAGEL-7B-MoT trained with both stages gains 11.33 points on average over the same model reasoning in text (think-4k).</p>
+
+    <div class="table-block">
+      <div class="tabs tabs-small" role="tablist" aria-label="Results table" id="tbl-tabs">
+        <button role="tab" aria-selected="true" data-t="all">Overview</button>
+        <button role="tab" aria-selected="false" data-t="l1">L1 · Perception</button>
+        <button role="tab" aria-selected="false" data-t="l2">L2 · Static spatial</button>
+        <button role="tab" aria-selected="false" data-t="l3">L3 · World modeling</button>
+      </div>
+      <div class="table-scroll" id="tbl-results" tabindex="0" aria-label="Results table"></div>
+    </div>
+
+    <figure class="fig fig-wide fig-zoom">
+      <button class="zoom-btn" type="button" aria-label="Enlarge the MMSI example"><img src="static/img/fig/case_study_mmsi.webp" alt="An MMSI question with two first-person views asks where the blue glass bottle is at the last view. Five other models answer D or C. ThinkMorph-SSL generates a merged panoramic view and answers A (right), the ground truth." loading="lazy" width="2240" height="1043"></button>
+    </figure>
+  </div>
+</section>
+
+<!-- ───────────────────────── 5. analysis ───────────────────────── -->
+<section class="sec" id="analysis">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Analysis</h2>
+      <p class="sec-tag">We test what pretext reasoning adds.</p>
+    </div>
+
+    <figure class="fig fig-wide fig-zoom fig-flush">
+      <button class="zoom-btn" type="button" aria-label="Enlarge the ablation figure"><img src="static/img/fig/ablation_row.webp" alt="Left: Stage-2-only accuracy and the gain from Stage 1 on V* (+6.28), SAT (+7.33) and SpatialViz (+5.85). Middle and right: MindCube accuracy over four Stage-2 epochs; with Stage 1, BAGEL-7B ends 4.9 points higher and InternVL-U-4B 4.7 points higher." loading="lazy" width="2240" height="774"></button>
+    </figure>
+
+    <div class="sec-sub grid-2 side-grid">
+      <div>
+        <h3>Order and instructions</h3>
+        <p class="prose-narrow">Pretext training before instruction tuning reaches 66.6% on MindCube, while mixing both corpora stays near 57%. Instruction-free pretext traces lead instructed ones by 2.7 points on average.</p>
+      </div>
+      <figure class="fig fig-zoom fig-side">
+      <button class="zoom-btn" type="button" aria-label="Enlarge the training order figure"><img src="static/img/fig/instruction_free.webp" alt="MindCube accuracy by Stage-2 epoch: two-stage instruction-free (ThinkMorph-SSL), two-stage instructed, and one-stage mixed training." loading="lazy" width="1100" height="1058"></button>
+    </figure>
+    </div>
+
+    <div class="sec-sub">
+      <h3>Does the model use its images?</h3>
+      <p class="prose-narrow">We sample eight traces for each of 150 problems per split, and the model decides whether to draw an image.</p>
+      <div class="grid-2 side-grid">
+        <div>
+          <p class="table-title">Does the image matter?</p>
+          <div class="table-scroll tp-scroll"><table class="rtable stable">
+            <thead>
+              <tr class="lv"><th></th><th colspan="3">Accuracy (%)</th><th colspan="2">Error rate (%)</th></tr>
+              <tr><th>Split</th><th>with image</th><th>without</th><th>Δ</th><th>defect</th><th>none</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Spatial (train)</td><td>69.4</td><td>32.2</td><td>+37.2</td><td>40.7</td><td>15.4</td></tr>
+              <tr><td>MMSI (test)</td><td>31.3</td><td>18.5</td><td>+12.8</td><td>67.8</td><td>47.4</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <figure class="fig fig-zoom fig-side">
+      <button class="zoom-btn" type="button" aria-label="Enlarge the failure case"><img src="static/img/fig/case_failure_mmsi.webp" alt="A failure case: the generated panorama omits the desk and monitors and duplicates the sofa, so the model answers front right instead of directly in front." loading="lazy" width="1400" height="932"></button>
+    </figure>
+      </div>
+    </div>
+
+    <div class="sec-sub grid-2 side-grid">
+      <div>
+        <h3>Cost</h3>
+        <p class="prose-narrow">TeaCache cuts the latency per V<sup>⋆</sup> question from 62.3&nbsp;s to 21.3&nbsp;s without lowering accuracy.</p>
+      </div>
+      <figure class="fig fig-zoom fig-side">
+      <button class="zoom-btn" type="button" aria-label="Enlarge the cost figure"><img src="static/img/fig/cost_scatter.webp" alt="V* accuracy and latency per question: ThinkMorph-SSL 68.06% at 62.3 s, with TeaCache 69.10% at 21.3 s, BAGEL think-16k 61.26% at 112.4 s, think-4k 58.64% at 44.3 s, no-think 52.88% at 1.3 s." loading="lazy" width="1400" height="748"></button>
+    </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── 6. cite ───────────────────────── -->
+<section class="sec sec-cite" id="cite">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Citation</h2>
+    </div>
     <div class="bib">
       <button class="copy" type="button" id="bib-copy">Copy</button>
 <pre id="bib-text"><code>@article{gu2026thinkmorphssl,
