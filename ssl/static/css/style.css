@@ -604,16 +604,13 @@ button { font: inherit; color: inherit; }
 #tbl-results .rtable td.avg, #tbl-results .rtable th.avg { font-weight: 400; }
 #tbl-results .rtable td.best { font-weight: 700; color: var(--ink); }
 #tbl-results .rtable td.second { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
-/* our rows in pink */
-#tbl-results .rtable tr.ours td { background: var(--rose-soft); font-weight: 400; }
-#tbl-results .rtable tr.ours td:first-child { color: var(--rose-ink); font-weight: 600; }
+/* our rows keep the original green; weight 400 so the best / second marks show */
+#tbl-results .rtable tr.ours td { font-weight: 400; }
+#tbl-results .rtable tr.ours td:first-child { font-weight: 600; }
 #tbl-results .rtable tr.ours td.best { font-weight: 700; }
-#tbl-results .rtable tr.delta td { background: color-mix(in srgb, var(--rose-soft) 45%, #fff); }
-#tbl-results .rtable tr.delta td:first-child { color: var(--rose-ink); }
 .tbl-note { margin: 10px 2px 0; font-size: 13px; color: var(--ink-3); }
 
-/* ── v2 round 3: Motivation art (the mark's mosaic spilling out) ── */
-.idea { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 460px); gap: 40px; align-items: center; }
+/* ── Motivation art (the mark's pixels drifting out) ── */
 .idea-art .ma-svg { display: block; width: 100%; height: auto; overflow: visible; }
 .idea-art .px { transform-box: fill-box; transform-origin: center; opacity: var(--o); animation: ma-wave 7s ease-in-out var(--d) infinite both; }
 @keyframes ma-wave {
@@ -623,5 +620,25 @@ button { font: inherit; color: inherit; }
   100% { opacity: 0; transform: scale(.35); }
 }
 @media (prefers-reduced-motion: reduce) { .idea-art .px { animation: none; opacity: var(--o); } }
-@media (max-width: 900px) { .idea { grid-template-columns: 1fr; } .idea-art { max-width: 300px; margin: 8px auto 0; } }
 #tbl-results .rtable tr.delta td, #tbl-results .rtable tr.delta td.avg { font-weight: 600; }
+
+/* ── v2 round 4 ── */
+/* Motivation keeps the live layout; the art sits small in the free space at the lower right */
+.idea { position: relative; }
+.idea-art { position: absolute; right: 0; bottom: -56px; width: min(290px, calc(100% - 846px)); pointer-events: none; }
+@media (max-width: 1100px) { .idea-art { display: none; } }
+/* results tabs: larger labels; each tab as wide as its label needs, together as wide as the table */
+#tbl-tabs button { flex: 1 1 auto; padding: 12px 14px; font-size: 17px; }
+/* reading text a little larger and darker */
+.prose-narrow { font-size: 17.5px; line-height: 1.62; color: #2b2a27; }
+/* stage headings: the stage number in teal and a hairline running to the right edge */
+.stage-block > h3 { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; font-size: 25px; }
+.stage-block > h3 .stage-no { color: var(--brand); }
+.stage-block > h3 .stage-dot { color: var(--ink-3); font-weight: 400; }
+.stage-block > h3::after { content: ""; flex: 1 1 auto; height: 1px; margin-left: 14px; background: var(--rule-2); }
+.stage-block + .stage-block { margin-top: 88px; }
+@media (max-width: 560px) { .stage-block > h3 { font-size: 22px; flex-wrap: wrap; row-gap: 2px; } .stage-block > h3::after { display: none; } }
+/* project-lead and equal-advising marks a little larger */
+.authors .mk { line-height: 0; }                /* larger marks must not push their name down */
+.authors .mk-lead, .authors .mk-adv { font-size: 1.12em; top: -.36em; }
+.marks-legend .mk-lead, .marks-legend .mk-adv { font-size: 1.3em; line-height: 1; vertical-align: -.1em; }
