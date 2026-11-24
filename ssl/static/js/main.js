@@ -161,7 +161,10 @@
     let ti = EX.instruct.findIndex((t) => t.key === "mindcube_bev"); if (ti < 0) ti = 0;
     let ei = 0, lastLevel = null;
     EX.instruct.forEach((t, i) => {
-      if (t.level !== lastLevel) { tabs.appendChild(h("span", { class: "tab-group-label", "aria-hidden": "true" }, t.level)); lastLevel = t.level; }
+      if (t.level !== lastLevel) {
+        if (lastLevel && t.level === "L3") tabs.appendChild(h("span", { class: "tab-break", "aria-hidden": "true" }));  // L3 starts its own row
+        tabs.appendChild(h("span", { class: "tab-group-label", "aria-hidden": "true" }, t.level)); lastLevel = t.level;
+      }
       const b = h("button", { role: "tab", "aria-selected": "false", "data-i": i, "aria-label": `${t.name}, level ${t.level.slice(1)}` }, esc(t.name));
       b.addEventListener("click", () => { ti = i; ei = 0; render(); });
       tabs.appendChild(b);
