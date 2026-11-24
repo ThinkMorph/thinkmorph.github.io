@@ -15,6 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500;600&family=Carlito:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans:400,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
@@ -44,12 +45,12 @@
     <p class="subtitle">Scaling Interleaved Multimodal Reasoning with Pretext Tasks</p>
 
     <ul class="authors">
-      <li><a href="https://kuvvius.github.io/" target="_blank" rel="noopener">Jiawei Gu</a><sup>1</sup><span class="mk mk-lead">*</span></li>
-      <li><a href="https://scholar.google.com/citations?user=WR875gYAAAAJ&hl=en" target="_blank" rel="noopener">Linjie Li</a><sup>1</sup><span class="mk mk-lead">*</span></li>
-      <li><a href="https://leo1oel.github.io/" target="_blank" rel="noopener">Yiming Liu</a><sup>2</sup><span class="mk mk-eq">*</span></li>
-      <li><a href="https://scholar.google.com/citations?user=0SPl0hcAAAAJ&hl=zh-CN" target="_blank" rel="noopener">Yunzhuo Hao</a><sup>3</sup><span class="mk mk-eq">*</span></li>
-      <li><a href="https://homes.cs.washington.edu/~wwill/" target="_blank" rel="noopener">Huichen Wang</a><sup>1</sup><span class="mk mk-eq">*</span></li>
-      <li><a href="https://guanzhchen.github.io/" target="_blank" rel="noopener">Guanzheng Chen</a><sup>4</sup><span class="mk mk-eq">*</span></li>
+      <li class="au-lead"><a href="https://kuvvius.github.io/" target="_blank" rel="noopener">Jiawei Gu</a><sup>1</sup><span class="mk mk-lead">*</span></li>
+      <li class="au-lead"><a href="https://scholar.google.com/citations?user=WR875gYAAAAJ&hl=en" target="_blank" rel="noopener">Linjie Li</a><sup>1</sup><span class="mk mk-lead">*</span></li>
+      <li class="au-eq"><a href="https://leo1oel.github.io/" target="_blank" rel="noopener">Yiming Liu</a><sup>2</sup><span class="mk mk-eq">*</span></li>
+      <li class="au-eq"><a href="https://scholar.google.com/citations?user=0SPl0hcAAAAJ&hl=zh-CN" target="_blank" rel="noopener">Yunzhuo Hao</a><sup>3</sup><span class="mk mk-eq">*</span></li>
+      <li class="au-eq"><a href="https://homes.cs.washington.edu/~wwill/" target="_blank" rel="noopener">Huichen Wang</a><sup>1</sup><span class="mk mk-eq">*</span></li>
+      <li class="au-eq"><a href="https://guanzhchen.github.io/" target="_blank" rel="noopener">Guanzheng Chen</a><sup>4</sup><span class="mk mk-eq">*</span></li>
       <li>Zhichao Peng<sup>5</sup></li>
       <li>Luxin Xu<sup>6</sup></li>
       <li>Xinyu Zhang<sup>6</sup></li>
@@ -62,10 +63,10 @@
       <li><a href="https://yafuly.github.io/" target="_blank" rel="noopener">Yafu Li</a><sup>9</sup></li>
       <li><a href="https://cgq15.github.io/" target="_blank" rel="noopener">Ganqu Cui</a><sup>2</sup></li>
       <li><a href="https://zyang-ur.github.io/" target="_blank" rel="noopener">Zhengyuan Yang</a><sup>10</sup></li>
-      <li><a href="https://www.comp.nus.edu.sg/cs/people/mshieh" target="_blank" rel="noopener">Qizhe Xie</a><sup>4</sup><span class="mk mk-adv">†</span></li>
-      <li><a href="https://scholar.google.com/citations?user=vhP-tlcAAAAJ&hl=en" target="_blank" rel="noopener">Yejin Choi</a><sup>11</sup><span class="mk mk-adv">†</span></li>
-      <li><a href="https://scholar.google.com/citations?user=IcqahyAAAAAJ&hl=en" target="_blank" rel="noopener">Ranjay Krishna</a><sup>1</sup><span class="mk mk-adv">†</span></li>
-      <li><a href="https://ych133.github.io/" target="_blank" rel="noopener">Yu Cheng</a><sup>9</sup><span class="mk mk-adv">†</span></li>
+      <li class="au-adv"><a href="https://www.comp.nus.edu.sg/cs/people/mshieh" target="_blank" rel="noopener">Qizhe Xie</a><sup>4</sup><span class="mk mk-adv">†</span></li>
+      <li class="au-adv"><a href="https://scholar.google.com/citations?user=vhP-tlcAAAAJ&hl=en" target="_blank" rel="noopener">Yejin Choi</a><sup>11</sup><span class="mk mk-adv">†</span></li>
+      <li class="au-adv"><a href="https://scholar.google.com/citations?user=IcqahyAAAAAJ&hl=en" target="_blank" rel="noopener">Ranjay Krishna</a><sup>1</sup><span class="mk mk-adv">†</span></li>
+      <li class="au-adv"><a href="https://ych133.github.io/" target="_blank" rel="noopener">Yu Cheng</a><sup>9</sup><span class="mk mk-adv">†</span></li>
     </ul>
     <ul class="affils">
       <li><sup>1</sup>University of Washington</li>
@@ -141,10 +142,6 @@
     <div class="idea">
       <div class="prose">
         <p class="lede">Models that reason with intermediate images are usually trained on traces built for one task family at a time. Self-supervised pretext tasks need no such traces, because the original image is the answer. <strong>ThinkMorph-SSL</strong> turns these tasks into interleaved reasoning traces and trains on them before instruction tuning. Compared with the same model reasoning in text, it gains 9.84 points on perception, 4.22 on static spatial understanding and 17.92 on mental world modeling.</p>
-        <details class="abstract">
-          <summary>Read the abstract</summary>
-          <p>People reason with pictures as well as words. Interleaved multimodal reasoning gives models a similar way to solve problems by creating intermediate images and using them to guide further reasoning. Training models with this ability usually relies on task-specific demonstrations, which are difficult to collect. We introduce ThinkMorph-SSL, a two-stage training recipe that uses images themselves as a source of supervision. The first stage, <em>pretext reasoning</em>, converts visual pretext tasks, such as image colorization and denoising, into <em>instruction-free</em> interleaved traces. Models describe a corrupted or transformed image, generate a restored or canonical image, and interpret the result. The second stage uses automatically constructed demonstrations for question-driven instruction tuning. At the same instruction-tuning budget, models trained with pretext reasoning outperform those trained with instruction tuning alone. The full recipe improves over the base model by an average of 11.33 accuracy points across twelve benchmarks. These results show that supervision derived from images can build the visual skills needed for interleaved reasoning and improve learning from task-specific demonstrations.</p>
-        </details>
       </div>
 
     </div>
