@@ -38,7 +38,7 @@
   --gray-mark: #9b998f;
   --teal: #008080;          /* equal-advising mark, as in the paper */
 
-  --serif: "EB Garamond", Georgia, "Times New Roman", serif;   /* headings and reading text, as on lattice-writer */
+  --serif: var(--sans);    /* one family: Geist (+ Geist Mono); Carlito only in the wordmark */
   --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
@@ -523,20 +523,6 @@ button { font: inherit; color: inherit; }
 /* results table views */
 .rtable-all, .rtable-l2, .rtable-l3 { min-width: 640px; }
 
-/* ── type: EB Garamond for headings and reading text, Geist for UI, Geist Mono for numbers ── */
-.subtitle { font-family: var(--serif); font-weight: 500; font-size: clamp(28px, 3.5vw, 46px); line-height: 1.12; letter-spacing: -.012em; }
-.sec-head h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(50px, 6.6vw, 96px); letter-spacing: -.025em; }
-.sec-tag { font-family: var(--serif); font-size: clamp(21px, 2.2vw, 27px); line-height: 1.3; letter-spacing: -.005em; }
-.sec-sub > h3, .side-grid h3, .explorer-head h3 { font-family: var(--serif); font-weight: 500; font-size: 27px; letter-spacing: -.01em; }
-.stage h3, .corpus h3 { font-family: var(--serif); font-weight: 500; font-size: 27px; letter-spacing: -.01em; }
-.lede { font-family: var(--serif); font-size: 21px; line-height: 1.5; }
-.prose-narrow { font-family: var(--serif); font-size: 19.5px; line-height: 1.5; }
-.strip-caption p { font-family: var(--serif); font-size: 18.5px; line-height: 1.45; }
-.stage p, .corpus > p { font-family: var(--serif); font-size: 18px; line-height: 1.5; }
-.abstract p { font-family: var(--serif); font-size: 18px; line-height: 1.55; }
-.thought { font-family: var(--serif); font-size: 16px; line-height: 1.5; }
-.iq-text p { font-family: var(--serif); font-size: 18.5px; line-height: 1.45; }
-
 /* legend text in the colour of its mark */
 .marks-legend .lg-lead { color: var(--rose); }
 .marks-legend .lg-eq { color: var(--ink); }
@@ -562,9 +548,3 @@ button { font: inherit; color: inherit; }
   .table-pair { grid-template-columns: minmax(0, 1fr); }
   .table-pair > div + div { border-left: 0; border-top: 1px solid var(--rule); }
 }
-
-/* keep UI labels in their own faces where the reading-text rules would reach them */
-.strip-caption p.trace-formula { font: 500 15px/1 var(--mono); }
-.stage p.stage-tag { font: 600 12px/1 var(--mono); }
-.corpus > p.corpus-kicker { font: 600 12px/1 var(--mono); }
-.corpus > p.corpus-big { font: 400 15px/1 var(--sans); }
