@@ -117,28 +117,20 @@
     el.innerHTML = `<span class="lv">${el.dataset.level}</span><span class="name">${esc(L.name)}</span><span class="val">${fmt2(L.ours)}<small>${fmtD(L.ours - L.base)}</small></span>`;
   });
 
-  /* Stage 1 explorer */
+  /* examples gallery: one card per task (Stage 1 and Stage 2); a card opens its full trace in a dialog */
   let selectPretext = () => {};
-  (function pretextExplorer() {
-    const tabs = $("#ex-pretext-tabs"), pager = $("#ex-pretext-pager"), src = $("#ex-pretext-source"), body = $("#ex-pretext-body");
-    if (!tabs || !EX.pretext.length) return;
-    let ti = 0, ei = 0;
-    EX.pretext.forEach((t, i) => {
-      const b = h("button", { role: "tab", "aria-selected": i === 0 ? "true" : "false" }, esc(t.name));
-      b.addEventListener("click", () => { ti = i; ei = 0; render(); });
-      tabs.appendChild(b);
-    });
-    function render() {
-      $$("button", tabs).forEach((b, i) => b.setAttribute("aria-selected", i === ti ? "true" : "false"));
-      const t = EX.pretext[ti], ex = t.examples[ei];
-      pager.innerHTML = "";
-      t.examples.forEach((e, i) => {
-        const b = h("button", { type: "button", "aria-pressed": i === ei ? "true" : "false", "aria-label": `Example ${i + 1}` }, String(i + 1));
-        b.addEventListener("click", () => { ei = i; render(); });
-        pager.appendChild(b);
-      });
-      src.textContent = `${t.name} · example ${ex.id} · image source: ${ex.source}`;
-      body.innerHTML = `
+  (function gallery() {
+    const grid = $("#gallery-grid"), filt = $("#gallery-filter"), dlg = $("#trace-dialog");
+    if (!grid || !dlg) return;
+    const sub = (k) => `<sub>${k}</sub>`;
+    // cover example per pretext task: real photos with a clear change
+    const COVER = { jigsaw: 1, colorization: 2, super_resolution: 4, masked_inpainting: 2, orthogonal_transform: 3, denoising: 4, deformation_recovery: 3 };
+    const items = [
+      ...EX.pretext.map((t) => ({ stage: "1", t, tag: "Stage 1", first: Math.max(0, t.examples.findIndex((e) => e.id === COVER[t.key])) })),
+      ...EX.instruct.map((t) => ({ stage: "2", t, tag: `Stage 2 · ${t.level}`, first: 0 })),
+    ];
+    function pretextHTML(t, ex) {
+      return `<div class="ptrace">
         <div class="step"><div class="step-head"><span class="step-tok in">I<sub>c</sub></span><span class="step-name">corrupted input</span></div>
           <img src="${ex.input}" alt="${esc(t.name)} example ${ex.id}: corrupted input" width="${ex.w}" height="${ex.h}">
           <p class="noprompt">text prompt: none</p></div>
@@ -148,40 +140,9 @@
           <span class="gen-tag">&lt;gen_image&gt; · target: the original</span>
           <img src="${ex.output}" alt="${esc(t.name)} example ${ex.id}: restored target image" width="${ex.w}" height="${ex.h}"></div>
         <div class="step"><span class="step-arrow" aria-hidden="true">→</span><div class="step-head"><span class="step-tok">T<sub>1</sub></span><span class="step-name">describe result</span></div>
-          <p class="thought">${esc(ex.t1)}</p></div>`;
+          <p class="thought">${esc(ex.t1)}</p></div></div>`;
     }
-    selectPretext = (i) => { ti = i; ei = 0; render(); };
-    render();
-  })();
-
-  /* Stage 2 explorer */
-  (function instructExplorer() {
-    const tabs = $("#ex-instruct-tabs"), pager = $("#ex-instruct-pager"), src = $("#ex-instruct-source"), body = $("#ex-instruct-body");
-    if (!tabs || !EX.instruct.length) return;
-    let ti = EX.instruct.findIndex((t) => t.key === "mindcube_bev"); if (ti < 0) ti = 0;
-    let ei = 0, lastLevel = null;
-    EX.instruct.forEach((t, i) => {
-      if (t.level !== lastLevel) {
-        if (lastLevel && t.level === "L3") tabs.appendChild(h("span", { class: "tab-break", "aria-hidden": "true" }));  // L3 starts its own row
-        tabs.appendChild(h("span", { class: "tab-group-label", "aria-hidden": "true" }, t.level)); lastLevel = t.level;
-      }
-      const b = h("button", { role: "tab", "aria-selected": "false", "data-i": i, "aria-label": `${t.name}, level ${t.level.slice(1)}` }, esc(t.name));
-      b.addEventListener("click", () => { ti = i; ei = 0; render(); });
-      tabs.appendChild(b);
-    });
-    const sub = (k) => `<sub>${k}</sub>`;
-    function render() {
-      $$("button", tabs).forEach((b) => b.setAttribute("aria-selected", +b.dataset.i === ti ? "true" : "false"));
-      const t = EX.instruct[ti], ex = t.examples[ei];
-      if (pager) {
-        pager.innerHTML = "";
-        t.examples.forEach((e, i) => {
-          const b = h("button", { type: "button", "aria-pressed": i === ei ? "true" : "false", "aria-label": `Example ${i + 1}` }, String(i + 1));
-          b.addEventListener("click", () => { ei = i; render(); });
-          pager.appendChild(b);
-        });
-      }
-      if (src) src.textContent = `${t.level} · ${t.name} · source: ${ex.source}`;
+    function instructHTML(t, ex) {
       const n = ex.inputs.length;
       const ins = ex.inputs.map((im) => `<figure><img src="${im.src}" alt="Input: ${esc(im.label)}" width="${im.w}" height="${im.h}" loading="lazy">${n > 1 ? `<figcaption class="cap">${esc(im.label)}</figcaption>` : ""}</figure>`).join("");
       let steps = "";
@@ -195,9 +156,46 @@
         steps += `<div class="istep is-gen"><div class="rail"><span>I${sub(k)}</span></div><div><p class="lab">&lt;gen_image&gt; · ${esc(g.label)}</p><figure><img src="${g.src}" alt="Intermediate image: ${esc(g.label)}" loading="lazy"></figure></div></div>`;
       });
       steps += `<div class="istep is-ans"><div class="rail"><span>A</span></div><div><p class="lab">answer</p><span class="ans">${esc(ex.answer)}</span></div></div>`;
-      body.innerHTML = `<div class="iq"><div class="iq-text"><p class="k">Question</p><p>${esc(ex.question)}</p></div><div class="iq-imgs n${Math.min(n, 5)}">${ins}</div></div><div class="isteps">${steps}</div>`;
+      return `<div class="itrace"><div class="iq"><div class="iq-text"><p class="k">Question</p><p>${esc(ex.question)}</p></div><div class="iq-imgs n${Math.min(n, 5)}">${ins}</div></div><div class="isteps">${steps}</div></div>`;
     }
-    render();
+    items.forEach((it, i) => {
+      const ex = it.t.examples[it.first];
+      const a = it.stage === "1" ? ex.input : ex.inputs[0].src;
+      const b = it.stage === "1" ? ex.output : (ex.gens[0] || ex.inputs[0]).src;
+      const card = h("button", { type: "button", class: "g-card", "data-stage": it.stage, "aria-label": `${it.tag}: ${it.t.name}. Open the trace.` },
+        `<span class="g-imgs"><img src="${a}" alt="" loading="lazy"><span class="g-arrow" aria-hidden="true">→</span><img src="${b}" alt="" loading="lazy"></span>` +
+        `<span class="g-cap"><span class="g-tag">${esc(it.tag)}</span><span class="g-name">${esc(it.t.name)}</span></span>`);
+      card.addEventListener("click", () => open(i, it.first));
+      grid.appendChild(card);
+    });
+    $$("button", filt).forEach((b) => b.addEventListener("click", () => {
+      $$("button", filt).forEach((x) => x.setAttribute("aria-selected", x === b ? "true" : "false"));
+      $$(".g-card", grid).forEach((c) => { c.hidden = b.dataset.f !== "all" && c.dataset.stage !== b.dataset.f; });
+    }));
+    let cur = 0, ei = 0;
+    const shown = () => $$(".g-card", grid).map((c, i) => (c.hidden ? -1 : i)).filter((i) => i >= 0);
+    function render() {
+      const it = items[cur], t = it.t, ex = t.examples[ei];
+      $(".td-tag", dlg).textContent = it.tag;
+      $(".td-name", dlg).textContent = t.name;
+      const pager = $(".td-pager", dlg); pager.innerHTML = "";
+      if (t.examples.length > 1) t.examples.forEach((e, k) => {
+        const b = h("button", { type: "button", "aria-pressed": k === ei ? "true" : "false", "aria-label": `Example ${k + 1}` }, String(k + 1));
+        b.addEventListener("click", () => { ei = k; render(); });
+        pager.appendChild(b);
+      });
+      const body = $(".td-body", dlg);
+      body.innerHTML = it.stage === "1" ? pretextHTML(t, ex) : instructHTML(t, ex);
+      body.scrollTop = 0;
+    }
+    function open(i, e) { cur = i; ei = e; render(); if (!dlg.open) { if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", ""); } }
+    function step(d) { const v = shown(); const p = Math.max(0, v.indexOf(cur)); cur = v[(p + d + v.length) % v.length]; ei = items[cur].first; render(); }
+    $(".td-prev", dlg).addEventListener("click", () => step(-1));
+    $(".td-next", dlg).addEventListener("click", () => step(1));
+    $(".td-close", dlg).addEventListener("click", () => dlg.close());
+    dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
+    document.addEventListener("keydown", (e) => { if (!dlg.open) return; if (e.key === "ArrowLeft") step(-1); else if (e.key === "ArrowRight") step(1); });
+    selectPretext = (i) => open(i, items[i].first);
   })();
 
   /* results table */

@@ -208,10 +208,12 @@
 <section class="sec" id="examples">
   <div class="wrap">
     <div class="sec-head"><h2>Examples</h2></div>
-    <div class="explorer" id="ex-instruct">
-      <div class="tabs tabs-grouped" role="tablist" aria-label="Construction pipeline" id="ex-instruct-tabs"></div>
-      <div class="itrace" id="ex-instruct-body" aria-live="polite"></div>
+    <div class="tabs tabs-small gallery-filter" role="tablist" aria-label="Filter examples" id="gallery-filter">
+      <button role="tab" aria-selected="true" data-f="all">All</button>
+      <button role="tab" aria-selected="false" data-f="1">Stage 1</button>
+      <button role="tab" aria-selected="false" data-f="2">Stage 2</button>
     </div>
+    <div class="gallery-grid" id="gallery-grid"></div>
   </div>
 </section>
 
@@ -245,6 +247,18 @@
 </footer>
 
 <div class="tooltip" id="tooltip" role="status" aria-live="polite" hidden></div>
+<dialog class="trace-dialog" id="trace-dialog" aria-label="Example trace">
+  <div class="td-head">
+    <div class="td-title"><span class="td-tag"></span><span class="td-name"></span></div>
+    <div class="pager td-pager" aria-label="Example"></div>
+    <div class="td-nav">
+      <button class="td-prev" type="button" aria-label="Previous example">‹</button>
+      <button class="td-next" type="button" aria-label="Next example">›</button>
+      <button class="td-close" type="button" aria-label="Close">×</button>
+    </div>
+  </div>
+  <div class="td-body"></div>
+</dialog>
 <dialog class="lightbox" id="lightbox" aria-label="Enlarged figure">
   <button class="lightbox-close" type="button" aria-label="Close">×</button>
   <img alt="">
