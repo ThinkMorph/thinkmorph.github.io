@@ -198,33 +198,43 @@
   /* results table */
   (function resultsTable() {
     const box = $("#tbl-results"), tabs = $("#tbl-tabs"); if (!box) return;
-    const cell = (v, cls = "") => `<td class="${cls}">${typeof v === "number" ? fmt2(v) : v}</td>`;
+    const sum = (a) => a.reduce((x, y) => x + y, 0);
+    // Overall = mean of the 12 benchmarks; CV-2D and CV-3D count once as CV-Bench (the abstract's +11.33 uses this)
+    const overall = (r) => (sum(r[2]) + r[4][0] + (r[4][1] + r[4][2]) / 2 + r[4][3] + sum(r[5])) / 12;
+    const OVERALL_TIP = "Mean of the 12 benchmarks; CV-2D and CV-3D count once as CV-Bench";
+    const VIEWS = {
+      all: { band: null, cols: ["L1 · Perception", "L2 · Static spatial", "L3 · World modeling", "Overall"], avg: [3],
+             vals: (r) => [r[3], r[6], r[7], overall(r)] },
+      l1: { band: ["Level 1 · Basic visual perception", 5], cols: [...L1_COLS, "L1 avg"], avg: [5], vals: (r) => [...r[2], r[3]] },
+      l2: { band: ["Level 2 · Static spatial understanding", 4], cols: [...L2_COLS, "L2 avg"], avg: [4], vals: (r) => [...r[4], r[6]] },
+      l3: { band: ["Level 3 · Mental world modeling", 4], cols: [...L3_COLS, "L3 avg"], avg: [4], vals: (r) => [...r[5], r[7]] },
+    };
     function build(which) {
-      const cols = which === "l1" ? [...L1_COLS, "L1 avg"] : [...L2_COLS, ...L3_COLS, "L2 avg", "L3 avg"];
-      const vals = (r) => which === "l1" ? [...r[2], r[3]] : [...r[4], ...r[5], r[6], r[7]];
-      const avgIdx = which === "l1" ? [5] : [8, 9];
-      let head = which === "l1"
-        ? `<tr class="lv"><th></th><th colspan="5">Level 1 · Basic visual perception</th><th class="avg">Avg</th></tr>`
-        : `<tr class="lv"><th></th><th colspan="4">Level 2 · Static spatial</th><th colspan="4">Level 3 · Mental world modeling</th><th colspan="2" class="avg">Avg</th></tr>`;
-      head += `<tr><th>Model</th>${cols.map((c, i) => `<th class="${avgIdx.includes(i) ? "avg" : ""}">${star(c)}</th>`).join("")}</tr>`;
-      let bodyHtml = "", grp = null;
-      RESULTS.forEach((r) => {
-        if (r[1] !== grp && r[1] !== "ours") { grp = r[1]; bodyHtml += `<tr class="grp"><td colspan="${cols.length + 1}">${esc(grp)}</td></tr>`; }
-        const v = vals(r);
-        const cls = r[1] === "ours" ? "ours" : `m${r[0] === "BAGEL think-4k" ? " ref" : ""}`;
-        bodyHtml += `<tr class="${cls}"><td>${esc(r[0])}</td>${v.map((x, i) => cell(x, avgIdx.includes(i) ? "avg" : "")).join("")}</tr>`;
+      const V = VIEWS[which], n = V.cols.length;
+      const vals = RESULTS.map((r) => V.vals(r).map((x) => Math.round(x * 100) / 100));
+      const best = V.cols.map((_, i) => Math.max(...vals.map((v) => v[i])));
+      const cls = (i, x) => [V.avg.includes(i) ? "avg" : "", x === best[i] ? "top" : ""].join(" ").trim();
+      let head = V.band
+        ? `<tr class="lv"><th></th><th colspan="${V.band[1]}">${esc(V.band[0])}</th><th class="avg">Avg</th></tr>` : "";
+      head += `<tr><th>Model</th>${V.cols.map((c, i) => `<th class="${V.avg.includes(i) ? "avg" : ""}"${c === "Overall" ? ` title="${OVERALL_TIP}"` : ""}>${star(c)}</th>`).join("")}</tr>`;
+      let body = "", grp = null;
+      RESULTS.forEach((r, k) => {
+        if (r[1] !== grp && r[1] !== "ours") { grp = r[1]; body += `<tr class="grp"><td colspan="${n + 1}">${esc(grp)}</td></tr>`; }
+        const v = vals[k];
+        const rowCls = r[1] === "ours" ? "ours" : `m${r[0] === "BAGEL think-4k" ? " ref" : ""}`;
+        body += `<tr class="${rowCls}"><td>${esc(r[0])}</td>${v.map((x, i) => `<td class="${cls(i, x)}">${fmt2(x)}</td>`).join("")}</tr>`;
         if (r[1] === "ours") {
-          const b = vals(T4K);
-          bodyHtml += `<tr class="delta"><td>Δ vs. think-4k</td>${v.map((x, i) => cell(fmtD(x - b[i]), avgIdx.includes(i) ? "avg" : "")).join("")}</tr>`;
+          const b = vals[RESULTS.indexOf(T4K)];
+          body += `<tr class="delta"><td>Δ vs. think-4k</td>${v.map((x, i) => `<td class="${V.avg.includes(i) ? "avg" : ""}">${fmtD(x - b[i])}</td>`).join("")}</tr>`;
         }
       });
-      box.innerHTML = `<table class="rtable"><thead>${head}</thead><tbody>${bodyHtml}</tbody></table>`;
+      box.innerHTML = `<table class="rtable rtable-${which}"><thead>${head}</thead><tbody>${body}</tbody></table>`;
     }
     $$("button", tabs).forEach((b) => b.addEventListener("click", () => {
       $$("button", tabs).forEach((x) => x.setAttribute("aria-selected", x === b ? "true" : "false"));
       build(b.dataset.t);
     }));
-    build("l1");
+    build(($("button[aria-selected='true']", tabs) || {}).dataset?.t || "all");
   })();
 
   /* bibtex copy */
