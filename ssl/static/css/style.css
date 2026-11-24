@@ -303,10 +303,12 @@ button { font: inherit; color: inherit; }
 .stage h3 { margin: 0 0 10px; font: 600 21px/1.25 var(--sans); letter-spacing: -.025em; }
 .stage p { margin: 0 0 16px; color: var(--ink-2); font-size: 15.5px; }
 .eq {
-  display: flex; flex-wrap: wrap; gap: 4px 8px; padding: 12px 14px; border-radius: 9px;
-  background: var(--surface); border: 1px solid var(--rule); font: 400 13.5px/1.5 var(--mono); color: var(--ink);
-  overflow-x: auto;
+  padding: 14px 16px; border-radius: 10px;
+  background: var(--surface); border: 1px solid var(--rule); color: var(--ink);
+  overflow-x: auto; overflow-y: hidden;
 }
+.eq .katex-display { margin: 0; }
+.eq .katex { font-size: 1.16em; }
 
 .explorer { margin-top: 84px; }
 .explorer-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; margin-bottom: 16px; }
@@ -551,3 +553,9 @@ button { font: inherit; color: inherit; }
 .marks-legend .lg-lead { color: var(--rose); }
 .marks-legend .lg-eq { color: var(--ink); }
 .marks-legend .lg-adv { color: var(--teal); }
+@media (max-width: 560px) {
+  .stage { padding: 22px 18px; }
+  .eq { padding: 12px 10px; }
+  .eq .katex { font-size: .94em; }
+}
+@media (max-width: 380px) { .eq .katex { font-size: .88em; } }
