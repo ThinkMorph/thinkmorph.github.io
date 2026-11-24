@@ -4,7 +4,7 @@
   "how": "input and target from the data"
  },
  "colorization": {
-  "example": "static/img/pretext/colorization_2_in.webp / _out.webp (trace explorer example 2)",
+  "example": "Pretext-270K row ebadb0d0fbda8525df7bdb74e9fba1774891dbafe0a7c19593b7f1cc95aae520",
   "how": "input and target from the data"
  },
  "super_resolution": {
