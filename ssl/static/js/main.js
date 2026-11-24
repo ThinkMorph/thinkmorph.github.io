@@ -73,7 +73,7 @@
   const secObs = new IntersectionObserver((ents) => {
     ents.forEach((e) => { if (e.isIntersecting) tocLinks.forEach((a) => a.classList.toggle("is-active", a.getAttribute("href") === "#" + e.target.id)); });
   }, { rootMargin: "-45% 0px -50% 0px" });
-  ["idea", "method", "results", "examples", "cite"].forEach((id) => { const el = document.getElementById(id); if (el) secObs.observe(el); });
+  ["idea", "method", "results", "analysis", "examples", "cite"].forEach((id) => { const el = document.getElementById(id); if (el) secObs.observe(el); });
 
   const EX = window.TM_EXAMPLES || { pretext: [], instruct: [] };
 

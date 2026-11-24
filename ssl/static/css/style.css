@@ -598,3 +598,16 @@ button { font: inherit; color: inherit; }
   .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .td-head { flex-wrap: wrap; }
 }
+
+/* round 2 of the subtractive layout */
+.fig.fig-mid { max-width: 880px; margin-left: auto; margin-right: auto; }
+.sec-sub { margin-top: 56px; }
+.stage-col p a { color: var(--ink); text-decoration-color: var(--rule-2); }
+.stage-col p a:hover { text-decoration-color: currentColor; }
+/* results table: full width of the column, larger type */
+#tbl-results { width: 100%; }
+#tbl-results .rtable { width: 100%; font-size: 15px; }
+#tbl-results .rtable th, #tbl-results .rtable td { padding: 7px 16px; }
+#tbl-results .rtable thead th { font-size: 13px; padding-top: 10px; padding-bottom: 8px; }
+#tbl-results .rtable td:first-child { font-size: 15px; padding-left: 18px; }
+#tbl-results .rtable tr.grp td { font-size: 11.5px; padding-top: 12px; padding-bottom: 4px; }
