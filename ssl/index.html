@@ -15,7 +15,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500;600&family=Carlito:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.47/dist/katex.min.css" integrity="sha384-nH0MfJ44wi1dd7w6jinlyBgljjS8EJAh2JBoRad8a3VDw2K69vfaaqm4WnR+gXtA" crossorigin="anonymous">
   <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
@@ -29,7 +28,6 @@
     <ul class="toc">
       <li><a href="#idea">Motivation</a></li>
       <li><a href="#method">Method</a></li>
-      <li><a href="#data">Data</a></li>
       <li><a href="#results">Results</a></li>
       <li><a href="#analysis">Analysis</a></li>
       <li><a href="#cite">Cite</a></li>
@@ -94,7 +92,7 @@
       <li><a class="btn" href="" data-link="arxiv">
         <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
         arXiv</a></li>
-      <li><a class="btn" href="" data-link="code">
+      <li><a class="btn" href="https://github.com/ThinkMorph/ThinkMorph-SSL" data-link="code">
         <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 4L1.5 8l4 4M10.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Code</a></li>
       <li><a class="btn" href="https://huggingface.co/datasets/ThinkMorph/Pretext-270K" data-link="pretext">
@@ -157,20 +155,26 @@
         <p class="stage-tag">Stage 1 · Pretext reasoning</p>
         <h3>Restore it, and say what changed</h3>
         <p>Only a corrupted image goes in. The model describes it, generates the restored image, and describes the result.</p>
-        <div class="eq"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="right left" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>T</mi><mn>0</mn></msub><mo separator="true">,</mo><msub><mi>I</mi><mn>0</mn></msub><mo separator="true">,</mo><msub><mi>T</mi><mn>1</mn></msub><mo>∣</mo><msub><mi>I</mi><mi>c</mi></msub><mo stretchy="false">)</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>T</mi><mn>0</mn></msub><mo>∣</mo><msub><mi>I</mi><mi>c</mi></msub><mo stretchy="false">)</mo><mtext> </mtext><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>I</mi><mn>0</mn></msub><mo>∣</mo><msub><mi>I</mi><mi>c</mi></msub><mo separator="true">,</mo><msub><mi>T</mi><mn>0</mn></msub><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mphantom><mo>=</mo></mphantom><mtext>  </mtext><mtext> </mtext><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>T</mi><mn>1</mn></msub><mo>∣</mo><msub><mi>I</mi><mi>c</mi></msub><mo separator="true">,</mo><msub><mi>T</mi><mn>0</mn></msub><mo separator="true">,</mo><msub><mi>I</mi><mn>0</mn></msub><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
-p_\theta(T_0, I_0, T_1 \mid I_c)
-&amp;= p_\theta(T_0 \mid I_c)\, p_\theta(I_0 \mid I_c, T_0) \\
-&amp;\phantom{=}\;\, p_\theta(T_1 \mid I_c, T_0, I_0)
-\end{aligned}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.7em;vertical-align:-1.1em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6em;"><span style="top:-3.76em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span><span style="top:-2.26em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.1em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6em;"><span style="top:-3.76em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span><span style="top:-2.26em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel" style="color:transparent;">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.1em;"><span></span></span></span></span></span></span></span></span></span></span></span></div>
+        <p class="stage-data"><span class="num">270,896</span> traces in <a href="https://huggingface.co/datasets/ThinkMorph/Pretext-270K">Pretext-270K</a>. Each one restores an image after one of seven programmatic corruptions, on images from eight public datasets.</p>
       </article>
       <article class="stage stage-2">
         <p class="stage-tag">Stage 2 · Instruction tuning</p>
         <h3>Build the image the question needs</h3>
         <p>Stage&nbsp;2 keeps the trace format and adds a question. The model draws the images that help answer it.</p>
-        <div class="eq"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo stretchy="false">(</mo><msup><mi>x</mi><mtext>img</mtext></msup><mo separator="true">,</mo><msup><mi>x</mi><mtext>text</mtext></msup><mo stretchy="false">)</mo><mo>→</mo><msub><mi>T</mi><mn>0</mn></msub><mo>→</mo><msub><mi>I</mi><mn>0</mn></msub><mo>→</mo><mo>⋯</mo><mo>→</mo><msub><mi>T</mi><mi>K</mi></msub></mrow><annotation encoding="application/x-tex">(x^{\text{img}}, x^{\text{text}}) \rightarrow T_0 \rightarrow I_0 \rightarrow \cdots \rightarrow T_K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1305em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8805em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">img</span></span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8436em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">text</span></span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0715em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></div>
+        <p class="stage-data"><span class="num">180,490</span> traces in <a href="https://huggingface.co/datasets/ThinkMorph/Instruct-180K">Instruct-180K</a>. Nine construction pipelines build them at three levels.</p>
       </article>
     </div>
 
+
+    <figure class="fig fig-zoom fig-mid">
+      <button class="zoom-btn" type="button" aria-label="Enlarge the corpus composition figure"><img src="static/img/fig/composition.webp" alt="Two donut charts. Left: Pretext-270K, 270,896 traces over seven transformations. Right: Instruct-180K, 180,490 traces by level (L1, L2, L3) and by task." loading="lazy" width="2000" height="690"></button>
+    </figure>
+
+    <figure class="fig fig-wide fig-zoom">
+      <button class="zoom-btn" type="button" aria-label="Enlarge the pipelines figure">
+        <img src="static/img/fig/spatial_smile.webp" alt="The nine Instruct-180K construction pipelines grouped by level: visual search and jigsaw QA (L1); object counting and depth perception (L2); object rotation, object editing, allocentric reframing from point clouds, panoramic completion, SAM3D viewpoint rendering, and ego-exo transfer (L3)." loading="lazy">
+      </button>
+    </figure>
 
     <div class="explorer" id="ex-pretext">
       <div class="explorer-head">
@@ -198,53 +202,12 @@ p_\theta(T_0, I_0, T_1 \mid I_c)
   </div>
 </section>
 
-<!-- ───────────────────────── 3. data ───────────────────────── -->
-<section class="sec" id="data">
-  <div class="wrap">
-    <div class="sec-head">
-      <h2>Data</h2>
-      <p class="sec-tag">Both corpora use the same trace format.</p>
-    </div>
-
-    <div class="corpora">
-      <article class="corpus corpus-1">
-        <p class="corpus-kicker">Stage 1</p>
-        <h3>Pretext-270K</h3>
-        <p class="corpus-big"><span class="num">270,896</span> traces</p>
-        <p>Each trace restores an image after one of seven programmatic corruptions. The images come from eight public datasets.</p>
-        <a class="corpus-link" href="https://huggingface.co/datasets/ThinkMorph/Pretext-270K">Download on Hugging Face →</a>
-      </article>
-      <article class="corpus corpus-2">
-        <p class="corpus-kicker">Stage 2</p>
-        <h3>Instruct-180K</h3>
-        <p class="corpus-big"><span class="num">180,490</span> traces</p>
-        <p>Nine construction pipelines build question-driven traces at three levels.</p>
-        <a class="corpus-link" href="https://huggingface.co/datasets/ThinkMorph/Instruct-180K">Download on Hugging Face →</a>
-      </article>
-    </div>
-
-    <figure class="fig fig-wide fig-zoom">
-      <button class="zoom-btn" type="button" aria-label="Enlarge the corpus composition figure"><img src="static/img/fig/composition.webp" alt="Two donut charts. Left: Pretext-270K, 270,896 traces over seven transformations. Right: Instruct-180K, 180,490 traces by level (L1, L2, L3) and by task." loading="lazy" width="2000" height="690"></button>
-    </figure>
-
-    <figure class="fig fig-wide fig-zoom">
-      <button class="zoom-btn" type="button" aria-label="Enlarge the pipelines figure">
-        <img src="static/img/fig/spatial_smile.webp" alt="The nine Instruct-180K construction pipelines grouped by level: visual search and jigsaw QA (L1); object counting and depth perception (L2); object rotation, object editing, allocentric reframing from point clouds, panoramic completion, SAM3D viewpoint rendering, and ego-exo transfer (L3)." loading="lazy">
-      </button>
-    </figure>
-  </div>
-</section>
 
 <!-- ───────────────────────── 4. results ───────────────────────── -->
-<section class="sec sec-alt" id="results">
+<section class="sec" id="results">
   <div class="wrap">
-    <div class="sec-head">
-      <h2>Results</h2>
-      <p class="sec-tag">ThinkMorph-SSL beats text reasoning on all twelve benchmarks.</p>
-    </div>
-
-    <p class="prose-narrow">BAGEL-7B-MoT trained with both stages gains 11.33 points on average over the same model reasoning in text (think-4k).</p>
-
+    <div class="sec-head"><h2>Results</h2></div>
+    <p class="prose-narrow">Trained with both stages, BAGEL-7B-MoT beats the same model reasoning in text (think-4k) on all twelve benchmarks, by 11.33 points on average.</p>
     <div class="table-block">
       <div class="tabs tabs-small" role="tablist" aria-label="Results table" id="tbl-tabs">
         <button role="tab" aria-selected="true" data-t="all">Overview</button>
@@ -254,15 +217,11 @@ p_\theta(T_0, I_0, T_1 \mid I_c)
       </div>
       <div class="table-scroll" id="tbl-results" tabindex="0" aria-label="Results table"></div>
     </div>
-
-    <figure class="fig fig-wide fig-zoom">
-      <button class="zoom-btn" type="button" aria-label="Enlarge the MMSI example"><img src="static/img/fig/case_study_mmsi.webp" alt="An MMSI question with two first-person views asks where the blue glass bottle is at the last view. Five other models answer D or C. ThinkMorph-SSL generates a merged panoramic view and answers A (right), the ground truth." loading="lazy" width="2240" height="1043"></button>
-    </figure>
   </div>
 </section>
 
 <!-- ───────────────────────── 5. analysis ───────────────────────── -->
-<section class="sec" id="analysis">
+<section class="sec sec-alt" id="analysis">
   <div class="wrap">
     <div class="sec-head">
       <h2>Analysis</h2>
@@ -278,32 +237,9 @@ p_\theta(T_0, I_0, T_1 \mid I_c)
         <h3>Order and instructions</h3>
         <p class="prose-narrow">Pretext training before instruction tuning reaches 66.6% on MindCube, while mixing both corpora stays near 57%. Instruction-free pretext traces lead instructed ones by 2.7 points on average.</p>
       </div>
-      <figure class="fig fig-zoom fig-side">
+      <figure class="fig fig-zoom fig-side fig-small">
       <button class="zoom-btn" type="button" aria-label="Enlarge the training order figure"><img src="static/img/fig/instruction_free.webp" alt="MindCube accuracy by Stage-2 epoch: two-stage instruction-free (ThinkMorph-SSL), two-stage instructed, and one-stage mixed training." loading="lazy" width="1100" height="1058"></button>
     </figure>
-    </div>
-
-    <div class="sec-sub">
-      <h3>Does the model use its images?</h3>
-      <p class="prose-narrow">We sample eight traces for each of 150 problems per split, and the model decides whether to draw an image.</p>
-      <div class="grid-2 side-grid">
-        <div>
-          <p class="table-title">Does the image matter?</p>
-          <div class="table-scroll tp-scroll"><table class="rtable stable">
-            <thead>
-              <tr class="lv"><th></th><th colspan="3">Accuracy (%)</th><th colspan="2">Error rate (%)</th></tr>
-              <tr><th>Split</th><th>with image</th><th>without</th><th>Δ</th><th>defect</th><th>none</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>Spatial (train)</td><td>69.4</td><td>32.2</td><td>+37.2</td><td>40.7</td><td>15.4</td></tr>
-              <tr><td>MMSI (test)</td><td>31.3</td><td>18.5</td><td>+12.8</td><td>67.8</td><td>47.4</td></tr>
-            </tbody>
-          </table></div>
-        </div>
-        <figure class="fig fig-zoom fig-side">
-      <button class="zoom-btn" type="button" aria-label="Enlarge the failure case"><img src="static/img/fig/case_failure_mmsi.webp" alt="A failure case: the generated panorama omits the desk and monitors and duplicates the sofa, so the model answers front right instead of directly in front." loading="lazy" width="1400" height="932"></button>
-    </figure>
-      </div>
     </div>
 
     <div class="sec-sub grid-2 side-grid">
