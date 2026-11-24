@@ -1,6 +1,6 @@
 # ThinkMorph-SSL logo
 
-The tail of the teal ThinkMorph arrow breaks into a mosaic and turns solid toward the tip: from a corrupted to a restored image. It belongs to the ThinkMorph family: the same circle with the head and the morph arrow, the same teal and indigo, and the same wordmark; each member changes one small thing.
+The tail of the teal ThinkMorph arrow breaks into a mosaic; above it a faint grid fades into the solid arrow: from a corrupted to a restored image. It belongs to the ThinkMorph family: the same circle with the head and the morph arrow, the same teal and indigo, and the same wordmark; each member changes one small thing.
 
 | File | Use |
 | --- | --- |

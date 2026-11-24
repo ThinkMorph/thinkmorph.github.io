@@ -635,8 +635,8 @@ button { font: inherit; color: inherit; }
 @media (max-width: 1100px) { .idea-art { display: none; } }
 /* results tabs: larger labels; each tab as wide as its label needs, together as wide as the table */
 #tbl-tabs button { flex: 1 1 auto; padding: 12px 14px; font-size: 17px; }
-/* reading text a little larger and darker */
-.prose-narrow { font-size: 17.5px; line-height: 1.62; color: #2b2a27; }
+/* body paragraphs at the size, colour and width of the Motivation paragraph */
+.prose-narrow { font-size: 19px; line-height: 1.55; color: var(--ink); max-width: 820px; }
 /* stage headings: the stage number in teal and a hairline running to the right edge */
 .stage-block > h3 { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; font-size: 25px; }
 .stage-block > h3 .stage-no { color: var(--brand); }
@@ -649,3 +649,31 @@ button { font: inherit; color: inherit; }
 /* a lead line between the pipelines figure and the Stage 2 examples */
 .stage-block > .ex-lead { margin: 30px 0 0; }
 .stage-block > .ex-lead + .explorer { margin-top: 16px; }
+
+/* ── v2 round 6: Stage 2 examples in the Stage 1 trace layout ── */
+.ptrace-q.n5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+/* six cells (two generated images): the question and T1 cells span both rows, I1 and T2 sit under T0 and I0 */
+.ptrace-q.n6 > .step:first-child, .ptrace-q.n6 > .step:nth-child(4) { grid-row: span 2; }
+.ptrace-q.n6 > .step:nth-child(n+5) { border-top: 1px solid var(--rule); }
+.ptrace-q.n6 > .step:nth-child(5) .step-arrow { display: none; }
+.ptrace-q .q-imgs { display: grid; gap: 6px; }
+.ptrace-q .q-imgs.n4, .ptrace-q .q-imgs.n5 { grid-template-columns: 1fr 1fr; }
+.ptrace-q .q-imgs figure { margin: 0; min-width: 0; }
+.ptrace-q .q-imgs img, .ptrace-q .q-gen { display: block; width: auto; height: auto; max-width: 100%; max-height: 260px; margin: 0 auto; }
+.ptrace-q .q-imgs.n4 img { width: 100%; max-height: none; aspect-ratio: 1; object-fit: cover; }
+.ptrace-q .q-imgs.n5 img { width: 100%; max-height: none; }
+.ptrace-q .q-imgs figcaption { margin-top: 3px; font: 400 11px/1.2 var(--mono); color: var(--ink-3); }
+.ptrace-q .q-text { margin: 10px 0 0; font: 400 14px/1.6 var(--sans); color: var(--ink); max-height: 300px; overflow: auto; padding-right: 6px; scrollbar-width: thin; }
+.ptrace-q .q-ans { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 10px; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--rule-2); }
+@media (max-width: 1020px) {
+  .ptrace-q.n5, .ptrace-q.n6 { grid-template-columns: 1fr 1fr; }
+  .ptrace-q > .step:nth-child(odd) { border-left: 0; }
+  .ptrace-q > .step:nth-child(odd) .step-arrow { display: none; }
+  .ptrace-q > .step:nth-child(n+3) { border-top: 1px solid var(--rule); }
+  .ptrace-q.n6 > .step:first-child, .ptrace-q.n6 > .step:nth-child(4) { grid-row: auto; }
+}
+@media (max-width: 760px) {
+  .ptrace-q.n5, .ptrace-q.n6 { grid-template-columns: 1fr; }
+  .ptrace-q > .step { border-left: 0; }
+  .ptrace-q .step-arrow { display: none; }
+}
