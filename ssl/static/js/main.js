@@ -84,7 +84,7 @@
     const tiles = EX.pretext.map((t, i) => {
       const ex = t.examples.find((e) => e.id === picks[t.key]) || t.examples[0];
       const li = h("li", { class: "tile", tabindex: "0", "aria-label": `${t.name}: corrupted input and restored target` },
-        `<div class="tile-frame"><span class="tile-state"></span><img class="before" src="${ex.input}" alt="" loading="eager"><img class="after" src="${ex.output}" alt="" loading="eager"><span class="scan"></span></div>
+        `<div class="tile-frame"><span class="tile-state"></span><img class="before" src="static/img/strip/${t.key}_before.webp" alt="" loading="eager"><img class="after" src="static/img/strip/${t.key}_after.webp" alt="" loading="eager"><span class="scan"></span></div>
          <div class="tile-label"><span class="n">0${i + 1}</span>${esc(t.name)}</div>`);
       li.addEventListener("click", () => { document.getElementById("method")?.scrollIntoView(); selectPretext(i); });
       li.addEventListener("keydown", (e) => { if (e.key === "Enter") li.click(); });
