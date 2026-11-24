@@ -144,36 +144,6 @@
       </div>
 
     </div>
-
-
-    <div class="sec-sub">
-      <h3>The base model cannot do this yet</h3>
-      <p class="prose-narrow">Without training, more text reasoning lowers BAGEL's L3 average, and forcing an image step lowers accuracy even with a ground-truth image.</p>
-      <div class="table-pair">
-        <div>
-          <p class="table-title">More text reasoning effort at inference time</p>
-          <div class="table-scroll tp-scroll"><table class="rtable stable">
-            <thead><tr><th>Setting</th><th>L1</th><th>L2</th><th>L3</th></tr></thead>
-            <tbody>
-              <tr><td>No-think</td><td>50.35</td><td>56.17</td><td>36.42</td></tr>
-              <tr><td>Think-4k</td><td>51.40<span class="d">+1.05</span></td><td>64.67<span class="d">+8.50</span></td><td>25.40<span class="d">−11.02</span></td></tr>
-              <tr><td>Think-16k</td><td>53.86<span class="d">+2.46</span></td><td>64.23<span class="d">−0.44</span></td><td>26.83<span class="d">+1.43</span></td></tr>
-            </tbody>
-          </table></div>
-        </div>
-        <div>
-          <p class="table-title">More visual reasoning effort at inference time</p>
-          <div class="table-scroll tp-scroll"><table class="rtable stable">
-            <thead><tr><th>Setting</th><th>V<sup>⋆</sup></th><th>MMSI</th><th>Spatial</th></tr></thead>
-            <tbody>
-              <tr><td>Text reasoning (16k)</td><td>61.26</td><td>29.00</td><td>47.40</td></tr>
-              <tr><td>Forced interleaved (16k)</td><td>61.26</td><td>27.20<span class="d">−1.80</span></td><td>41.20<span class="d">−6.20</span></td></tr>
-              <tr><td>&nbsp;&nbsp;+ ground-truth image</td><td>–</td><td>–</td><td>42.00<span class="d">+0.80</span></td></tr>
-            </tbody>
-          </table></div>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
