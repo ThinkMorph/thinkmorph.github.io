@@ -299,12 +299,7 @@ button { font: inherit; color: inherit; }
 /* ── method ──────────────────────────────────────────────────────────────── */
 .stages { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .stage { position: relative; padding: 26px 28px 24px; border-radius: var(--radius); background: var(--bg); border: 1px solid var(--rule); overflow: hidden; }
-.stage::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
-.stage-1::before { background: var(--blue); }
-.stage-2::before { background: var(--indigo); }
-.stage-tag { margin: 0 0 10px; font: 600 12px/1 var(--mono); letter-spacing: .05em; text-transform: uppercase; }
-.stage-1 .stage-tag { color: var(--blue); }
-.stage-2 .stage-tag { color: var(--indigo); }
+.stage-tag { margin: 0 0 8px; font: 500 14px/1.3 var(--sans); color: var(--ink-3); }
 .stage h3 { margin: 0 0 10px; font: 600 21px/1.25 var(--sans); letter-spacing: -.025em; }
 .stage p { margin: 0 0 16px; color: var(--ink-2); font-size: 15.5px; }
 .eq {
@@ -391,9 +386,7 @@ button { font: inherit; color: inherit; }
 /* ── data ────────────────────────────────────────────────────────────────── */
 .corpora { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .corpus { position: relative; padding: 28px 30px; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); box-shadow: var(--shadow); }
-.corpus-kicker { margin: 0 0 10px; font: 600 12px/1 var(--mono); letter-spacing: .05em; text-transform: uppercase; }
-.corpus-1 .corpus-kicker { color: var(--blue); }
-.corpus-2 .corpus-kicker { color: var(--indigo); }
+.corpus-kicker { margin: 0 0 10px; font: 500 14px/1.3 var(--sans); color: var(--ink-3); }
 .corpus h3 { margin: 0; font: 600 26px/1.15 var(--sans); letter-spacing: -.03em; }
 .corpus-big { margin: 18px 0 14px; font: 400 15px/1 var(--sans); color: var(--ink-3); }
 .corpus-big .num { font: 600 50px/1 var(--sans); color: var(--ink); letter-spacing: -.03em; margin-right: 6px; font-variant-numeric: tabular-nums; }
