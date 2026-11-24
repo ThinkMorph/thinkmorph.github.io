@@ -86,7 +86,7 @@
       const li = h("li", { class: "tile", tabindex: "0", "aria-label": `${t.name}: corrupted input and restored target` },
         `<div class="tile-frame"><span class="tile-state"></span><img class="before" src="static/img/strip/${t.key}_before.webp" alt="" loading="eager"><img class="after" src="static/img/strip/${t.key}_after.webp" alt="" loading="eager"><span class="scan"></span></div>
          <div class="tile-label"><span class="n">0${i + 1}</span>${esc(t.name)}</div>`);
-      li.addEventListener("click", () => { document.getElementById("method")?.scrollIntoView(); selectPretext(i); });
+      li.addEventListener("click", () => { document.getElementById("examples")?.scrollIntoView(); selectPretext(i); });
       li.addEventListener("keydown", (e) => { if (e.key === "Enter") li.click(); });
       li.addEventListener("pointerenter", () => li.classList.add("is-restored"));
       li.addEventListener("focus", () => li.classList.add("is-restored"));
@@ -123,10 +123,13 @@
     const grid = $("#gallery-grid"), filt = $("#gallery-filter"), dlg = $("#trace-dialog");
     if (!grid || !dlg) return;
     const sub = (k) => `<sub>${k}</sub>`;
-    // cover example per pretext task: real photos with a clear change
-    const COVER = { jigsaw: 1, colorization: 2, super_resolution: 4, masked_inpainting: 2, orthogonal_transform: 3, denoising: 4, deformation_recovery: 3 };
+    // examples the hero strip already shows (static/img/strip/SOURCES.json); the gallery leaves them out
+    const IN_STRIP = { jigsaw: 1, super_resolution: 4, masked_inpainting: 2, denoising: 4, deformation_recovery: 3 };
+    // cover example per pretext task, chosen among the rest for a clear change
+    const COVER = { jigsaw: 4, colorization: 2, super_resolution: 2, masked_inpainting: 1, orthogonal_transform: 3, denoising: 2, deformation_recovery: 2 };
+    const notInStrip = (t) => ({ ...t, examples: t.examples.filter((e) => e.id !== IN_STRIP[t.key]) });
     const items = [
-      ...EX.pretext.map((t) => ({ stage: "1", t, tag: "Stage 1", first: Math.max(0, t.examples.findIndex((e) => e.id === COVER[t.key])) })),
+      ...EX.pretext.map(notInStrip).map((t) => ({ stage: "1", t, tag: "Stage 1", first: Math.max(0, t.examples.findIndex((e) => e.id === COVER[t.key])) })),
       ...EX.instruct.map((t) => ({ stage: "2", t, tag: `Stage 2 · ${t.level}`, first: 0 })),
     ];
     function pretextHTML(t, ex) {
