@@ -623,9 +623,15 @@ button { font: inherit; color: inherit; }
 #tbl-results .rtable tr.delta td, #tbl-results .rtable tr.delta td.avg { font-weight: 600; }
 
 /* ── v2 round 4 ── */
-/* Motivation keeps the live layout; the art sits small in the free space at the lower right */
+/* Motivation keeps the live layout; the art sits in the free space on the right, reaching into the page margin,
+   its mark centred near the first lines of the paragraph, slightly transparent */
 .idea { position: relative; }
-.idea-art { position: absolute; right: 0; bottom: -56px; width: min(290px, calc(100% - 846px)); pointer-events: none; }
+.idea-art {
+  --ov: clamp(0px, calc((100vw - 1124px) / 2 - 24px), 80px);                      /* overhang into the page margin */
+  --w: clamp(0px, calc(min(1124px, 100vw - 56px) + var(--ov) - 836px), 390px);   /* stays 16px clear of the text column */
+  position: absolute; right: calc(-1 * var(--ov)); top: 36px; width: var(--w);
+  transform: translateY(-34.6%); opacity: .85; pointer-events: none;
+}
 @media (max-width: 1100px) { .idea-art { display: none; } }
 /* results tabs: larger labels; each tab as wide as its label needs, together as wide as the table */
 #tbl-tabs button { flex: 1 1 auto; padding: 12px 14px; font-size: 17px; }
@@ -638,7 +644,8 @@ button { font: inherit; color: inherit; }
 .stage-block > h3::after { content: ""; flex: 1 1 auto; height: 1px; margin-left: 14px; background: var(--rule-2); }
 .stage-block + .stage-block { margin-top: 88px; }
 @media (max-width: 560px) { .stage-block > h3 { font-size: 22px; flex-wrap: wrap; row-gap: 2px; } .stage-block > h3::after { display: none; } }
-/* project-lead and equal-advising marks a little larger */
-.authors .mk { line-height: 0; }                /* larger marks must not push their name down */
-.authors .mk-lead, .authors .mk-adv { font-size: 1.12em; top: -.36em; }
-.marks-legend .mk-lead, .marks-legend .mk-adv { font-size: 1.3em; line-height: 1; vertical-align: -.1em; }
+
+/* ── v2 round 5 ── */
+/* a lead line between the pipelines figure and the Stage 2 examples */
+.stage-block > .ex-lead { margin: 30px 0 0; }
+.stage-block > .ex-lead + .explorer { margin-top: 16px; }
