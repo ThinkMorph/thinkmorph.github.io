@@ -28,9 +28,9 @@
   --wordmark: "Carlito", Calibri, "Segoe UI", sans-serif;
   --indigo-ink: #3f3784;
   --indigo-soft: #eceaf6;
-  --rose: #d6336c;          /* raspberry: restored / generated images and the project-lead mark */
-  --rose-ink: #b0245a;
-  --rose-soft: #fbe4ee;
+  --rose: #e0679a;          /* soft rose: restored / generated images and the project-lead mark */
+  --rose-ink: #b9457a;
+  --rose-soft: #fde8f1;
   --gain: #2e7d4f;          /* gains, green as in the paper's tables */
   --blue: #13898a;          /* legacy name, now the brand teal */
   --blue-soft: #e2f1f0;
@@ -154,7 +154,7 @@ button { font: inherit; color: inherit; }
 .tile-frame .after { clip-path: inset(0 calc((1 - var(--p)) * 100%) 0 0); }
 .tile-frame .scan {
   position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px;
-  left: calc(var(--p) * 100%); background: #fff; box-shadow: 0 0 0 1px rgba(214, 51, 108, .9), 0 0 18px rgba(214, 51, 108, .9);
+  left: calc(var(--p) * 100%); background: #fff; box-shadow: 0 0 0 1px rgba(224, 103, 154, .9), 0 0 18px rgba(224, 103, 154, .9);
   opacity: calc(1 - abs(var(--p) * 2 - 1));   /* visible mid-wipe only */
 }
 @supports not (opacity: calc(1 - abs(0.5))) { .tile-frame .scan { display: none; } }
