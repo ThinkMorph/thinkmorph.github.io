@@ -14,7 +14,7 @@
   <link rel="icon" href="static/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500;600&family=Carlito:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Geist:wght@300..700&family=Geist+Mono:wght@400;500;600&family=Carlito:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
@@ -81,9 +81,9 @@
       <li><sup>11</sup>Stanford University</li>
     </ul>
     <p class="marks-legend">
-      <span><span class="mk mk-lead">*</span> Project lead</span>
-      <span><span class="mk mk-eq">*</span> Equal contribution</span>
-      <span><span class="mk mk-adv">†</span> Equal advising</span>
+      <span class="lg-lead"><span class="mk mk-lead">*</span> Project lead</span>
+      <span class="lg-eq"><span class="mk mk-eq">*</span> Equal contribution</span>
+      <span class="lg-adv"><span class="mk mk-adv">†</span> Equal advising</span>
     </p>
 
     <!-- Fill in each href when the resource is public. Buttons with an empty href render as "soon". -->
@@ -121,7 +121,7 @@
         <p class="trace-formula" aria-label="corrupted image, then thought zero, then generated image, then thought one">
           <span class="tok tok-img">I<sub>c</sub></span><span class="arr">→</span><span class="tok">T<sub>0</sub></span><span class="arr">→</span><span class="tok tok-gen">I<sub>0</sub></span><span class="arr">→</span><span class="tok">T<sub>1</sub></span>
         </p>
-        <p>Seven ways to corrupt an ordinary image. In Stage&nbsp;1 the model receives only the corrupted image, describes it, <em>generates</em> the restored image, and describes the result. No question, no instruction.</p>
+        <p>In Stage&nbsp;1 the model sees only a corrupted image, with no question or instruction. It describes the image, <em>generates</em> the restored image, and then describes the result.</p>
         <button class="strip-toggle" id="strip-toggle" type="button" aria-pressed="false">Pause</button>
       </div>
     </div>
@@ -138,31 +138,25 @@
       <p class="sec-tag">Images can supply their own supervision.</p>
     </div>
 
-    <div class="grid-2 idea-grid">
+    <div class="idea">
       <div class="prose">
-        <p class="lede">Reasoning with intermediate images is usually trained on traces built for each task family. Pretext tasks from self-supervised learning take their targets from the image itself: corrupt it, then restore it. <strong>ThinkMorph-SSL</strong> turns them into interleaved reasoning traces and trains on them before instruction tuning.</p>
+        <p class="lede">Models that reason with intermediate images are usually trained on traces built for one task family at a time. Self-supervised pretext tasks need no such traces, because the original image is the answer. <strong>ThinkMorph-SSL</strong> turns these tasks into interleaved reasoning traces and trains on them before instruction tuning. Compared with the same model reasoning in text, it gains 9.84 points on perception, 4.22 on static spatial understanding and 17.92 on mental world modeling.</p>
         <details class="abstract">
           <summary>Read the abstract</summary>
           <p>People reason with pictures as well as words. Interleaved multimodal reasoning gives models a similar way to solve problems by creating intermediate images and using them to guide further reasoning. Training models with this ability usually relies on task-specific demonstrations, which are difficult to collect. We introduce ThinkMorph-SSL, a two-stage training recipe that uses images themselves as a source of supervision. The first stage, <em>pretext reasoning</em>, converts visual pretext tasks, such as image colorization and denoising, into <em>instruction-free</em> interleaved traces. Models describe a corrupted or transformed image, generate a restored or canonical image, and interpret the result. The second stage uses automatically constructed demonstrations for question-driven instruction tuning. At the same instruction-tuning budget, models trained with pretext reasoning outperform those trained with instruction tuning alone. The full recipe improves over the base model by an average of 11.33 accuracy points across twelve benchmarks. These results show that supervision derived from images can build the visual skills needed for interleaved reasoning and improve learning from task-specific demonstrations.</p>
         </details>
       </div>
 
-      <aside class="keynums" aria-label="Headline numbers">
-        <p class="keynums-title">Level averages vs. BAGEL think-4k</p>
-        <div class="keynum" data-level="L1"></div>
-        <div class="keynum" data-level="L2"></div>
-        <div class="keynum" data-level="L3"></div>
-      </aside>
     </div>
 
 
     <div class="sec-sub">
       <h3>The base model cannot do this yet</h3>
       <p class="prose-narrow">Without training, more text reasoning lowers BAGEL's L3 average, and forcing an image step lowers accuracy even with a ground-truth image.</p>
-      <div class="grid-2 tables-2">
+      <div class="table-pair">
         <div>
           <p class="table-title">More text reasoning effort at inference time</p>
-          <div class="table-scroll"><table class="rtable stable">
+          <div class="table-scroll tp-scroll"><table class="rtable stable">
             <thead><tr><th>Setting</th><th>L1</th><th>L2</th><th>L3</th></tr></thead>
             <tbody>
               <tr><td>No-think</td><td>50.35</td><td>56.17</td><td>36.42</td></tr>
@@ -173,7 +167,7 @@
         </div>
         <div>
           <p class="table-title">More visual reasoning effort at inference time</p>
-          <div class="table-scroll"><table class="rtable stable">
+          <div class="table-scroll tp-scroll"><table class="rtable stable">
             <thead><tr><th>Setting</th><th>V<sup>⋆</sup></th><th>MMSI</th><th>Spatial</th></tr></thead>
             <tbody>
               <tr><td>Text reasoning (16k)</td><td>61.26</td><td>29.00</td><td>47.40</td></tr>
@@ -192,7 +186,7 @@
   <div class="wrap">
     <div class="sec-head">
       <h2>Method</h2>
-      <p class="sec-tag">Pretext reasoning first, then instruction tuning.</p>
+      <p class="sec-tag">Pretext reasoning comes first, and instruction tuning follows.</p>
     </div>
 
     <div class="stages">
@@ -208,7 +202,7 @@
       <article class="stage stage-2">
         <p class="stage-tag">Stage 2 · Instruction tuning</p>
         <h3>Build the image the question needs</h3>
-        <p>The same trace format, now with a question. The intermediate images are the ones that help answer it.</p>
+        <p>Stage&nbsp;2 keeps the trace format and adds a question. The model draws the images that help answer it.</p>
         <div class="eq" aria-label="image and question, then T0, I0, and so on, up to TK">
           <span>(x<sup>img</sup>, x<sup>text</sup>) → T<sub>0</sub> → I<sub>0</sub> → ⋯ → T<sub>K</sub></span>
         </div>
@@ -252,7 +246,7 @@
   <div class="wrap">
     <div class="sec-head">
       <h2>Data</h2>
-      <p class="sec-tag">Two corpora, one trace format.</p>
+      <p class="sec-tag">Both corpora use the same trace format.</p>
     </div>
 
     <div class="corpora">
@@ -260,14 +254,14 @@
         <p class="corpus-kicker">Stage 1</p>
         <h3>Pretext-270K</h3>
         <p class="corpus-big"><span class="num">270,896</span> traces</p>
-        <p>Instruction-free Text–Image–Text traces from seven programmatic transformations, on images from eight public datasets.</p>
+        <p>Each trace restores an image after one of seven programmatic corruptions. The images come from eight public datasets.</p>
         <a class="corpus-link" href="https://huggingface.co/datasets/ThinkMorph/Pretext-270K">Download on Hugging Face →</a>
       </article>
       <article class="corpus corpus-2">
         <p class="corpus-kicker">Stage 2</p>
         <h3>Instruct-180K</h3>
         <p class="corpus-big"><span class="num">180,490</span> traces</p>
-        <p>Question-driven interleaved traces from nine construction pipelines, at three levels.</p>
+        <p>Nine construction pipelines build question-driven traces at three levels.</p>
         <a class="corpus-link" href="https://huggingface.co/datasets/ThinkMorph/Instruct-180K">Download on Hugging Face →</a>
       </article>
     </div>
@@ -289,7 +283,7 @@
   <div class="wrap">
     <div class="sec-head">
       <h2>Results</h2>
-      <p class="sec-tag">Better than text reasoning on all twelve benchmarks.</p>
+      <p class="sec-tag">ThinkMorph-SSL beats text reasoning on all twelve benchmarks.</p>
     </div>
 
     <p class="prose-narrow">BAGEL-7B-MoT trained with both stages gains 11.33 points on average over the same model reasoning in text (think-4k).</p>
@@ -315,7 +309,7 @@
   <div class="wrap">
     <div class="sec-head">
       <h2>Analysis</h2>
-      <p class="sec-tag">What pretext reasoning adds.</p>
+      <p class="sec-tag">We test what pretext reasoning adds.</p>
     </div>
 
     <figure class="fig fig-wide fig-zoom fig-flush">
@@ -334,11 +328,11 @@
 
     <div class="sec-sub">
       <h3>Does the model use its images?</h3>
-      <p class="prose-narrow">150 problems per split, eight traces each; the model decides whether to draw.</p>
+      <p class="prose-narrow">We sample eight traces for each of 150 problems per split, and the model decides whether to draw an image.</p>
       <div class="grid-2 side-grid">
         <div>
           <p class="table-title">Does the image matter?</p>
-          <div class="table-scroll"><table class="rtable stable">
+          <div class="table-scroll tp-scroll"><table class="rtable stable">
             <thead>
               <tr class="lv"><th></th><th colspan="3">Accuracy (%)</th><th colspan="2">Error rate (%)</th></tr>
               <tr><th>Split</th><th>with image</th><th>without</th><th>Δ</th><th>defect</th><th>none</th></tr>
