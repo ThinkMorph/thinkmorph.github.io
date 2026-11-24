@@ -38,7 +38,7 @@
   --gray-mark: #9b998f;
   --teal: #008080;          /* equal-advising mark, as in the paper */
 
-  --serif: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --serif: var(--sans);    /* one family: Geist (+ Geist Mono); Carlito only in the wordmark */
   --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
@@ -101,8 +101,7 @@ button { font: inherit; color: inherit; }
 .title-tail { color: var(--brand); }
 .subtitle {
   margin: 14px 0 34px; max-width: 30ch;
-  font: 400 clamp(22px, 2.6vw, 32px)/1.2 var(--serif); font-style: italic; color: var(--ink-2);
-  font-variation-settings: "opsz" 36;
+  font: 400 clamp(20px, 2.3vw, 28px)/1.3 var(--sans); color: var(--ink-2); letter-spacing: -.015em;
 }
 .authors, .affils { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; }
 .authors { gap: 4px 18px; font: 500 16px/1.5 var(--sans); max-width: 980px; }
@@ -190,14 +189,13 @@ button { font: inherit; color: inherit; }
 .sec-no { font: 500 13px/1 var(--mono); color: var(--rose); padding-top: 14px; letter-spacing: .04em; }
 .sec-no::before { content: "§ "; color: var(--ink-3); }
 .sec-head h2 {
-  margin: 0; font: 400 clamp(48px, 6.6vw, 92px)/1 var(--serif); letter-spacing: -.03em;
-  font-variation-settings: "opsz" 72;
+  margin: 0; font: 600 clamp(44px, 6vw, 84px)/1.02 var(--sans); letter-spacing: -.045em;
 }
-.sec-tag { margin: 16px 0 0; max-width: 48ch; font: 400 clamp(21px, 2.3vw, 28px)/1.3 var(--serif); color: var(--ink-3); }
-.sec-head h2 em { font-style: italic; font-weight: 400; color: var(--ink-3); }
+.sec-tag { margin: 14px 0 0; max-width: 52ch; font: 400 clamp(19px, 2vw, 24px)/1.35 var(--sans); color: var(--ink-3); letter-spacing: -.015em; }
+.sec-head h2 em { font-style: normal; font-weight: 400; color: var(--ink-3); }
 .sec-sub { margin-top: 84px; }
 .sec-sub > h3, .side-grid h3, .explorer-head h3 {
-  margin: 0 0 12px; font: 500 26px/1.2 var(--serif); letter-spacing: -.01em; font-variation-settings: "opsz" 36;
+  margin: 0 0 12px; font: 600 22px/1.25 var(--sans); letter-spacing: -.025em;
 }
 .prose p, .prose-narrow { max-width: 68ch; }
 .prose p { margin: 0 0 16px; }
@@ -226,7 +224,7 @@ button { font: inherit; color: inherit; }
 .keynum .lv { font: 600 13px/1 var(--mono); color: var(--ink-2); }
 .keynum .bar { position: relative; height: 26px; }
 .keynum .bar svg { width: 100%; height: 100%; overflow: visible; }
-.keynum .val { text-align: right; font: 500 30px/1 var(--serif); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.keynum .val { text-align: right; font: 600 28px/1 var(--sans); letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
 .keynum .val small { display: block; margin-top: 4px; font: 600 12px/1 var(--mono); color: var(--gain); letter-spacing: 0; }
 .keynum .from { font: 400 12px/1 var(--mono); color: var(--ink-3); }
 .keynums-foot { margin: 6px 0 0; font-size: 12.5px; color: var(--ink-3); line-height: 1.5; }
@@ -306,7 +304,7 @@ button { font: inherit; color: inherit; }
 .stage-tag { margin: 0 0 10px; font: 600 12px/1 var(--mono); letter-spacing: .05em; text-transform: uppercase; }
 .stage-1 .stage-tag { color: var(--blue); }
 .stage-2 .stage-tag { color: var(--indigo); }
-.stage h3 { margin: 0 0 10px; font: 500 25px/1.2 var(--serif); letter-spacing: -.01em; }
+.stage h3 { margin: 0 0 10px; font: 600 21px/1.25 var(--sans); letter-spacing: -.025em; }
 .stage p { margin: 0 0 16px; color: var(--ink-2); font-size: 15.5px; }
 .eq {
   display: flex; flex-wrap: wrap; gap: 4px 8px; padding: 12px 14px; border-radius: 9px;
@@ -358,7 +356,7 @@ button { font: inherit; color: inherit; }
 .step img { width: 100%; height: auto; border-radius: 8px; background: var(--sunken); }
 .step .noprompt { margin: 10px 0 0; font: 400 11.5px/1.4 var(--mono); color: var(--ink-3); }
 .step .noprompt s { color: var(--ink-3); }
-.thought { margin: 0; font: 400 14px/1.6 var(--serif); font-variation-settings: "opsz" 14; color: var(--ink); max-height: 380px; overflow: auto; padding-right: 6px; scrollbar-width: thin; }
+.thought { margin: 0; font: 400 14px/1.6 var(--sans); color: var(--ink); max-height: 380px; overflow: auto; padding-right: 6px; scrollbar-width: thin; }
 .gen-tag { display: inline-block; margin-bottom: 8px; font: 500 11px/1 var(--mono); color: var(--rose-ink); }
 .step-arrow { position: absolute; left: -9px; top: 22px; width: 17px; height: 17px; border-radius: 50%; background: var(--surface); border: 1px solid var(--rule); display: grid; place-items: center; font: 600 10px/1 var(--mono); color: var(--ink-3); }
 
@@ -366,7 +364,7 @@ button { font: inherit; color: inherit; }
 .itrace { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
 .iq { padding: 20px 24px; border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 24px; align-items: start; }
 .iq-text .k { font: 600 11px/1 var(--mono); color: var(--ink-3); letter-spacing: .05em; text-transform: uppercase; margin: 0 0 8px; }
-.iq-text p { margin: 0; font: 400 17px/1.5 var(--serif); font-variation-settings: "opsz" 18; }
+.iq-text p { margin: 0; font: 400 16px/1.55 var(--sans); }
 .iq-imgs { display: grid; gap: 8px; }
 .iq-imgs.n1 { grid-template-columns: 1fr; }
 .iq-imgs.n4 { grid-template-columns: repeat(4, 1fr); }
@@ -395,9 +393,9 @@ button { font: inherit; color: inherit; }
 .corpus-kicker { margin: 0 0 10px; font: 600 12px/1 var(--mono); letter-spacing: .05em; text-transform: uppercase; }
 .corpus-1 .corpus-kicker { color: var(--blue); }
 .corpus-2 .corpus-kicker { color: var(--indigo); }
-.corpus h3 { margin: 0; font: 500 30px/1.15 var(--serif); letter-spacing: -.015em; }
+.corpus h3 { margin: 0; font: 600 26px/1.15 var(--sans); letter-spacing: -.03em; }
 .corpus-big { margin: 18px 0 14px; font: 400 15px/1 var(--sans); color: var(--ink-3); }
-.corpus-big .num { font: 500 54px/1 var(--serif); color: var(--ink); letter-spacing: -.03em; margin-right: 6px; font-variant-numeric: tabular-nums; }
+.corpus-big .num { font: 600 50px/1 var(--sans); color: var(--ink); letter-spacing: -.03em; margin-right: 6px; font-variant-numeric: tabular-nums; }
 .corpus > p { color: var(--ink-2); font-size: 15px; margin: 0; }
 .corpus > .corpus-kicker { margin: 0 0 10px; }
 .corpus > .corpus-big { margin: 18px 0 14px; }
