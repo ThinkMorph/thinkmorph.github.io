@@ -24,7 +24,7 @@ Every figure on the page is a figure from the paper; the page draws no charts of
 | `stage1.webp` | `figures/stage1.pdf` (overview; used only as the link-preview image) |
 | `spatial_smile.webp` | `figures/spatial_smile.pdf` (Instruct-180K pipelines) |
 | `composition.webp` | `figures/smile-composition.pdf` (corpus composition) |
-| `case_study_mmsi.webp` | `figures/case_study_mmsi.pdf` |
+| `case_study_mmsi.webp` | `figures/case_study_mmsi.pdf` (not on the page) |
 | `case_failure_mmsi.webp` | `figures/case_failure_mmsi.pdf` |
 | `cost_scatter.webp` | `figures/cost_scatter.pdf` |
 | `ablation_row.webp` | `figures/fig_ablation_row.pdf` |
