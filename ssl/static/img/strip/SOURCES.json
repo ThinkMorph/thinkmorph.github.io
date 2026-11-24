@@ -16,11 +16,11 @@
   "how": "input and target from the data"
  },
  "orthogonal_transform": {
-  "example": "static/img/pretext/orthogonal_transform_3_in.webp / _out.webp (trace explorer example 3)",
+  "example": "Pretext-270K row 4a0b05cc4e7cf5d5c32c55e9fb4b48661a61f35aae13d3b1dfe740d820a3938e",
   "how": "input and target from the data"
  },
  "denoising": {
-  "example": "static/img/pretext/denoising_4_in.webp / _out.webp (trace explorer example 4)",
+  "example": "Pretext-270K row 2f2e35bbbd69f3fab3175e507c391ede0314e8b57c500d463fee1d4db169d9c4",
   "how": "target from the data, input made noisier"
  },
  "deformation_recovery": {
