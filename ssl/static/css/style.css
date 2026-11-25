@@ -645,9 +645,6 @@ button { font: inherit; color: inherit; }
 @media (max-width: 560px) { .stage-block > h3 { font-size: 22px; flex-wrap: wrap; row-gap: 2px; } }
 
 /* ── v2 round 5 ── */
-/* a lead line between the pipelines figure and the Stage 2 examples */
-.stage-block > .ex-lead { margin: 30px 0 0; }
-.stage-block > .ex-lead + .explorer { margin-top: 16px; }
 
 /* ── v2 round 6: Stage 2 examples in the Stage 1 trace layout ── */
 .ptrace-q.n5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
@@ -712,5 +709,8 @@ button { font: inherit; color: inherit; }
 /* stage headings: a teal dot, then the title in ink, larger */
 .stage-block > h3 { font-size: 30px; gap: 12px; }
 .stage-block > h3::before { content: ""; flex: none; width: .32em; height: .32em; border-radius: 50%; background: var(--brand); }
-.stage-block > h3 .stage-no { color: var(--ink); }
+.stage-block > h3 .stage-no { color: var(--brand); }
+/* Stage 2 in the logo's indigo: dot and stage number */
+#stage-2 > h3::before { background: var(--indigo); }
+#stage-2 > h3 .stage-no { color: var(--indigo); }
 @media (max-width: 560px) { .stage-block > h3 { font-size: 24px; } }
