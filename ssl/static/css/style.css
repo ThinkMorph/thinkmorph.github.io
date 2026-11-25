@@ -714,3 +714,7 @@ button { font: inherit; color: inherit; }
 #stage-2 > h3::before { background: var(--indigo); }
 #stage-2 > h3 .stage-no { color: var(--indigo); }
 @media (max-width: 560px) { .stage-block > h3 { font-size: 24px; } }
+
+/* ── v2 round 11 ── */
+/* the Stage 2 pipelines figure a little smaller (1124 -> 960 px), centred */
+#stage-2 > .fig { max-width: 960px; margin-left: auto; margin-right: auto; }
