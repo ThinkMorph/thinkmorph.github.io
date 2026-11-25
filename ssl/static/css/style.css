@@ -723,9 +723,12 @@ button { font: inherit; color: inherit; }
 .stage-block .explorer, .stage-block > .fig, .stage-block > .fig + .explorer { margin-top: 40px; }
 .prose-narrow { line-height: 1.65; }
 
-/* ── Analysis: smaller figures; the ablation figure and the two text + figure rows share one 900 px column,
-   so every figure's right edge lines up ── */
-#analysis .wrap > .fig, #analysis .wrap > .sec-sub { max-width: 900px; }
-#analysis .side-grid .fig.fig-small { max-width: none; justify-self: stretch; }
+/* ── Analysis: smaller figures without frames, centred: the ablation figure in the column,
+   the two side figures in their half of each text + figure row ── */
+#analysis .fig-zoom img { border: 0; }
+#analysis .wrap > .fig { max-width: 900px; margin-left: auto; margin-right: auto; }
+#analysis .side-grid .fig { justify-self: center; width: 100%; }
+#analysis .side-grid .fig.fig-small { max-width: 420px; }
+#analysis .side-grid .fig:not(.fig-small) { max-width: 480px; }
 /* the Analysis lead sentence is body text, like the Results one; the ablation figure follows it closely */
 #analysis .wrap > .prose-narrow + .fig { margin-top: 40px; }
