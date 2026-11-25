@@ -727,3 +727,5 @@ button { font: inherit; color: inherit; }
    so every figure's right edge lines up ── */
 #analysis .wrap > .fig, #analysis .wrap > .sec-sub { max-width: 900px; }
 #analysis .side-grid .fig.fig-small { max-width: none; justify-self: stretch; }
+/* the Analysis lead sentence is body text, like the Results one; the ablation figure follows it closely */
+#analysis .wrap > .prose-narrow + .fig { margin-top: 40px; }
