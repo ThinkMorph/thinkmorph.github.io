@@ -728,7 +728,7 @@ button { font: inherit; color: inherit; }
 #analysis .fig-zoom img { border: 0; }
 #analysis .wrap > .fig { max-width: 900px; margin-left: auto; margin-right: auto; }
 #analysis .side-grid .fig { justify-self: center; width: 100%; }
-#analysis .side-grid .fig.fig-small { max-width: 420px; }
+#analysis .side-grid .fig.fig-small { max-width: 360px; }   /* order figure, a little smaller */
 #analysis .side-grid .fig:not(.fig-small) { max-width: 480px; }
 /* the Analysis lead sentence is body text, like the Results one; the ablation figure follows it closely */
 #analysis .wrap > .prose-narrow + .fig { margin-top: 40px; }
