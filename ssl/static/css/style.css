@@ -710,11 +710,16 @@ button { font: inherit; color: inherit; }
 .stage-block > h3 { font-size: 30px; gap: 12px; }
 .stage-block > h3::before { content: ""; flex: none; width: .32em; height: .32em; border-radius: 50%; background: var(--brand); }
 .stage-block > h3 .stage-no { color: var(--brand); }
-/* Stage 2 in the logo's indigo: dot and stage number */
-#stage-2 > h3::before { background: var(--indigo); }
-#stage-2 > h3 .stage-no { color: var(--indigo); }
 @media (max-width: 560px) { .stage-block > h3 { font-size: 24px; } }
 
 /* ── v2 round 11 ── */
-/* the Stage 2 pipelines figure a little smaller (1124 -> 960 px), centred */
-#stage-2 > .fig { max-width: 960px; margin-left: auto; margin-right: auto; }
+/* the Stage 2 pipelines figure a little smaller (1124 -> 960 px), aligned left with the text */
+#stage-2 > .fig { max-width: 960px; margin-left: 0; margin-right: auto; }
+
+/* ── v2 round 12 ── */
+/* Method: more air between the section title, the stage headings, their text and the material below */
+.sec-head + .stage-block { margin-top: 28px; }
+.stage-block + .stage-block { margin-top: 104px; }
+.stage-block > h3 { margin-bottom: 20px; }
+.stage-block .explorer, .stage-block > .fig, .stage-block > .fig + .explorer { margin-top: 40px; }
+.prose-narrow { line-height: 1.65; }
