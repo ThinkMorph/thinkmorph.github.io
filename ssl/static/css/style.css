@@ -637,13 +637,12 @@ button { font: inherit; color: inherit; }
 #tbl-tabs button { flex: 1 1 auto; padding: 12px 14px; font-size: 17px; }
 /* body paragraphs at the size, colour and width of the Motivation paragraph */
 .prose-narrow { font-size: 19px; line-height: 1.55; color: var(--ink); max-width: 820px; }
-/* stage headings: the stage number in teal and a hairline running to the right edge */
+/* stage headings: the stage number in teal */
 .stage-block > h3 { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; font-size: 25px; }
 .stage-block > h3 .stage-no { color: var(--brand); }
 .stage-block > h3 .stage-dot { color: var(--ink-3); font-weight: 400; }
-.stage-block > h3::after { content: ""; flex: 1 1 auto; height: 1px; margin-left: 14px; background: var(--rule-2); }
 .stage-block + .stage-block { margin-top: 88px; }
-@media (max-width: 560px) { .stage-block > h3 { font-size: 22px; flex-wrap: wrap; row-gap: 2px; } .stage-block > h3::after { display: none; } }
+@media (max-width: 560px) { .stage-block > h3 { font-size: 22px; flex-wrap: wrap; row-gap: 2px; } }
 
 /* ── v2 round 5 ── */
 /* a lead line between the pipelines figure and the Stage 2 examples */
@@ -684,9 +683,8 @@ button { font: inherit; color: inherit; }
 .toc a { padding: 7px 0 5px; border-radius: 0; font-size: 16px; border-bottom: 2px solid transparent; }
 .toc a:hover { background: none; color: var(--ink); }
 .toc a.is-active { background: none; box-shadow: none; color: var(--ink); border-bottom-color: var(--brand); }
-/* example selectors: underlined "Example N" tabs on the right, the image source on the left (Stage 1) */
+/* example selectors: underlined "Example N" tabs on the left, the image source on the right (Stage 1) */
 .explorer .ex-sub { justify-content: space-between; flex-wrap: wrap; gap: 8px 24px; margin: 16px 0 16px; }
-.explorer .ex-source { order: -1; }
 .pager { gap: 22px; }
 .pager button { width: auto; height: auto; padding: 6px 0 5px; border: 0; border-bottom: 2px solid transparent; border-radius: 0;
   background: none; font: 500 15.5px/1.2 var(--sans); color: var(--ink-3); }
@@ -701,3 +699,7 @@ button { font: inherit; color: inherit; }
 .ptrace-q .q-src { margin: 10px 0 0; font: 400 11.5px/1.4 var(--mono); color: var(--ink-3); }
 /* results: the delta row has no background */
 #tbl-results .rtable tr.delta td, #tbl-results .rtable tr.delta td.avg { background: transparent; }
+
+/* ── v2 round 8 ── */
+/* section titles a little larger (44 -> 50 px at full width) */
+.sec-head h2 { font-size: clamp(33px, 3.8vw, 50px); }
