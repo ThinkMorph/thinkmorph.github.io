@@ -713,8 +713,7 @@ button { font: inherit; color: inherit; }
 @media (max-width: 560px) { .stage-block > h3 { font-size: 24px; } }
 
 /* ── v2 round 11 ── */
-/* the Stage 2 pipelines figure a little smaller (1124 -> 960 px), aligned left with the text */
-#stage-2 > .fig { max-width: 960px; margin-left: 0; margin-right: auto; }
+/* the Stage 2 pipelines figure spans the full column, aligned on both sides with the examples below */
 
 /* ── v2 round 12 ── */
 /* Method: more air between the section title, the stage headings, their text and the material below */
