@@ -243,7 +243,7 @@
           body += `<tr class="delta"><td>Δ vs. think-4k</td>${v.map((x, i) => `<td class="${V.avg.includes(i) ? "avg" : ""}">${fmtD(x - b[i])}</td>`).join("")}</tr>`;
         }
       });
-      box.innerHTML = `<table class="rtable rtable-${which}"><thead>${head}</thead><tbody>${body}</tbody></table>`
+      box.innerHTML = `<table class="rtable rtable-${which}"><colgroup><col class="c-model">${V.cols.map(() => "<col>").join("")}</colgroup><thead>${head}</thead><tbody>${body}</tbody></table>`
         + `<p class="tbl-note">Bold: best; underlined: second best, among open models (closed-source models are not ranked).</p>`;
     }
     $$("button", tabs).forEach((b) => b.addEventListener("click", () => {

@@ -703,3 +703,14 @@ button { font: inherit; color: inherit; }
 /* ── v2 round 8 ── */
 /* section titles a little larger (44 -> 50 px at full width) */
 .sec-head h2 { font-size: clamp(33px, 3.8vw, 50px); }
+
+/* ── v2 round 9 ── */
+/* results table: the model column takes 30%, the score columns share the rest evenly, scores centred */
+#tbl-results .rtable { table-layout: fixed; min-width: 720px; }
+#tbl-results .rtable col.c-model { width: 30%; }
+#tbl-results .rtable th:not(:first-child), #tbl-results .rtable td:not(:first-child) { text-align: center; }
+/* stage headings: a teal dot, then the title in ink, larger */
+.stage-block > h3 { font-size: 30px; gap: 12px; }
+.stage-block > h3::before { content: ""; flex: none; width: .32em; height: .32em; border-radius: 50%; background: var(--brand); }
+.stage-block > h3 .stage-no { color: var(--ink); }
+@media (max-width: 560px) { .stage-block > h3 { font-size: 24px; } }
