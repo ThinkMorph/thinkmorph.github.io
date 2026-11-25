@@ -677,3 +677,27 @@ button { font: inherit; color: inherit; }
   .ptrace-q > .step { border-left: 0; }
   .ptrace-q .step-arrow { display: none; }
 }
+
+/* ── v2 round 7 ── */
+/* top navigation: larger labels, the current section underlined instead of a pill */
+.toc { gap: 28px; }
+.toc a { padding: 7px 0 5px; border-radius: 0; font-size: 16px; border-bottom: 2px solid transparent; }
+.toc a:hover { background: none; color: var(--ink); }
+.toc a.is-active { background: none; box-shadow: none; color: var(--ink); border-bottom-color: var(--brand); }
+/* example selectors: underlined "Example N" tabs on the right, the image source on the left (Stage 1) */
+.explorer .ex-sub { justify-content: space-between; flex-wrap: wrap; gap: 8px 24px; margin: 16px 0 16px; }
+.explorer .ex-source { order: -1; }
+.pager { gap: 22px; }
+.pager button { width: auto; height: auto; padding: 6px 0 5px; border: 0; border-bottom: 2px solid transparent; border-radius: 0;
+  background: none; font: 500 15.5px/1.2 var(--sans); color: var(--ink-3); }
+.pager button:hover { color: var(--ink); }
+.pager button[aria-pressed="true"] { background: none; color: var(--ink); border-bottom-color: var(--brand); }
+/* Stage 2: level tabs on top, the level's pipelines as underlined tabs below */
+.subtabs { display: flex; flex-wrap: wrap; gap: 6px 26px; }
+.subtabs button { padding: 6px 0 5px; border: 0; border-bottom: 2px solid transparent; background: none; cursor: pointer;
+  font: 500 16.5px/1.2 var(--sans); color: var(--ink-2); }
+.subtabs button:hover { color: var(--ink); }
+.subtabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--brand); }
+.ptrace-q .q-src { margin: 10px 0 0; font: 400 11.5px/1.4 var(--mono); color: var(--ink-3); }
+/* results: the delta row has no background */
+#tbl-results .rtable tr.delta td, #tbl-results .rtable tr.delta td.avg { background: transparent; }

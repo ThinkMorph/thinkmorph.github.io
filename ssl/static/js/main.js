@@ -133,11 +133,11 @@
       const t = EX.pretext[ti], ex = t.examples[ei];
       pager.innerHTML = "";
       t.examples.forEach((e, i) => {
-        const b = h("button", { type: "button", "aria-pressed": i === ei ? "true" : "false", "aria-label": `Example ${i + 1}` }, String(i + 1));
+        const b = h("button", { type: "button", "aria-pressed": i === ei ? "true" : "false" }, `Example ${i + 1}`);
         b.addEventListener("click", () => { ei = i; render(); });
         pager.appendChild(b);
       });
-      src.textContent = `${t.name} · example ${ex.id} · image source: ${ex.source}`;
+      src.textContent = `image source: ${ex.source}`;
       body.innerHTML = `
         <div class="step"><div class="step-head"><span class="step-tok in">I<sub>c</sub></span><span class="step-name">corrupted input</span></div>
           <img src="${ex.input}" alt="${esc(t.name)} example ${ex.id}: corrupted input" width="${ex.w}" height="${ex.h}">
@@ -156,30 +156,34 @@
 
   /* Stage 2 explorer */
   (function instructExplorer() {
-    const tabs = $("#ex-instruct-tabs"), pager = $("#ex-instruct-pager"), src = $("#ex-instruct-source"), body = $("#ex-instruct-body");
+    const tabs = $("#ex-instruct-tabs"), pipes = $("#ex-instruct-pipes"), pager = $("#ex-instruct-pager"), body = $("#ex-instruct-body");
     if (!tabs || !EX.instruct.length) return;
+    const LEVEL_NAME = { L1: "Basic visual perception", L2: "Static spatial understanding", L3: "Mental world modeling" };
     let ti = EX.instruct.findIndex((t) => t.key === "mindcube_bev"); if (ti < 0) ti = 0;
-    let ei = 0, lastLevel = null;
-    EX.instruct.forEach((t, i) => {
-      if (t.level !== lastLevel) {
-        if (lastLevel && t.level === "L3") tabs.appendChild(h("span", { class: "tab-break", "aria-hidden": "true" }));  // L3 starts its own row
-        tabs.appendChild(h("span", { class: "tab-group-label", "aria-hidden": "true" }, t.level)); lastLevel = t.level;
-      }
-      const b = h("button", { role: "tab", "aria-selected": "false", "data-i": i, "aria-label": `${t.name}, level ${t.level.slice(1)}` }, esc(t.name));
-      b.addEventListener("click", () => { ti = i; ei = 0; render(); });
+    let ei = 0;
+    // first row: the three levels; second row: that level's pipelines (left) and the examples (right)
+    [...new Set(EX.instruct.map((t) => t.level))].forEach((lv) => {
+      const b = h("button", { role: "tab", "aria-selected": "false", "data-lv": lv }, `${lv} · ${LEVEL_NAME[lv] || ""}`);
+      b.addEventListener("click", () => { ti = EX.instruct.findIndex((t) => t.level === lv); ei = 0; render(); });
       tabs.appendChild(b);
     });
     const sub = (k) => `<sub>${k}</sub>`;
     function render() {
-      $$("button", tabs).forEach((b) => b.setAttribute("aria-selected", +b.dataset.i === ti ? "true" : "false"));
       const t = EX.instruct[ti], ex = t.examples[ei];
+      $$("button", tabs).forEach((b) => b.setAttribute("aria-selected", b.dataset.lv === t.level ? "true" : "false"));
+      pipes.innerHTML = "";
+      EX.instruct.forEach((p, i) => {
+        if (p.level !== t.level) return;
+        const b = h("button", { role: "tab", "aria-selected": i === ti ? "true" : "false" }, esc(p.name));
+        b.addEventListener("click", () => { ti = i; ei = 0; render(); });
+        pipes.appendChild(b);
+      });
       pager.innerHTML = "";
       t.examples.forEach((e, i) => {
-        const b = h("button", { type: "button", "aria-pressed": i === ei ? "true" : "false", "aria-label": `Example ${i + 1}` }, String(i + 1));
+        const b = h("button", { type: "button", "aria-pressed": i === ei ? "true" : "false" }, `Example ${i + 1}`);
         b.addEventListener("click", () => { ei = i; render(); });
         pager.appendChild(b);
       });
-      src.textContent = `${t.level} · ${t.name} · source: ${ex.source}`;
       const n = ex.inputs.length;
       const ins = ex.inputs.map((im) => `<figure><img src="${im.src}" alt="Input: ${esc(im.label)}" width="${im.w}" height="${im.h}" loading="lazy">${n > 1 ? `<figcaption>${esc(im.label)}</figcaption>` : ""}</figure>`).join("");
       // same layout as the Stage 1 trace: question + input, then T0, I0, T1, ... in one card; the answer closes the last cell
@@ -189,7 +193,7 @@
       const arrow = `<span class="step-arrow" aria-hidden="true">→</span>`;
       const ans = `<div class="q-ans"><span class="step-name">answer</span><span class="ans">${esc(ex.answer)}</span></div>`;
       const cells = [`<div class="step"><div class="step-head"><span class="step-tok in">Q</span><span class="step-name">${n > 1 ? `question + ${n} input images` : "question + input image"}</span></div>`
-        + `<div class="q-imgs n${Math.min(n, 5)}">${ins}</div><p class="q-text">${esc(ex.question)}</p></div>`];
+        + `<div class="q-imgs n${Math.min(n, 5)}">${ins}</div><p class="q-text">${esc(ex.question)}</p><p class="q-src">source: ${esc(ex.source)}</p></div>`];
       seq.forEach((st, idx) => {
         const tail = idx === seq.length - 1 ? ans : "";
         if (st.kind === "t") cells.push(`<div class="step">${arrow}<div class="step-head"><span class="step-tok">T${sub(st.k)}</span><span class="step-name">${esc(st.x.label.toLowerCase())}</span></div><p class="thought">${esc(st.x.text)}</p>${tail}</div>`);
